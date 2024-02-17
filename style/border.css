@@ -36,19 +36,13 @@
 }
 
 
-@keyframes borderRotate {
-	100% {
-		--angle: 445deg;
-	}
-}
 
 .block {
 	border-top-right-radius: 50px;
 	border-top-left-radius: 50px;
-	
 	background: linear-gradient(0deg, #ffffff, #272727);
-
 }
+
 
 .block:before, .block:after {
 	content: '';
@@ -64,6 +58,20 @@
 	animation: steam 20s linear infinite;
 }
 
+.block:after {
+	filter: blur(50px);
+}
+
+@media screen and (max-width:  600px) {
+	.block:before, .block:after {
+		animation: none;
+	}
+	.block:after {
+		filter: none;
+	}
+
+}
+
 @keyframes steam {
 	0% {
 		background-position: 0 0;
@@ -76,6 +84,10 @@
 	}
 }
 
-.block:after {
-	filter: blur(50px);
+
+@keyframes borderRotate {
+	100% {
+		--angle: 445deg;
+	}
 }
+
