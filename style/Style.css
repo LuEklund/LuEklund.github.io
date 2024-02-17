@@ -12,7 +12,7 @@
 *======================================
 */
 
-a:hover {
+a {
   text-decoration: none;
 }
 
@@ -185,10 +185,11 @@ h3#logo {
   font-weight: 800;
   line-height: 240%;
   margin: 0;
+  color: black;
 }
 
 h3#logo span {
-  color: orange;
+  color: #00fcff;
 }
 
 .heading {
@@ -206,7 +207,7 @@ h3#logo span {
 }
 
 .active {
-  color: red;
+  color: #00fcff;
 }
 
 .heading h1 span {
@@ -331,7 +332,7 @@ line-height: 200%;
 }
 
 .heading h1 span {
-color: #222222;
+color: #ffffff;
 }
 
 .intro {
