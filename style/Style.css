@@ -101,6 +101,8 @@ body {
   /* width: 75px; */
 }
 
+
+
 /*
 *======================================
 *       MOBILE CONTACT
@@ -176,7 +178,8 @@ position: absolute;
 .content {
   margin-left: 300px;
   padding: 0 56px;
-  background-color: black;
+  background-color: rgb(255, 255, 255);
+  /* background-color: #e342e3; */
 }
 
 #sideBarOverlay {
@@ -246,7 +249,7 @@ h3#logo span {
 }
 
 .heading h1 span {
-  color: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
 }
 
 .content > .intro {
@@ -258,7 +261,7 @@ h3#logo span {
   margin-bottom: 80px;
   width: 540px;
   box-sizing: border-box;
-  color: white;
+  color: rgb(0, 0, 0);
 }
 
 .grid {
@@ -312,6 +315,13 @@ h3#logo span {
   border-radius: 10px 10px 0 0;
 }
 
+.skill-icon
+{
+  width: 30px !important;
+  height: 30px !important;
+  background-color: transparent !important;
+}
+
 .column iframe {
   display: block;
   width: 100%;
@@ -337,6 +347,7 @@ h3#logo span {
 @media screen and (max-width: 600px) {
   .topnav {
     display: flex;
+    border-bottom: 1px solid black;
   }
 
   #sideBar {
@@ -364,7 +375,7 @@ h3#logo span {
   }
 
   .heading h1 span {
-  color: #ffffff;
+  color: #000000;
   }
 
   .intro {
