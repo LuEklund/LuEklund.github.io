@@ -41,10 +41,10 @@
 	border-top-right-radius: 50px;
 	border-top-left-radius: 50px;
 	background: linear-gradient(0deg, #ffffff, #272727);
+
 }
 
-
-.block:before, .block:after {
+.block:hover::before, .block:hover::after {
 	content: '';
 	position: absolute;
 	left: -2px;
@@ -58,7 +58,7 @@
 	animation: steam 20s linear infinite;
 }
 
-.block:after {
+.block:hover::before {
 	filter: blur(50px);
 }
 
