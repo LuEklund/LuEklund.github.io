@@ -320,6 +320,13 @@ h3#logo span {
   background-color: transparent !important;
 }
 
+.extra-icon
+{
+  width: 64px !important;
+  height: 64px !important;
+  background-color: transparent !important;
+}
+
 .column iframe {
   display: block;
   width: 100%;
@@ -334,8 +341,9 @@ h3#logo span {
 .text > p {
   display: none;
   font-weight: 300;
-  font-size: 14px;
+  font-size: 16px;
   margin-bottom: 0px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 .column:hover  p {
   display: block;
