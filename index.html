@@ -1,540 +1,193 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Lucas Eklund</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style/Style.css">
+</head>
+<body>
 
-        <!--Bootstrapm 5 CDN-->
-        <!-- Latest compiled and minified CSS -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<div id="cur"></div>
+<canvas id="rain"></canvas>
 
-        <!-- Latest compiled JavaScript -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- ══ HEADER ══════════════════════════════ -->
+<header id="header">
 
-        <!--Gives me Cool fonts and icons-->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <div class="id-block">
+    <div class="id-name"><span>Lucas</span> Eklund</div>
+    <div class="id-role">Junior Software Developer</div>
+  </div>
 
-        <link href="style/Style.css" rel="stylesheet" />
-        <link href="style/border.css" rel="stylesheet" />
+  <div class="hd-div"></div>
 
+  <div class="contact-block">
+    <a href="mailto:lucasdevbusiness@gmail.com">lucasdevbusiness@gmail.com</a>
+    <a href="https://github.com/LuEklund" target="_blank">github.com/LuEklund</a>
+  </div>
 
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
-        <title>Lucas Eklund</title>
+</header>
 
-    </head>
-    <body>
-        
-        <div class="profile-sidebar" id="sideBar">
-            <a href="javascript:void(0);" class="icon" id="sideBarButton" target="_self">
-                <img src="assets/menu_navigation_icon.svg">
-            </a>
-            <div id="profile-picture">
-                <img src="assets/leklund1000x1000.png" alt="profile picture" />
-            </div>
-            <!-- END SIDEBAR USERPIC -->
-            <!-- SIDEBAR USER TITLE -->
-            <div class="profile-usertitle">
-                <h5>Lucas Eklund</h5>
-                <h6>Junior Software Developer</h6>
-                
-                <div class="profile-intro">
-                    Interested in:</br>
-                    - Game Development</br>
-                    - Start ups / Entrepreneurship</br>
-                    - Youtube - storytelling</br>
-                </div>
-            </div>
-            <div id="tools">
-                <h6> Tools and technologies I work with</h6>
-                <lu class="tool-list">
-                    <li><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg"/></li>
-                    <li><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg"/></li>
-                    <li><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg"/></li>
-                    <li><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg"/></li>
+<!-- ══ TOOLBAR ═════════════════════════════ -->
+<div id="toolbar">
+  <div class="tb-search">
+    <input id="search" type="text" placeholder="search..." autocomplete="off" spellcheck="false"/>
+  </div>
 
-                </lu>
-                <lu class="tool-list">
-                    <li><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg"/></li>
-                    <li><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg"/></li>
-                    <li><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg"/></li>
-                </lu>
-                <lu class="tool-list">
-                    <li><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg"/></li>
-                    <li><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/unrealengine/unrealengine-original.svg"/></li>
-                    <li><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/unity/unity-original.svg"/></li>
-                </lu>
-            </div>
-            <div class="contactOnMobile">
-                <a href="mailto:lucasdevbusiness@gmail.com" target="_blank">
-                    <img src="assets/mail_icon.svg">
-                </a>
-                <a href="https://github.com/LuEklund" target="_blank">
-                    <img src="assets/github_icon.svg">
-                </a>
+  <div class="tb-filters" id="filters">
+    <button class="ftag on" data-f="all">All</button>
+    <button class="ftag" data-f="c"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg"/>C</button>
+    <button class="ftag" data-f="cpp"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg"/>C++</button>
+    <button class="ftag" data-f="zig">Zig</button>
+    <button class="ftag" data-f="asm">ASM</button>
+    <button class="ftag" data-f="vulkan">Vulkan</button>
+    <button class="ftag" data-f="unreal"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/unrealengine/unrealengine-original.svg"/>Unreal</button>
+    <button class="ftag" data-f="unity"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/unity/unity-original.svg"/>Unity</button>
+    <button class="ftag" data-f="cs"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg"/>C#</button>
+    <button class="ftag" data-f="py"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg"/>Python</button>
+    <button class="ftag" data-f="java"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg"/>Java</button>
+    <button class="ftag" data-f="web">JS/TS</button>
+    <button class="ftag" data-f="sfml">SFML</button>
+  </div>
 
-            </div>
+  <div class="tb-count" id="rcount"></div>
+</div>
 
-            <div class="contacts">
-                <a href="mailto:lucasdevbusiness@gmail.com">
-                    <img src="assets/mail_icon.svg" target="_blank">
-                    <i class="email"></i>lucasdevbusiness@gmail.com
-                </a>
-                <a href="https://github.com/LuEklund" target="_blank">
-                    <img src="assets/github_icon.svg">
-                    <i class="git-profile"></i>github.com/LuEklund
-                </a>
+<!-- ══ GRID ════════════════════════════════ -->
+<div id="main">
+  <div id="grid"></div>
+</div>
 
-            </div>
-        </div>
-        
-        <section class="content" id="mainContent">
-            <div id="sideBarOverlay"></div>
-            <div class="topnav">
-                <h3 id="logo">LUCAS <span>EKLUND</span></h3>
-                <a href="javascript:void(0);" class="icon" id="topNavButton" target="_self">
-                    <img src="assets/menu_navigation_icon.svg">
-                </a>
-            </div>
-            <div class="heading" id="myHeading">
-                <h1 class="active" href="#home"> Lucas <span>Portfolio</span></h1>
-                
-                <!-- <a href="javascript:void(0);" class="icon" onclick="navBarResponsive()">
-                    <i class="fa fa-bars"></i>
-                </a> -->
-            </div>
-            <!-- <div class="intro">
-                <p id="middle-intro">
-                    <strong>Hover:</strong> on a project to read more.</br>
-                    <strong>Click:</strong> on a project to go to its page.
-                </p>
-            </div> -->
-            <section class="grid">
+<!-- ══ FOOTER ══════════════════════════════ -->
+<footer>
+  <div class="fl">LU<span>_</span>EKLUND</div>
+  <div class="fr"><span>ONLINE</span><span id="clk"></span></div>
+</footer>
 
-            <!-- 
-                Template
-                Link to project.
-                section start.
-                image of project.
-                content of project.
-                header.
-                parageraph about project.
-                section end.
-            -->
-            <!-- SECTION 1 -->
+<script>
+// cursor
+const cur=document.getElementById('cur');
+document.addEventListener('mousemove',e=>{cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px';});
 
-                <section class="column">
-                <div class="block" style="position: relative;">
-                    <a href="https://github.com/LuEklund/WallensteinVR.git" target="_blank">
-                        <img src="assets/WallenstienVR.png" alt="Wolfenstein" />
-                    </a>
-                    <div class="text">
-                        <h5> WallensteinVR</h5>
-                        <img class="skill-icon" src="assets/zig.png" />
+// clock
+function tick(){document.getElementById('clk').textContent=new Date().toLocaleTimeString('en-GB',{hour12:false});}
+setInterval(tick,1000);tick();
 
-                        <p>
-                            Simple laborythm VR game, with enemies that tried to get to u, u have to get a square collectable to take it back to the starting door.
-                        </p>
-                    </div>
-                  
-                </div>
-            </section>
+// matrix rain
+(function(){
+  const cv=document.getElementById('rain');
+  const cx=cv.getContext('2d');
+  const CH='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789zig::vulkan{}[];><=+-*/&|';
+  let W,H,drops;
+  function init(){
+    W=cv.width=innerWidth;H=cv.height=innerHeight;
+    drops=Array.from({length:Math.floor(W/14)},()=>Math.random()*H/14|0);
+  }
+  function draw(){
+    cx.fillStyle='rgba(3,8,14,.06)';cx.fillRect(0,0,W,H);
+    cx.fillStyle='rgba(0,224,255,.85)';cx.font='13px "DM Mono",monospace';
+    drops.forEach((d,i)=>{
+      cx.fillText(CH[Math.random()*CH.length|0],i*14,d*14);
+      if(d*14>H&&Math.random()>.97)drops[i]=0; else drops[i]++;
+    });
+  }
+  init();window.addEventListener('resize',init);setInterval(draw,55);
+})();
 
-            <section class="column">
-                <div class="block" style="position: relative;">
-                    <a href="https://github.com/LuEklund/assembly" target="_blank">
-                        <img src="assets/Snake_ASM.jpg" alt="Minecraft Vulkan Clone" />
-                    </a>
-                    <div class="text">
-                        <h5> Assembly 6502 NES Snake</h5>
-                        <img class="skill-icon" src="assets/youtube.png" />
+// data
+const PROJECTS=[
+  {title:"WallensteinVR",desc:"Labyrinth VR game in Zig. Enemies hunt you — grab the collectible and race back before they reach you.",thumb:"assets/WallenstienVR.png",link:"https://github.com/LuEklund/WallensteinVR.git",tags:["zig"],highlight:true},
+  {title:"NES Snake — 6502 Assembly",desc:"Snake on real NES hardware in pure 6502 assembly. No OS, no abstraction, bare metal.",thumb:"assets/Snake_ASM.jpg",link:"https://github.com/LuEklund/assembly",tags:["asm"]},
+  {title:"Minecraft — Vulkan",desc:"Ongoing Minecraft clone built with Vulkan from scratch. Custom chunk meshing, terrain generation. YouTube devlog series.",thumb:"assets/EpicMinecraftClone.gif",link:"https://www.youtube.com/watch?v=fP3RNawUWzU",tags:["c","cpp","vulkan"]},
+  {title:"Chungustraction",desc:"Solo entry for DaniJam 2025, theme: Attraction. Built in Unity over 48 hours.",thumb:"assets/Attract.gif",link:"https://lucasdevs.itch.io/chungustraction",tags:["cs","unity"]},
+  {title:"Fingrevie — Hexpansion",desc:"Tower defense on a procedurally expanding hex grid with upgrades. Unreal Engine 5.",thumb:"assets/HexPlanation.gif",link:"https://fingrevie.itch.io/hextd-prototype",tags:["c","cpp","unreal"]},
+  {title:"Cub3D — DDA Raycaster",desc:"Wolfenstein-inspired raycaster in pure C. 2D map → real-time 3D view via DDA. Zero dependencies beyond MiniLibX.",thumb:"https://github.com/jontssu/cub3D/blob/master/Peek%202024-01-09%2016-46.gif?raw=true",link:"https://github.com/jontssu/cub3D",tags:["c"]},
+  {title:"Vulkan Renderer",desc:"Building a Vulkan renderer from scratch — pipeline, render passes, sync, descriptor sets. Devlog on YouTube.",thumb:"assets/Vulkan.png",link:"https://www.youtube.com/watch?v=QDaCNKZ0rf4",tags:["c","cpp","vulkan"]},
+  {title:"RibbitSpace",desc:"Space combat prototype in Unreal Engine. Custom ship movement and projectile system.",thumb:"assets/Ribbit.jpg",link:"https://www.youtube.com/watch?v=e1C9blkl-N0",tags:["c","cpp","unreal"]},
+  {title:"TopDown RPG — Multiplayer",desc:"Top-down RPG in UE5. Replication netcode and Gameplay Ability System (GAS). C++ with Blueprints.",thumb:"https://github.com/LuEklund/Unreal-TopDown-RPG/blob/master/ProgressImages/TopDownRPG3.gif?raw=true",link:"https://github.com/LuEklund/Unreal-TopDown-RPG",tags:["c","cpp","unreal"]},
+  {title:"ToonTanks",desc:"Tank shooter in UE5. Primarily C++ with minimal Blueprint usage.",thumb:"https://github.com/LuEklund/ToonTanks/blob/master/AnimationToon2.gif?raw=true",link:"https://github.com/LuEklund/ToonTanks",tags:["c","cpp","unreal"]},
+  {title:"SFML RPG",desc:"RPG on SFML. Custom entity system, game loop, and state machine — no engine.",thumb:"assets/SFML-RPG.gif",link:"https://github.com/LuEklund/SFML-GameRPG",tags:["c","cpp","sfml"]},
+  {title:"PyDefend",desc:"2D base-defense in Python / PyGame. Place towers on every tile to win.",thumb:"assets/PyDefend.png",link:"https://lucasdevs.itch.io/pydefend",tags:["py"]},
+  {title:"Discord RPG Bot",desc:"Discord bot with quests, inventory, and 1v1 battle mechanics.",thumb:"assets/DiscordBot.png",link:"#",tags:["web"]},
+  {title:"MergeGame",desc:"Stack coins to hit a target amount. Minimalist Unity puzzle game.",thumb:"assets/MergeGame.gif",link:"https://github.com/LuEklund/MergeGame",tags:["cs","unity"]},
+  {title:"Lost Prince",desc:"Short Unity story game made with Visual Scripting. Atmosphere-first.",thumb:"assets/LostPrince.gif",link:"https://lucas-eklund.itch.io/lost-prince",tags:["cs","unity"]},
+  {title:"Platformer — SFML",desc:"Side-scroller in C++/SFML. Custom physics and collision, no engine.",thumb:"https://github.com/LuEklund/Platformer-SFML/blob/master/assets/thumbnail.png?raw=true",link:"https://github.com/LuEklund/Platformer-SFML",tags:["c","cpp","sfml"]},
+  {title:"Snake — SFML",desc:"Classic Snake in C++/SFML. Clean game loop, no game library.",thumb:"https://github.com/LuEklund/Snake-SFML/blob/master/assets/thumbnail.png?raw=true",link:"https://github.com/LuEklund/Snake-SFML",tags:["c","cpp","sfml"]},
+  {title:"TicTacToe — SFML",desc:"TicTacToe in C++/SFML.",thumb:"https://github.com/LuEklund/TicTacToe-SFML/blob/master/assets/thumbnail.png?raw=true",link:"https://github.com/LuEklund/TicTacToe-SFML",tags:["c","cpp","sfml"]},
+  {title:"1D Combat — SFML",desc:"Player vs AI lane combat inspired by Age of War. Custom AI in pure C++.",thumb:"https://github.com/LuEklund/1D-Combat-SFML/blob/master/assets/thumbnail.png?raw=true",link:"https://github.com/LuEklund/1D-Combat-SFML",tags:["c","cpp","sfml"]},
+  {title:"42 — Hive Helsinki",desc:"Core 42 curriculum in pure C. Memory, pointers, data structures — no external libraries allowed.",thumb:"https://auth.42.fr/auth/resources/0nmse/login/students/img/42_logo.svg",link:"https://github.com/LuEklund/HIVE_2022",tags:["c"]},
+  {title:"ft_transcendence",desc:"Final Hive project. Full-stack: Django backend, vanilla JS, OAuth2, WebSockets, live Pong.",thumb:"https://auth.42.fr/auth/resources/0nmse/login/students/img/42_logo.svg",link:"https://github.com/LuEklund/ft_transcendence",tags:["web","py","java"]},
+];
 
-                        <p>
-                            Made snake for NES using assembly 6502 
-                        </p>
-                    </div>
-                  
-                </div>
-            </section>
-             
-            <section class="column">
-                <div class="block" style="position: relative;">
-                    <a href="https://www.youtube.com/watch?v=fP3RNawUWzU" target="_blank">
-                        <img src="assets/EpicMinecraftClone.gif" alt="Minecraft Vulkan Clone" />
-                    </a>
-                    <div class="text">
-                        <h5> Minecraft Vulkan</h5>
-                        <img class="skill-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg"/>
-                        <img class="skill-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg"/>
-                        <img class="skill-icon" src="assets/youtube.png" />
-                        <p>
-                            I am making a  Minecraft Clone in Vulkan, posting regular updates on Youtube</br>
-                            <!-- YouTube link in the top-right corner -->
-                            <a href="https://www.youtube.com/watch?v=fP3RNawUWzU" target="_blank">
-                                <img class="extra-icon" src="assets/youtube.png" alt="YouTube video" />
-                            </a>
+const TM={
+  c:{l:"C",cl:"tc-c"},cpp:{l:"C++",cl:"tc-cpp"},cs:{l:"C#",cl:"tc-cs"},
+  zig:{l:"Zig",cl:"tc-zig"},asm:{l:"ASM",cl:"tc-asm"},py:{l:"Python",cl:"tc-py"},
+  unreal:{l:"Unreal",cl:"tc-unreal"},unity:{l:"Unity",cl:"tc-unity"},
+  vulkan:{l:"Vulkan",cl:"tc-vulkan"},web:{l:"JS/TS",cl:"tc-web"},
+  sfml:{l:"SFML",cl:"tc-sfml"},java:{l:"Java",cl:"tc-java"},
+};
 
-                        </p>
-                    </div>
-                </div>
-            </section>
+function build(){
+  const g=document.getElementById('grid');
+  g.innerHTML='';
+  PROJECTS.forEach((p,i)=>{
+    const tagsH=p.tags.map(t=>{const m=TM[t]||{l:t,cl:''};return`<span class="tag ${m.cl}">${m.l}</span>`;}).join('');
+    const imgH=p.thumb
+      ?`<img src="${p.thumb}" alt="${p.title}" loading="lazy" onerror="this.outerHTML='<div class=\\'img-ph\\'>NO PREVIEW</div>'">`
+      :`<div class="img-ph">NO PREVIEW</div>`;
+    const c=document.createElement('article');
+    c.className='card';
+    c.dataset.tags=p.tags.join(' ');
+    c.dataset.title=p.title.toLowerCase();
+    c.dataset.desc=p.desc.toLowerCase();
+    if(p.highlight) c.dataset.highlight='true';
+    c.innerHTML=`
+      <a class="card-link" href="${p.link}" target="_blank" rel="noopener" aria-label="${p.title}"></a>
+      <div class="ci">${imgH}<div class="ci-num">${String(i+1).padStart(2,'0')}</div></div>
+      <div class="cb">
+        <div class="ct">${p.title}</div>
+        <div class="cd">${p.desc}</div>
+        <div class="ctags">${tagsH}</div>
+      </div>`;
+    g.appendChild(c);
+  });
+  const nr=document.createElement('div');
+  nr.className='nores';nr.id='nores';nr.textContent='No matching projects.';
+  g.appendChild(nr);
+  count();
+}
 
-            <section class="column">
-                <div class="block" style="position: relative;">
-                    <a href="https://lucasdevs.itch.io/chungustraction" target="_blank">
-                        <img src="assets/Attract.gif" alt="Unity game jam" />
-                        
-                    </a>
-                    <div class="text">
-                        <h5>Chungustraction</h5>
-                        <img class="skill-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg"/>
-                        <img class="skill-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/unity/unity-original.svg"/>
-                        <img class="skill-icon" src="assets/youtube.png" />
-                        <p>
-                            <p>
-                                A Game I made for DaniJam 2025 April. Theme Attraction
-                            </p>
-                        </p>
-                    </div>
-                </div>
-            </section>
-            
-                <a href="https://fingrevie.itch.io/hextd-prototype" target="_blank">
-                    <section class="column">
-                        <div class="block">
-                            <img src="assets/HexPlanation.gif" alt="Fingrevie - Hexpansion"/>
-                            <div class="text">
-                                <h5>
-                                    Fingrevie - Hexpansion
-                                </h5>
-                                <img class="skill-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg"/>
-                                <img class="skill-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/unrealengine/unrealengine-original.svg"/>
-                                <p>
-                                    Tower Defense game, with random expanding map and upgrades!
-                                    <br/><img class="extra-icon" src="assets/Fingrevie-Logo.png"/>
-                                </p>
-                            </div>
-                        </div>
-                    </section>
-                </a>
-                <a href="https://github.com/jontssu/cub3D" target="_blank">
-                    <section class="column">
-                        <div class="block">
-                            <img src="https://github.com/jontssu/cub3D/blob/master/Peek%202024-01-09%2016-46.gif?raw=true" alt="Raycasting"/>
-                            <div class="text">
-                                <h5>
-                                    Cub3D
-                                </h5>
-                                <img class="skill-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg"/>
-                                <p>
-                                    Cub3D is done using pure C with no boost libraries except for MiniLibX. Cub3D is a project inspired by Wolfenstein 3D, using Digital Differential Analysis (DDA) to transform a 2D map into a 3D environment, creating a sense of depth and space.
-                                </p>
-                            </div>
-                        </div>
-                    </section>
-                </a>
+let af='all',sq='';
+function filter(){
+  const cards=document.querySelectorAll('.card');
+  let v=0;
+  cards.forEach(c=>{
+    const tm=af==='all'||c.dataset.tags.split(' ').includes(af);
+    const sm=!sq||c.dataset.title.includes(sq)||c.dataset.desc.includes(sq)||c.dataset.tags.includes(sq);
+    c.classList.toggle('gone',!(tm&&sm));
+    if(tm&&sm)v++;
+  });
+  document.getElementById('nores').style.display=v?'none':'block';
+  count(v);
+}
+function count(v){
+  const n=v!==undefined?v:PROJECTS.length;
+  document.getElementById('rcount').textContent=n+' projects';
+}
 
+document.getElementById('filters').addEventListener('click',e=>{
+  const b=e.target.closest('.ftag');if(!b)return;
+  af=b.dataset.f;
+  document.querySelectorAll('.ftag').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');
+  filter();
+});
+document.getElementById('search').addEventListener('input',e=>{
+  sq=e.target.value.toLowerCase().trim();filter();
+});
 
-
-                <section class="column">
-                    <div class="block" style="position: relative;">
-                        <a href="https://youtu.be/7zbomVY2-P0" target="_blank">
-                            <img src="assets/Vulkan.png" alt="Vulkan learn" />
-                        </a>
-                        <div class="text">
-                            <h5>Vulkan</h5>
-                            <img class="skill-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg"/>
-                            <img class="skill-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg"/>
-                            <img class="skill-icon" src="assets/youtube.png" />
-                            <p>
-                                Learning Vulkan</br>
-                                <!-- YouTube link in the top-right corner -->
-                                <a href="https://www.youtube.com/watch?v=QDaCNKZ0rf4" target="_blank">
-                                    <img class="extra-icon" src="assets/youtube.png" alt="YouTube video" />
-                                </a>
-    
-                            </p>
-                        </div>
-                    </div>
-                </section>
-
-
-                <section class="column">
-                    <div class="block" style="position: relative;">
-                        <a href="" target="_blank">
-                            <img src="assets/DiscordBot.png" alt="DiscordJS" />
-                        </a>
-                        <div class="text">
-                            <h5>Discord BOT</h5>
-                            <p>
-                                RPG, quests and 1v1 battle mechanics</br>
-                            </p>
-                        </div>
-                    </div>
-                </section>
-
-                <section class="column">
-                    <div class="block" style="position: relative;">
-                        <a href="https://www.youtube.com/watch?v=e1C9blkl-N0" target="_blank">
-                            <img src="assets/Ribbit.jpg" alt="PyGame" />
-                        </a>
-                        <div class="text">
-                            <h5>RibbitSpace</h5>
-                            <img class="skill-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg"/>
-                            <img class="skill-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/unrealengine/unrealengine-original.svg"/>
-                            <img class="skill-icon" src="assets/youtube.png" />
-                            <p>
-                                the begining of a space combat game, I also made a YT video about it</br>
-                                <!-- YouTube link in the top-right corner -->
-                                <a href="https://www.youtube.com/watch?v=e1C9blkl-N0" target="_blank">
-                                    <img class="extra-icon" src="assets/youtube.png" alt="YouTube video" />
-                                </a>
-    
-                            </p>
-                        </div>
-                    </div>
-                </section>
-                <section class="column">
-                    <div class="block" style="position: relative;">
-                        <a href="https://lucasdevs.itch.io/pydefend" target="_blank">
-                            <img src="assets/PyDefend.png" alt="PyGame" />
-                        </a>
-                        <div class="text">
-                            <h5>PyDefend</h5>
-                            <img class="skill-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" />
-                            <img class="skill-icon" src="assets/youtube.png" />
-                            <p>
-                                A simple 2D defend base game. Defend the base and try to win by placing a tower on every tile!<br />
-                                Made with PyGame.</br>
-                                <!-- YouTube link in the top-right corner -->
-                                <a href="https://www.youtube.com/watch?v=PyilFiclHH8" target="_blank">
-                                    <img class="extra-icon" src="assets/youtube.png" alt="YouTube video" />
-                                </a>
-                                <span class="video-description">
-                                    <i class="fas fa-arrow-right"></i> Watch me create this in 6 minutes!
-                                </span>
-                            </p>
-                        </div>
-                    </div>
-                </section>
-
-                <a href="https://github.com/LuEklund/Unreal-TopDown-RPG" target="_blank">
-                    <section class="column">
-                        <div class="block">
-                            <img src="https://github.com/LuEklund/Unreal-TopDown-RPG/blob/master/ProgressImages/TopDownRPG3.gif?raw=true" alt="Unreal Engine Game" />
-                            <div class="text">
-                                <h5>
-                                    Unreal-TopDown-RPG (Multiplayer)
-                                </h5>
-                                <img class="skill-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg"/>
-                                <img class="skill-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/unrealengine/unrealengine-original.svg"/>
-
-                                <p>
-                                    A top-down RPG game is done in Unreal Engine 5 using C++ and blueprints.
-                                    Working on this project mainly to learn how multiplayer works and how the GAS 
-                                    (Gameplay Ability System) works.
-                                </p>
-                            </div>
-                        </div>
-                    </section>
-                </a>
-
-                <a href="https://github.com/LuEklund/ToonTanks" target="_blank">
-                    <section class="column">
-                        <div class="block">
-                            <img src="https://github.com/LuEklund/ToonTanks/blob/master/AnimationToon2.gif?raw=true" alt="Unreal Engine Game" />
-                            <div class="text">
-                                <h5>
-                                    ToonTanks
-                                </h5>
-                                <img class="skill-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg"/>
-                                <img class="skill-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/unrealengine/unrealengine-original.svg"/>
-                                <p>
-                                    ToonTanks is a smiple game made in Unreal Engine using mainly C++ and a bit of blueprints.
-                                </p>
-                            </div>
-                        </div>
-                    </section>
-                </a>
-
-                <!-- SECTION 2 -->
-                <a href="https://github.com/LuEklund/SFML-GameRPG" target="_blank">
-                    <section class="column">
-                        <div class="block">
-                                <img src="assets/SFML-RPG.gif" alt="SFML RPG" />
-                            <div class="text">
-                                <h5>
-                                    SFML-RPG
-                                </h5>
-                                <img class="skill-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg"/>
-                                <img class="skill-icon" src="assets/sfml-icon.svg"/>
-                                <p>
-                                    SFML-RPG, is game a I created using SFML which is just a graphics library.
-                                </p>
-                            </div>
-                        </div>
-                    </section>
-                </a>
-
-                <a href="https://github.com/LuEklund/MergeGame" target="_blank">
-                    <section class="column">
-                        <div class="block">
-                            <img src="assets/MergeGame.gif" alt="Unity Game" />
-                            <div class="text">
-                                <h5>
-                                    MergeGame
-                                </h5>
-                                <img class="skill-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg"/>
-                                <img class="skill-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/unity/unity-original.svg"/>
-                                <p>
-                                    MergeGame is a simple game where players stack coins to meet the required amount of money for the Money Man. With intuitive controls and a minimalist design.
-                                </p>
-                            </div>
-                        </div>
-                    </section>
-                </a>
-
-                <a href="https://lucas-eklund.itch.io/lost-prince" target="_blank">
-                    <section class="column">
-                        <div class="block">
-                            <img src="assets/LostPrince.gif" alt="Unity Game" />
-                            <div class="text">
-                                <h5>
-                                    Lost Prince
-                                </h5>
-                                <img class="skill-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg"/>
-                                <img class="skill-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/unity/unity-original.svg"/>
-                                <p>
-                                    Lost Prince is a short story game, done in Unity using Visual scripting.
-                                </p>
-                            </div>
-                        </div>
-                    </section>
-                </a>
-
-                <!-- SECTION 3 -->
-                <a href="https://github.com/LuEklund/Platformer-SFML" target="_blank">
-                    <section class="column">
-                        <div class="block">
-                            <img src="https://github.com/LuEklund/Platformer-SFML/blob/master/assets/thumbnail.png?raw=true" alt="SFML Platformer" />
-                            <div class="text">
-                                <h5>
-                                    Platformer-SFML
-                                </h5>
-                                <img class="skill-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg"/>
-                                <img class="skill-icon" src="assets/sfml-icon.svg"/>
-                                <p>
-                                    Platformer-SFML, is game a I created using SFML which is just a graphics library.
-                                </p>
-                            </div>
-                        </div>
-                    </section>
-                </a>
-
-                <a href="https://github.com/LuEklund/Snake-SFML" target="_blank">
-                    <section class="column">
-                        <div class="block">
-                            <img src="https://github.com/LuEklund/Snake-SFML/blob/master/assets/thumbnail.png?raw=true" alt="SFML Sanke" />
-                            <div class="text">
-                                <h5>
-                                    Snake-SFML
-                                </h5>
-                                <img class="skill-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg"/>
-                                <img class="skill-icon" src="assets/sfml-icon.svg"/>
-                                <p>
-                                    Snake-SFML, is game a I created using SFML which is just a graphics library.
-                                </p>
-                            </div>
-                        </div>
-                    </section>
-                </a>
-
-                <!-- SECTION 4 -->
-                <a href="https://github.com/LuEklund/TicTacToe-SFML" target="_blank">
-                    <section class="column">
-                        <div class="block">
-                            <img src="https://github.com/LuEklund/TicTacToe-SFML/blob/master/assets/thumbnail.png?raw=true" alt="SFML TocTacToe" />
-                            <div class="text">
-                                <h5>
-                                    TicTacToe-SFML
-                                </h5>
-                                <img class="skill-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg"/>
-                                <img class="skill-icon" src="assets/sfml-icon.svg"/>
-                                <p>
-                                    TicTacToe-SFML, is game a I created using SFML which is just a graphics library.
-                                </p>
-                            </div>
-                        </div>
-                    </section>
-                </a>
-
-                <a href="https://github.com/LuEklund/1D-Combat-SFML" target="_blank">
-                    <section class="column">
-                        <div class="block">
-                            <img src="https://github.com/LuEklund/1D-Combat-SFML/blob/master/assets/thumbnail.png?raw=true" alt="SFML 1D Combat" />
-                            <div class="text">
-                                <h5>
-                                    1D-Combat-SFML
-                                </h5>
-                                <img class="skill-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg"/>
-                                <img class="skill-icon" src="assets/sfml-icon.svg"/>
-                                <p>
-                                    1D-Combat-SFML, is a simple Player vs AI game that i created inspired by the game age of war it is done in SFML which is just a graphics library.
-                                </p>
-                            </div>
-                        </div>
-                    </section>
-                </a>
-
-                <!-- SECTION 5 -->
-                <a href="https://github.com/LuEklund/HIVE_2022" target="_blank">
-                    <section class="column">
-                        <div class="block">
-                            <img src="https://auth.42.fr/auth/resources/0nmse/login/students/img/42_logo.svg" alt="Hive Helsinki C" />
-                            <div class="text">
-                                <h5>
-                                    42 - Hive Helsinki Project
-                                </h5>
-                                <img class="skill-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg"/>
-                                <p>
-                                    Functions and programs written in pure C with no external libraries.
-                                </p>
-                            </div>
-                        </div>
-                    </section>
-                </a>
-
-                <a href="https://github.com/LuEklund/ft_transcendence" target="_blank">
-                    <section class="column">
-                        <div class="block">
-                            <img src="https://auth.42.fr/auth/resources/0nmse/login/students/img/42_logo.svg" alt="ft_transcendence" />
-                            <div class="text">
-                                <h5>
-                                    ft_transcendence
-                                </h5>
-                                <img class="skill-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg"/>
-                                <img class="skill-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg"/>
-                                <img class="skill-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg"/>
-                                <img class="skill-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg"/>
-                                <img class="skill-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain.svg"/>
-                                <p>
-                                    Full stack project. Final project at Hive Helsinki.
-                                </p>
-                            </div>
-                        </div>
-                    </section>
-                </a>
-
-
-            </section>
-        </section>
-
-        <!-- For JS to work -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-        <!-- My JavaScript -->
-        <script src="script/script.js"></script>
-    </body>
+build();
+</script>
+</body>
 </html>
