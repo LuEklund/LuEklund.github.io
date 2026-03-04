@@ -66,8 +66,32 @@
 
 <!-- ══ FOOTER ══════════════════════════════ -->
 <footer>
-  <div class="fl">LU<span>_</span>EKLUND</div>
-  <div class="fr"><span>ONLINE</span><span id="clk"></span></div>
+
+  <div class="about-snippet">
+    <div class="footer-label">// about me</div>
+    <p>
+      I am Lucas, a developer who loves going as low as possible. And telling stories.<br/>
+      I have studied at Hive Helsinki (42 Network) a truly amazing school focused on peer-to-peer learning the rpogramming lanagues C. No teachers.<br/>
+      Now I am learning about Vulkan and Zig. By making games and game engines. </br>
+      I am also a student at Åbo Akademi University. Studing Computer Engineering, (2nd year).</br>
+      </br>
+      (I use arch btw).</br>
+    </p>
+  </div>
+
+  <div class="interests-snippet">
+    <div class="footer-label">// interests</div>
+    <ul>
+      <li>Game Development</li>
+      <li>Low Level / Systems Programming</li>
+      <li>Data-Oriented Design</li>
+      <li>Start-ups &amp; Entrepreneurship</li>
+      <li>YouTube &amp; Storytelling</li>
+      <li>Gym</li>
+      <li>Reading Non-Fiction</li>
+    </ul>
+  </div>
+
 </footer>
 
 <script>
@@ -75,9 +99,6 @@
 const cur=document.getElementById('cur');
 document.addEventListener('mousemove',e=>{cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px';});
 
-// clock
-function tick(){document.getElementById('clk').textContent=new Date().toLocaleTimeString('en-GB',{hour12:false});}
-setInterval(tick,1000);tick();
 
 // matrix rain
 (function(){
