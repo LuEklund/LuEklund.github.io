@@ -217,28 +217,40 @@ a{color:inherit;text-decoration:none;}
   flex-direction: column;
   cursor: pointer;
   animation: pop .3s ease both;
+  border: 1px solid transparent;
+  transition: all .3s ease;
 }
-.card:hover { background: var(--s1); }
-.card[data-highlight="true"] {
-  background: linear-gradient(135deg, rgba(0,224,255,.08) 0%, var(--bg) 50%);
-  border: 1px solid rgba(0,224,255,.25);
+.card:hover {
+  background: var(--s1);
+  border-color: rgba(0,224,255,.25);
+  box-shadow: 0 0 20px rgba(0,224,255,.15);
 }
-.card[data-highlight="true"] .ci img {
+.card:hover .ci img {
   filter: saturate(.6) brightness(1) contrast(1.15);
 }
-.card[data-highlight="true"] .ct {
+.card:hover .ct {
   color: var(--tron);
   text-shadow: 0 0 20px rgba(0,224,255,.4);
+}
+.card[data-highlight="true"] {
+  background: linear-gradient(135deg, rgba(0,224,255,.08) 0%, var(--bg) 50%);
+  border-color: rgba(0,224,255,.25);
 }
 .card[data-highlight="true"]::before {
   content: '★';
   position: absolute;
-  top: 8px;
-  left: 10px;
-  color: var(--tron);
-  font-size: 14px;
+  bottom: 8px;
+  right: 10px;
+  color: #ffd700;
+  font-size: 24px;
   z-index: 2;
-  text-shadow: 0 0 10px rgba(0,224,255,.6);
+  animation: starPulse 1.5s ease-in-out infinite;
+  text-shadow: 0 0 15px rgba(255,215,0,.8);
+}
+
+@keyframes starPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0.8; }
 }
 .card[data-highlight="true"]::after {
   height: 2px;
