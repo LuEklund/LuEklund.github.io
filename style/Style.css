@@ -42,7 +42,7 @@ a{color:inherit;text-decoration:none;}
   display: grid;
   grid-template-columns: auto 1fr auto;
   gap: 0 clamp(20px, 3vw, 48px);
-  align-items: start;
+  align-items: center;
 }
 
 
@@ -63,6 +63,30 @@ a{color:inherit;text-decoration:none;}
   letter-spacing: clamp(2px, 0.3vw, 5px);
   text-transform: uppercase;
   color: var(--mid);
+}
+
+.id-pfp-link {
+  display: block;
+  margin-right: 16px;
+  flex-shrink: 0;
+}
+.id-pfp {
+  width: clamp(60px, 7vw, 90px);
+  height: clamp(60px, 7vw, 90px);
+  border-radius: 8px;
+  object-fit: cover;
+  border: 2px solid var(--tron);
+  box-shadow: 0 0 20px rgba(0,224,255,.2);
+  transition: box-shadow .3s;
+  display: block;
+}
+.id-pfp:hover {
+  box-shadow: 0 0 30px rgba(0,224,255,.4);
+}
+
+.id-block {
+  display: flex;
+  align-items: center;
 }
 
 /* divider */
