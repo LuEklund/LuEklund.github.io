@@ -243,7 +243,7 @@ a{color:inherit;text-decoration:none;}
   animation: pop .3s ease both;
   border: 1px solid transparent;
   transition: all .3s ease;
-  margin: 5px;
+  margin: 2%;
 }
 .card:hover {
   background: var(--s1);
@@ -501,10 +501,18 @@ footer {
   .tb-count{
     display:none;
   }
-  #main,#grid{padding:0;gap:0;background:var(--bg);}
+  #main,#grid{padding:0;gap:0;background:transparent;}
   .card{border-bottom:1px solid var(--line);}
   footer{padding:16px 20px;flex-direction:column;gap:12px;align-items:flex-start;}
   .fr{width:100%;justify-content:space-between;}
+  #rain{
+    position:fixed !important;
+    inset:0 !important;
+    opacity:.25 !important;
+    display:block !important;
+    z-index:0 !important;
+    pointer-events:none !important;
+  }
 }
 
 ::-webkit-scrollbar{width:4px;}
