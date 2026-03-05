@@ -258,28 +258,19 @@ a{color:inherit;text-decoration:none;}
 }
 .card[data-highlight="true"] {
   background: linear-gradient(135deg, rgba(0,224,255,.08) 0%, var(--bg) 50%);
-  border-color: rgba(0,224,255,.25);
+  border-color: #ffd700;
 }
-.card[data-highlight="true"]::before {
-  content: '★';
-  position: absolute;
-  bottom: 8px;
-  right: 10px;
+.card[data-highlight="true"]:hover {
+  background: var(--s1);
+  border-color: #ffd700;
+  box-shadow: 0 0 20px rgba(255,215,0,.3);
+}
+.card[data-highlight="true"]:hover .ct {
   color: #ffd700;
-  font-size: 24px;
-  z-index: 2;
-  animation: starPulse 1.5s ease-in-out infinite;
-  text-shadow: 0 0 15px rgba(255,215,0,.8);
-}
-
-@keyframes starPulse {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.2); opacity: 0.8; }
+  text-shadow: 0 0 20px rgba(255,215,0,.6);
 }
 .card[data-highlight="true"]::after {
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--tron), transparent);
-  transform: scaleX(1);
+  background: linear-gradient(90deg, transparent, #ffd700, transparent);
 }
 
 /* tron line sweep on hover */
