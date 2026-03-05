@@ -243,6 +243,7 @@ a{color:inherit;text-decoration:none;}
   animation: pop .3s ease both;
   border: 1px solid transparent;
   transition: all .3s ease;
+  margin: 5px;
 }
 .card:hover {
   background: var(--s1);
@@ -257,12 +258,13 @@ a{color:inherit;text-decoration:none;}
   text-shadow: 0 0 20px rgba(0,224,255,.4);
 }
 .card[data-highlight="true"] {
-  background: linear-gradient(135deg, rgba(0,224,255,.08) 0%, var(--bg) 50%);
-  border-color: #ffd700;
+  background: linear-gradient(135deg, rgba(255,215,0,.15) 0%, var(--bg) 50%);
+  border: 2px solid;
+  border-image: linear-gradient(135deg, #ffd700, #ff8c00, #ffd700) 1;
+  box-shadow: 0 0 15px rgba(255,215,0,.25), inset 0 0 15px rgba(255,215,0,.1);
 }
 .card[data-highlight="true"]:hover {
   background: var(--s1);
-  border-color: #ffd700;
   box-shadow: 0 0 20px rgba(255,215,0,.3);
 }
 .card[data-highlight="true"]:hover .ct {
