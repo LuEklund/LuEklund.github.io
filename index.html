@@ -112,7 +112,7 @@ document.addEventListener('mousemove',e=>{cur.style.left=e.clientX+'px';cur.styl
   }
   function draw(){
     cx.fillStyle='rgba(3,8,14,.06)';cx.fillRect(0,0,W,H);
-    cx.fillStyle='rgba(0,224,255,.85)';cx.font='13px "DM Mono",monospace';
+    cx.fillStyle='rgba(0,224,255,1)';cx.font='16px "DM Mono",monospace';
     drops.forEach((d,i)=>{
       cx.fillText(CH[Math.random()*CH.length|0],i*14,d*14);
       if(d*14>H&&Math.random()>.97)drops[i]=0; else drops[i]++;
