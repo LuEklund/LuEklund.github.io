@@ -98,7 +98,7 @@ body > *:not(#rain):not(#cur):not(#cur2) { position: relative; z-index: 1; }
 .hnav { display: flex; align-items: center; gap: 18px; }
 .hl {
   font-family: 'Share Tech Mono', monospace;
-  font-size: 11px; color: #1a3545; letter-spacing: .08em;
+  font-size: 11px; color: #00e5ff; letter-spacing: .08em;
   transition: color .15s;
 }
 .hl:hover { color: var(--g); }
@@ -265,7 +265,7 @@ body > *:not(#rain):not(#cur):not(#cur2) { position: relative; z-index: 1; }
 
 /* progress bar */
 .cprog {
-  position: absolute; bottom: 0; left: 0; right: 0; height: 2px; z-index: 3;
+  position: absolute; bottom: 0; left: 0; right: 0; height: 1%; z-index: 3;
   background: rgba(0,229,255,.1);
 }
 .cprog-bar {
@@ -471,8 +471,8 @@ body > *:not(#rain):not(#cur):not(#cur2) { position: relative; z-index: 1; }
 
 .pcinfo { padding: 9px 11px 11px; flex: 1; display: flex; flex-direction: column; gap: 4px; }
 .pctags { display: flex; flex-wrap: wrap; gap: 3px; }
-.pctitle { color: #5a8a9a; font-weight: 600; font-size: 12px; line-height: 1.3; }
-.pcdesc { color: #1e2535; font-size: 10px; line-height: 1.5;
+.pctitle { color: white; font-weight: 600; font-size: 12px; line-height: 1.3; }
+.pcdesc { color: #00c5db; font-size: 10px; line-height: 1.5;
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
 /* empty */
@@ -515,12 +515,12 @@ body > *:not(#rain):not(#cur):not(#cur2) { position: relative; z-index: 1; }
 .agrid { display:grid; grid-template-columns:1fr; gap:28px; }
 @media(min-width:640px){ .agrid{ grid-template-columns:1.5fr 1fr 1fr; gap:24px; } }
 .a-lb { font-family:'Share Tech Mono',monospace; font-size:9px;
-  letter-spacing:.22em; color:#0e1a22; margin-bottom:11px; }
-.a-bio { color:#1a2535; font-size:12px; line-height:1.72; }
-.a-bio b { color:#2a5065; font-weight:500; }
+  letter-spacing:.22em; color:#00e5ff; margin-bottom:11px; }
+.a-bio { color:#00e5ff; font-size:12px; line-height:1.72; }
+.a-bio b { color:#007bff; font-weight:500; }
 .a-mn { font-family:'Share Tech Mono',monospace; font-size:9px;
   color:#0a1422; display:block; margin-top:9px; }
-.alink { display:flex; align-items:center; gap:8px; color:#162535;
+.alink { display:flex; align-items:center; gap:8px; color:#00e5ff;
   font-size:12px; padding:7px 0; border-bottom:1px solid #060e08;
   transition:color .15s; }
 .alink:last-child { border-bottom:none; }
@@ -571,8 +571,8 @@ footer { padding:16px; text-align:center; border-top:1px solid #060e08;
 <header id="hdr">
   <a href="#" class="logo" aria-label="Lucas Eklund">LUCAS <span>EKLUND</span></a>
   <nav class="hnav">
-    <a href="#projects" class="hl">_projects</a>
-    <a href="#about"    class="hl">_about</a>
+    <a href="#projects" class="hl">Projects</a>
+    <a href="#about"    class="hl">About</a>
     <a href="https://github.com/LuEklund" target="_blank" rel="noopener" class="hbtn">[ GitHub ]</a>
   </nav>
 </header>
@@ -660,11 +660,11 @@ footer { padding:16px; text-align:center; border-top:1px solid #060e08;
         <p class="a-lb">// BACKGROUND</p>
         <div style="display:flex;align-items:center;gap:11px;margin-bottom:13px;">
           <img src="assets/leklund1000x1000.png" alt="Lucas Eklund"
-               style="width:48px;height:48px;border-radius:2px;object-fit:cover;border:1px solid #060c14;filter:grayscale(1) brightness(.6) sepia(.2) hue-rotate(185deg);flex-shrink:0;"
+               style="width:48px;height:48px;border-radius:2px;object-fit:cover;border:1px solid #060c14;flex-shrink:0;"
                onerror="this.style.display='none'"/>
           <div>
-            <div style="color:#3a6a7a;font-weight:600;font-size:13px;">Lucas Eklund</div>
-            <div style="color:#0e1a22;font-family:'Share Tech Mono',monospace;font-size:9px;">lucasdevbusiness@gmail.com</div>
+            <div style="color:#007bff;font-weight:600;font-size:13px;">Lucas Eklund</div>
+            <div style="color:#00e5ff;font-family:'Share Tech Mono',monospace;font-size:9px;">lucasdevbusiness@gmail.com</div>
           </div>
         </div>
         <p class="a-bio">Developer who loves going as <b>low as possible</b>. Studied at <b>Hive Helsinki</b> (42 Network) — peer-to-peer C school, no teachers, no lectures. Currently Computer Engineering at <b>Åbo Akademi University</b> (2nd year). Building game engines from scratch and documenting on YouTube.<span class="a-mn">$ uname -a → Arch Linux x86_64</span></p>
@@ -770,7 +770,7 @@ const FEAT=P.filter(p=>p.hi);
 ════════════════════════════════════════════════════════ */
 let cAct=0, cTimer=null, cDragX=0, cWasDrag=false, cProgTimer=null;
 
-const AUTOPLAY_MS = 3800;
+const AUTOPLAY_MS = 20000;
 
 function cW(){ return Math.min(window.innerWidth * 0.82, 960); }
 function cH(){ return Math.min(Math.round(cW() * 9/16), 540); }
