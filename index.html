@@ -3,134 +3,477 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Lucas Eklund</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style/Style.css">
+<title>Lucas Eklund — Game &amp; Systems Developer</title>
+<meta name="description" content="Lucas Eklund — game developer and systems programmer. Vulkan, Zig, C, C++, Unreal."/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+/* ── Base ─────────────────────────────────── */
+*{box-sizing:border-box;cursor:none;}
+html{scroll-behavior:smooth;}
+body{background:#03080e;color:#cbd5e1;font-family:'Space Grotesk',ui-sans-serif,system-ui;overflow-x:hidden;}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:#03080e;}
+::-webkit-scrollbar-thumb{background:rgba(0,229,255,.25);border-radius:3px;}
+::-webkit-scrollbar-thumb:hover{background:rgba(0,229,255,.5);}
+:focus-visible{outline:2px solid rgba(0,229,255,.6);outline-offset:2px;}
+
+/* ── Custom cursor ────────────────────────── */
+#cur{position:fixed;width:10px;height:10px;background:#00e5ff;border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);box-shadow:0 0 10px rgba(0,229,255,.9);transition:transform .15s,width .2s,height .2s;mix-blend-mode:screen;}
+#cur-ring{position:fixed;width:28px;height:28px;border:1px solid rgba(0,229,255,.35);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:left .1s ease,top .1s ease,opacity .2s;}
+
+/* ── Matrix rain ──────────────────────────── */
+#rain{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.32;}
+
+/* Stack everything above canvas */
+body>*:not(#rain):not(#cur):not(#cur-ring){position:relative;z-index:1;}
+
+/* ── Navbar ───────────────────────────────── */
+#navbar{transition:background .3s,box-shadow .3s;}
+#navbar.scrolled{background:rgba(3,8,14,.88);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 1px 0 rgba(0,229,255,.08),0 4px 24px rgba(0,0,0,.6);}
+#mobile-menu{max-height:0;overflow:hidden;transition:max-height .3s ease;}
+#mobile-menu.open{max-height:320px;}
+
+/* ── Glassmorphism ────────────────────────── */
+.glass{background:rgba(8,15,31,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(0,229,255,.1);}
+.glass-hover{transition:border-color .25s,transform .25s,box-shadow .25s;}
+.glass-hover:hover{border-color:rgba(0,229,255,.3);transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,229,255,.08);}
+
+/* ── Highlighted card (gold) ──────────────── */
+.card-highlight{border-color:rgba(240,180,41,.3)!important;box-shadow:0 0 20px rgba(240,180,41,.05);}
+.card-highlight:hover{border-color:rgba(240,180,41,.6)!important;box-shadow:0 12px 40px rgba(240,180,41,.12)!important;transform:translateY(-3px);}
+
+/* ── Card image ───────────────────────────── */
+.card-img{width:100%;height:175px;object-fit:cover;display:block;filter:saturate(.65) brightness(.85);transition:filter .3s;}
+.glass-hover:hover .card-img{filter:saturate(1.05) brightness(.98);}
+.card-img-ph{width:100%;height:175px;background:#080f1f;display:flex;align-items:center;justify-content:center;color:#1e3a5f;font-family:'Orbitron',sans-serif;font-size:10px;letter-spacing:.2em;}
+
+/* ── Tech tag pills ───────────────────────── */
+.tag{display:inline-flex;align-items:center;padding:2px 7px;border-radius:3px;font-size:10px;font-weight:600;border:1px solid;letter-spacing:.03em;white-space:nowrap;}
+.tag-c,.tag-cpp{color:#7dd3fc;border-color:rgba(125,211,252,.25);background:rgba(125,211,252,.05);}
+.tag-zig{color:#fbbf24;border-color:rgba(251,191,36,.25);background:rgba(251,191,36,.05);}
+.tag-asm{color:#f87171;border-color:rgba(248,113,113,.25);background:rgba(248,113,113,.05);}
+.tag-cs{color:#c084fc;border-color:rgba(192,132,252,.25);background:rgba(192,132,252,.05);}
+.tag-py{color:#60a5fa;border-color:rgba(96,165,250,.25);background:rgba(96,165,250,.05);}
+.tag-unreal{color:#94a3b8;border-color:rgba(148,163,184,.25);background:rgba(148,163,184,.05);}
+.tag-unity{color:#e2e8f0;border-color:rgba(226,232,240,.18);background:rgba(226,232,240,.04);}
+.tag-vulkan{color:#fb923c;border-color:rgba(251,146,60,.25);background:rgba(251,146,60,.05);}
+.tag-web{color:#fbbf24;border-color:rgba(251,191,36,.25);background:rgba(251,191,36,.05);}
+.tag-sfml{color:#4ade80;border-color:rgba(74,222,128,.25);background:rgba(74,222,128,.05);}
+
+/* ── Filter buttons ───────────────────────── */
+.ftag{display:inline-flex;align-items:center;gap:5px;padding:5px 13px;border-radius:4px;border:1px solid rgba(71,85,105,.45);color:#64748b;font-size:11px;font-family:'Orbitron',sans-serif;font-weight:700;letter-spacing:.05em;cursor:pointer;background:transparent;transition:all .2s ease;}
+.ftag:hover{border-color:rgba(0,229,255,.35);color:#94a3b8;background:rgba(0,229,255,.04);}
+.ftag.active{border-color:rgba(0,229,255,.6);color:#00e5ff;background:rgba(0,229,255,.08);text-shadow:0 0 8px rgba(0,229,255,.4);}
+
+/* ── Project card base ────────────────────── */
+.card{opacity:0;}
+.card.vis{animation:fadeUp .4s ease forwards;}
+
+/* ── Section reveal ───────────────────────── */
+.sf{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease;}
+.sf.vis{opacity:1;transform:none;}
+
+/* ── Neon text ────────────────────────────── */
+.neon{text-shadow:0 0 18px rgba(0,229,255,.55);}
+.neon-sm{text-shadow:0 0 10px rgba(0,229,255,.4);}
+
+/* ── Gone ─────────────────────────────────── */
+.gone{display:none!important;}
+
+/* ── Orbitron font ────────────────────────── */
+.orb{font-family:'Orbitron',sans-serif;}
+
+/* ── PFP glow ring ────────────────────────── */
+@keyframes pfpGlow{0%,100%{box-shadow:0 0 16px rgba(0,229,255,.3),0 0 32px rgba(0,229,255,.15);}50%{box-shadow:0 0 28px rgba(0,229,255,.55),0 0 56px rgba(0,229,255,.2);}}
+.pfp-ring{animation:pfpGlow 3s ease-in-out infinite;}
+
+/* ── Keyframes ────────────────────────────── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+@keyframes scrollBounce{0%,100%{transform:translateY(0);}50%{transform:translateY(7px);}}
+.scroll-bounce{animation:scrollBounce 1.6s ease-in-out infinite;}
+
+/* ── Gradient separator ───────────────────── */
+.sep{width:80px;height:1px;background:linear-gradient(90deg,transparent,#00e5ff,transparent);margin:0 auto;}
+
+/* ── Reduced motion ───────────────────────── */
+@media(prefers-reduced-motion:reduce){
+  #rain{display:none;}
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;}
+}
+</style>
 </head>
 <body>
 
-<div id="cur"></div>
-<canvas id="rain"></canvas>
+<!-- Cursor -->
+<div id="cur" aria-hidden="true"></div>
+<div id="cur-ring" aria-hidden="true"></div>
 
-<!-- ══ HEADER ══════════════════════════════ -->
-<header id="header">
+<!-- Matrix rain -->
+<canvas id="rain" aria-hidden="true"></canvas>
 
-  <div class="id-block">
-    <a href="https://www.linkedin.com/in/lucas-eklund/" target="_blank" class="id-pfp-link">
-      <img src="assets/leklund1000x1000.png" class="id-pfp" alt="Profile" onerror="this.style.display='none'"/>
-    </a>
-    <div>
-      <div class="id-name"><span>Lucas</span> Eklund</div>
-      <div class="id-role">Junior Software Developer</div>
+<!-- ═══════════════════ NAV ═══════════════════ -->
+<nav id="navbar" class="fixed top-0 left-0 right-0 z-50">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="flex items-center justify-between h-16">
+
+      <a href="#hero" class="orb font-black text-lg tracking-widest neon" style="color:#00e5ff;">
+        LU<span class="text-white">EK</span>
+      </a>
+
+      <!-- Desktop -->
+      <div class="hidden md:flex items-center gap-8">
+        <a href="#about"    class="text-slate-400 hover:text-cyan-300 transition-colors duration-200 text-sm font-medium tracking-wide">About</a>
+        <a href="#projects" class="text-slate-400 hover:text-cyan-300 transition-colors duration-200 text-sm font-medium tracking-wide">Projects</a>
+        <a href="#contact"  class="text-slate-400 hover:text-cyan-300 transition-colors duration-200 text-sm font-medium tracking-wide">Contact</a>
+        <a href="https://github.com/LuEklund" target="_blank" rel="noopener"
+           class="px-4 py-1.5 border text-sm font-semibold rounded transition-all duration-200"
+           style="border-color:rgba(0,229,255,.4);color:#00e5ff;"
+           onmouseenter="this.style.background='rgba(0,229,255,.1)'" onmouseleave="this.style.background='transparent'">
+          GitHub
+        </a>
+      </div>
+
+      <!-- Mobile burger -->
+      <button id="menu-btn" class="md:hidden text-slate-400 hover:text-cyan-300" aria-label="Toggle menu" aria-expanded="false">
+        <svg id="burger-icon" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile menu -->
+    <div id="mobile-menu">
+      <div class="flex flex-col gap-4 pb-5 pt-2 border-t" style="border-color:rgba(0,229,255,.1);">
+        <a href="#about"    class="text-slate-400 hover:text-cyan-300 transition-colors" onclick="closeMob()">About</a>
+        <a href="#projects" class="text-slate-400 hover:text-cyan-300 transition-colors" onclick="closeMob()">Projects</a>
+        <a href="#contact"  class="text-slate-400 hover:text-cyan-300 transition-colors" onclick="closeMob()">Contact</a>
+        <a href="https://github.com/LuEklund" target="_blank" rel="noopener" style="color:#00e5ff;">GitHub ↗</a>
+      </div>
     </div>
   </div>
+</nav>
 
-  <div class="hd-div"></div>
+<!-- ═══════════════════ HERO ══════════════════ -->
+<section id="hero" class="min-h-screen flex flex-col items-center justify-center px-4 pt-16">
+  <div class="max-w-3xl mx-auto text-center">
 
-  <div class="contact-block">
-    <a href="mailto:lucasdevbusiness@gmail.com">lucasdevbusiness@gmail.com</a>
-    <a href="https://github.com/LuEklund" target="_blank">github.com/LuEklund</a>
-  </div>
+    <!-- Profile photo -->
+    <div class="mb-8 flex justify-center">
+      <div class="relative">
+        <div class="absolute inset-0 rounded-full scale-110 pfp-ring" style="border:2px solid rgba(0,229,255,.4);border-radius:9999px;"></div>
+        <a href="https://www.linkedin.com/in/lucas-eklund/" target="_blank" rel="noopener" aria-label="Lucas Eklund on LinkedIn">
+          <img src="assets/leklund1000x1000.png" alt="Lucas Eklund"
+               class="w-28 h-28 sm:w-36 sm:h-36 rounded-full object-cover grayscale hover:grayscale-0 transition-all duration-500"
+               style="border:2px solid rgba(0,229,255,.3);"
+               onerror="this.outerHTML='<div style=\'width:9rem;height:9rem;border-radius:9999px;background:#080f1f;border:2px solid rgba(0,229,255,.3);display:flex;align-items:center;justify-content:center;font-family:Orbitron,sans-serif;font-size:1.5rem;font-weight:900;color:#00e5ff;\'>LE</div>'"/>
+        </a>
+      </div>
+    </div>
 
-</header>
+    <!-- Name -->
+    <h1 class="orb font-black text-4xl sm:text-5xl md:text-7xl text-white leading-tight mb-3">
+      <span class="neon" style="color:#00e5ff;">Lucas</span> Eklund
+    </h1>
 
-<!-- ══ TOOLBAR ═════════════════════════════ -->
-<div id="toolbar">
-  <div class="tb-search">
-    <input id="search" type="text" placeholder="search..." autocomplete="off" spellcheck="false"/>
-  </div>
-
-  <div class="tb-filters" id="filters">
-    <button class="ftag on" data-f="all">All</button>
-    <button class="ftag" data-f="c"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg"/>C</button>
-    <button class="ftag" data-f="cpp"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg"/>C++</button>
-    <button class="ftag" data-f="zig">Zig</button>
-    <button class="ftag" data-f="asm">ASM</button>
-    <button class="ftag" data-f="vulkan">Vulkan</button>
-    <button class="ftag" data-f="unreal"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/unrealengine/unrealengine-original.svg"/>Unreal</button>
-    <button class="ftag" data-f="unity"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/unity/unity-original.svg"/>Unity</button>
-    <button class="ftag" data-f="cs"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg"/>C#</button>
-    <button class="ftag" data-f="py"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg"/>Python</button>
-    <!-- <button class="ftag" data-f="java"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg"/>Java</button> -->
-    <button class="ftag" data-f="web">JS/TS</button>
-    <button class="ftag" data-f="sfml">SFML</button>
-  </div>
-
-  <div class="tb-count" id="rcount"></div>
-</div>
-
-<!-- ══ GRID ════════════════════════════════ -->
-<div id="main">
-  <div id="grid"></div>
-</div>
-
-<!-- ══ FOOTER ══════════════════════════════ -->
-<footer>
-
-  <div class="about-snippet">
-    <div class="footer-label">// about me</div>
-    <p>
-      I am Lucas, a developer who loves going as low as possible. And telling stories.<br/>
-      I have studied at Hive Helsinki (42 Network) a truly amazing school focused on peer-to-peer learning the rpogramming lanagues C. No teachers.<br/>
-      Now I am learning about Vulkan and Zig. By making games and game engines. </br>
-      I am also a student at Åbo Akademi University. Studing Computer Engineering, (2nd year).</br>
-      </br>
-      (I use arch btw).</br>
+    <!-- Role -->
+    <p class="orb text-xs sm:text-sm tracking-[0.3em] uppercase mb-6" style="color:#4a6fa0;">
+      Game &amp; Systems Developer
     </p>
-  </div>
 
-  <div class="interests-snippet">
-    <div class="footer-label">// interests</div>
-    <ul>
-      <li>Game Development</li>
-      <li>Low Level / Systems Programming</li>
-      <li>Data-Oriented Design</li>
-      <li>Start-ups &amp; Entrepreneurship</li>
-      <li>YouTube &amp; Storytelling</li>
-      <li>Gym</li>
-      <li>Reading Non-Fiction</li>
-    </ul>
-  </div>
+    <!-- Tagline -->
+    <p class="max-w-lg mx-auto text-slate-400 text-base sm:text-lg leading-relaxed mb-8">
+      Building games from bare metal — Vulkan, Zig, and pure C.<br/>
+      <span class="font-mono text-sm" style="color:rgba(0,229,255,.5);">// I use Arch btw</span>
+    </p>
 
+    <!-- Tech badges -->
+    <div class="flex flex-wrap justify-center gap-2 mb-10">
+      <span class="tag tag-c">C</span>
+      <span class="tag tag-cpp">C++</span>
+      <span class="tag tag-zig">Zig</span>
+      <span class="tag tag-asm">ASM</span>
+      <span class="tag tag-vulkan">Vulkan</span>
+      <span class="tag tag-unreal">Unreal</span>
+      <span class="tag tag-unity">Unity</span>
+    </div>
+
+    <!-- Social links -->
+    <div class="flex justify-center gap-4 mb-14">
+      <a href="https://github.com/LuEklund" target="_blank" rel="noopener" aria-label="GitHub"
+         class="w-10 h-10 flex items-center justify-center rounded transition-all duration-200 text-slate-400 hover:text-cyan-300"
+         style="border:1px solid rgba(71,85,105,.5);"
+         onmouseenter="this.style.borderColor='rgba(0,229,255,.45)'" onmouseleave="this.style.borderColor='rgba(71,85,105,.5)'">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+      </a>
+      <a href="https://www.linkedin.com/in/lucas-eklund/" target="_blank" rel="noopener" aria-label="LinkedIn"
+         class="w-10 h-10 flex items-center justify-center rounded transition-all duration-200 text-slate-400 hover:text-cyan-300"
+         style="border:1px solid rgba(71,85,105,.5);"
+         onmouseenter="this.style.borderColor='rgba(0,229,255,.45)'" onmouseleave="this.style.borderColor='rgba(71,85,105,.5)'">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+      </a>
+      <a href="mailto:lucasdevbusiness@gmail.com" aria-label="Email"
+         class="w-10 h-10 flex items-center justify-center rounded transition-all duration-200 text-slate-400 hover:text-cyan-300"
+         style="border:1px solid rgba(71,85,105,.5);"
+         onmouseenter="this.style.borderColor='rgba(0,229,255,.45)'" onmouseleave="this.style.borderColor='rgba(71,85,105,.5)'">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"/></svg>
+      </a>
+      <a href="https://www.youtube.com/@lucasdevs" target="_blank" rel="noopener" aria-label="YouTube"
+         class="w-10 h-10 flex items-center justify-center rounded transition-all duration-200 text-slate-400 hover:text-red-400"
+         style="border:1px solid rgba(71,85,105,.5);"
+         onmouseenter="this.style.borderColor='rgba(239,68,68,.45)'" onmouseleave="this.style.borderColor='rgba(71,85,105,.5)'">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+      </a>
+    </div>
+
+    <!-- Scroll cue -->
+    <div class="flex flex-col items-center gap-1 scroll-bounce" style="color:#1e3a5f;">
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5"/>
+      </svg>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════ ABOUT ═════════════════ -->
+<section id="about" class="py-24 px-4 sf">
+  <div class="max-w-6xl mx-auto">
+
+    <div class="mb-16 text-center">
+      <p class="orb text-xs tracking-widest mb-2" style="color:#00e5ff;">// 01</p>
+      <h2 class="orb font-bold text-3xl sm:text-4xl text-white">About Me</h2>
+      <div class="sep mt-4"></div>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-8 items-start">
+
+      <!-- Bio -->
+      <div class="glass glass-hover rounded-xl p-8">
+        <h3 class="orb text-xs tracking-widest mb-6" style="color:#00e5ff;">Background</h3>
+        <div class="space-y-4 text-slate-400 leading-relaxed text-sm sm:text-base">
+          <p>I'm Lucas — a developer who loves going as <span class="text-slate-200 font-medium">low as possible</span>. I thrive at the intersection of game development and systems programming.</p>
+          <p>Studied at <span class="text-slate-200 font-medium">Hive Helsinki</span> (42 Network) — peer-to-peer C programming school with no teachers, no lectures. Just projects and peers.</p>
+          <p>Currently a <span class="text-slate-200 font-medium">Computer Engineering</span> student at Åbo Akademi University (2nd year), building game engines from scratch and documenting the journey on YouTube.</p>
+          <p class="font-mono text-xs pt-2" style="color:rgba(0,229,255,.5);">$ uname -a<br/>&gt; Arch Linux x86_64</p>
+        </div>
+      </div>
+
+      <!-- Interests + Education -->
+      <div class="space-y-6">
+        <div class="glass glass-hover rounded-xl p-8">
+          <h3 class="orb text-xs tracking-widest mb-5" style="color:#00e5ff;">Interests</h3>
+          <div class="grid grid-cols-2 gap-2">
+            <span class="text-slate-400 text-sm py-1.5 px-3 rounded" style="background:rgba(0,229,255,.04);border:1px solid rgba(0,229,255,.08);">Game Development</span>
+            <span class="text-slate-400 text-sm py-1.5 px-3 rounded" style="background:rgba(0,229,255,.04);border:1px solid rgba(0,229,255,.08);">Systems Programming</span>
+            <span class="text-slate-400 text-sm py-1.5 px-3 rounded" style="background:rgba(0,229,255,.04);border:1px solid rgba(0,229,255,.08);">Vulkan / Graphics</span>
+            <span class="text-slate-400 text-sm py-1.5 px-3 rounded" style="background:rgba(0,229,255,.04);border:1px solid rgba(0,229,255,.08);">Data-Oriented Design</span>
+            <span class="text-slate-400 text-sm py-1.5 px-3 rounded" style="background:rgba(0,229,255,.04);border:1px solid rgba(0,229,255,.08);">YouTube &amp; Storytelling</span>
+            <span class="text-slate-400 text-sm py-1.5 px-3 rounded" style="background:rgba(0,229,255,.04);border:1px solid rgba(0,229,255,.08);">Start-ups</span>
+          </div>
+        </div>
+
+        <div class="glass glass-hover rounded-xl p-8">
+          <h3 class="orb text-xs tracking-widest mb-5" style="color:#00e5ff;">Education</h3>
+          <div class="space-y-4">
+            <div class="pl-4" style="border-left:2px solid rgba(0,229,255,.4);">
+              <div class="text-slate-200 font-semibold text-sm">Åbo Akademi University</div>
+              <div class="text-slate-500 text-xs mt-0.5">Computer Engineering · 2023 – present</div>
+            </div>
+            <div class="pl-4" style="border-left:2px solid rgba(100,116,139,.4);">
+              <div class="text-slate-200 font-semibold text-sm">Hive Helsinki — 42 Network</div>
+              <div class="text-slate-500 text-xs mt-0.5">Software Engineering · 2022 – 2023</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tech stack -->
+    <div class="glass glass-hover rounded-xl p-8 mt-8">
+      <h3 class="orb text-xs tracking-widest mb-6 text-center" style="color:#00e5ff;">Tech Stack</h3>
+      <div class="flex flex-wrap justify-center gap-2.5">
+        <span class="tag tag-c">C</span>
+        <span class="tag tag-cpp">C++</span>
+        <span class="tag tag-zig">Zig</span>
+        <span class="tag tag-asm">6502 ASM</span>
+        <span class="tag tag-vulkan">Vulkan</span>
+        <span class="tag tag-unreal">Unreal Engine 5</span>
+        <span class="tag tag-unity">Unity</span>
+        <span class="tag tag-sfml">SFML</span>
+        <span class="tag tag-py">Python</span>
+        <span class="tag tag-web">JS / TS</span>
+        <span class="tag tag-py">Django</span>
+        <span class="tag tag-cs">C#</span>
+        <span class="tag tag-asm" style="color:#a78bfa;border-color:rgba(167,139,250,.25);background:rgba(167,139,250,.05);">Arch Linux</span>
+        <span class="tag tag-asm" style="color:#f97316;border-color:rgba(249,115,22,.25);background:rgba(249,115,22,.05);">Git</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════ PROJECTS ══════════════ -->
+<section id="projects" class="py-24 px-4 sf">
+  <div class="max-w-6xl mx-auto">
+
+    <div class="mb-16 text-center">
+      <p class="orb text-xs tracking-widest mb-2" style="color:#00e5ff;">// 02</p>
+      <h2 class="orb font-bold text-3xl sm:text-4xl text-white">Projects</h2>
+      <div class="sep mt-4"></div>
+    </div>
+
+    <!-- Search + count -->
+    <div class="glass rounded-xl px-4 py-3 mb-5 flex items-center gap-3">
+      <svg class="w-4 h-4 shrink-0 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607z"/>
+      </svg>
+      <input id="search" type="text" placeholder="search projects..."
+             class="flex-1 bg-transparent text-slate-300 text-sm placeholder:text-slate-600 focus:outline-none"
+             autocomplete="off" spellcheck="false" aria-label="Search projects"/>
+      <div id="rcount" class="orb text-xs shrink-0" style="color:#00e5ff;"></div>
+    </div>
+
+    <!-- Filters -->
+    <div class="flex flex-wrap gap-2 mb-8" id="filters">
+      <button class="ftag active" data-f="all">All</button>
+      <button class="ftag" data-f="c">C</button>
+      <button class="ftag" data-f="cpp">C++</button>
+      <button class="ftag" data-f="zig">Zig</button>
+      <button class="ftag" data-f="asm">ASM</button>
+      <button class="ftag" data-f="vulkan">Vulkan</button>
+      <button class="ftag" data-f="unreal">Unreal</button>
+      <button class="ftag" data-f="unity">Unity</button>
+      <button class="ftag" data-f="cs">C#</button>
+      <button class="ftag" data-f="py">Python</button>
+      <button class="ftag" data-f="web">JS/TS</button>
+      <button class="ftag" data-f="sfml">SFML</button>
+    </div>
+
+    <!-- Grid -->
+    <div id="grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"></div>
+
+    <!-- No results -->
+    <div id="nores" class="hidden text-center py-20 font-mono text-sm" style="color:#334155;">
+      &gt; no matching projects found_
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════ CONTACT ═══════════════ -->
+<section id="contact" class="py-24 px-4 sf">
+  <div class="max-w-2xl mx-auto text-center">
+
+    <p class="orb text-xs tracking-widest mb-2" style="color:#00e5ff;">// 03</p>
+    <h2 class="orb font-bold text-3xl sm:text-4xl text-white mb-4">Get In Touch</h2>
+    <div class="sep mb-10"></div>
+
+    <p class="text-slate-400 text-base sm:text-lg leading-relaxed mb-10">
+      Open to game dev collaborations, systems programming projects,<br class="hidden sm:block"/>
+      or just talking about low-level code and Zig.
+    </p>
+
+    <a href="mailto:lucasdevbusiness@gmail.com"
+       class="inline-flex items-center gap-3 px-8 py-4 rounded orb font-bold text-sm tracking-widest transition-all duration-300 neon"
+       style="border:1px solid rgba(0,229,255,.4);color:#00e5ff;"
+       onmouseenter="this.style.background='rgba(0,229,255,.08)';this.style.borderColor='rgba(0,229,255,.7)'"
+       onmouseleave="this.style.background='transparent';this.style.borderColor='rgba(0,229,255,.4)'">
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"/>
+      </svg>
+      Say Hello
+    </a>
+
+    <div class="flex flex-wrap justify-center gap-6 mt-10">
+      <a href="https://github.com/LuEklund" target="_blank" rel="noopener"
+         class="font-mono text-sm text-slate-500 hover:text-cyan-400 transition-colors">github.com/LuEklund</a>
+      <span class="text-slate-700">·</span>
+      <a href="https://www.linkedin.com/in/lucas-eklund/" target="_blank" rel="noopener"
+         class="font-mono text-sm text-slate-500 hover:text-cyan-400 transition-colors">linkedin.com/in/lucas-eklund</a>
+      <span class="text-slate-700">·</span>
+      <a href="https://www.youtube.com/@lucasdevs" target="_blank" rel="noopener"
+         class="font-mono text-sm text-slate-500 hover:text-red-400 transition-colors">youtube/@lucasdevs</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════ FOOTER ════════════════ -->
+<footer class="py-8 px-4 text-center" style="border-top:1px solid rgba(30,58,95,.4);">
+  <p class="font-mono text-xs" style="color:#1e3a5f;">© 2025 Lucas Eklund · HTML + Tailwind · GitHub Pages</p>
 </footer>
 
+<!-- ═══════════════════ SCRIPTS ═══════════════ -->
 <script>
-// cursor
-const cur=document.getElementById('cur');
-document.addEventListener('mousemove',e=>{cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px';});
+// ── Cursor ──────────────────────────────────────────────────────────
+const cur = document.getElementById('cur');
+const curRing = document.getElementById('cur-ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cur.style.left = mx + 'px'; cur.style.top = my + 'px';
+});
+(function raf() {
+  rx += (mx - rx) * .14; ry += (my - ry) * .14;
+  curRing.style.left = rx + 'px'; curRing.style.top = ry + 'px';
+  requestAnimationFrame(raf);
+})();
+document.querySelectorAll('a,button').forEach(el => {
+  el.addEventListener('mouseenter', () => { cur.style.transform = 'translate(-50%,-50%) scale(1.6)'; });
+  el.addEventListener('mouseleave', () => { cur.style.transform = 'translate(-50%,-50%) scale(1)'; });
+});
 
-
-// matrix rain
-(function(){
-  const cv=document.getElementById('rain');
-  const cx=cv.getContext('2d');
-  const CH='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789zig::vulkan{}[];><=+-*/&|';
-  let W,H,drops;
-  function init(){
-    W=cv.width=innerWidth;H=cv.height=innerHeight;
-    drops=Array.from({length:Math.floor(W/14)},()=>Math.random()*H/14|0);
+// ── Matrix rain ─────────────────────────────────────────────────────
+(function() {
+  const cv = document.getElementById('rain');
+  const cx = cv.getContext('2d');
+  const CH = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789zig::vulkan{}[];><=+-*/&|';
+  let W, H, drops;
+  function init() {
+    W = cv.width = innerWidth; H = cv.height = innerHeight;
+    drops = Array.from({ length: Math.floor(W / 14) }, () => Math.random() * H / 14 | 0);
   }
-  function draw(){
-    cx.fillStyle='rgba(3,8,14,.06)';cx.fillRect(0,0,W,H);
-    cx.fillStyle='rgba(0,224,255,1)';cx.font='16px "DM Mono",monospace';
-    drops.forEach((d,i)=>{
-      cx.fillText(CH[Math.random()*CH.length|0],i*14,d*14);
-      if(d*14>H&&Math.random()>.97)drops[i]=0; else drops[i]++;
+  function draw() {
+    cx.fillStyle = 'rgba(3,8,14,.055)'; cx.fillRect(0, 0, W, H);
+    cx.fillStyle = 'rgba(0,229,255,.85)'; cx.font = '14px monospace';
+    drops.forEach((d, i) => {
+      cx.fillText(CH[Math.random() * CH.length | 0], i * 14, d * 14);
+      if (d * 14 > H && Math.random() > .97) drops[i] = 0; else drops[i]++;
     });
   }
-  init();window.addEventListener('resize',init);setInterval(draw,55);
+  init(); window.addEventListener('resize', init); setInterval(draw, 58);
 })();
 
-// data
-const PROJECTS=[
-  {title:"PlanetaryZigma",desc:"Making a Risk of rain 2 inspired game but with Procedual genrated planets",thumb:"assets/PlanetaryZigma.gif",link:"https://github.com/LuEklund/PlanetaryZigma",tags:["zig","vulkan"],highlight:true},
-  {title:"WallensteinVR",desc:"Labyrinth VR game in Zig. Enemies hunt you — grab the collectible and race back before they reach you.",thumb:"assets/WallenstienVR.png",link:"https://github.com/LuEklund/WallensteinVR.git",tags:["zig","vulkan"],highlight:true},
-  {title:"NES Snake — 6502 Assembly",desc:"Snake on real NES hardware in pure 6502 assembly. No OS, no abstraction, bare metal.",thumb:"assets/Snake_ASM.jpg",link:"https://github.com/LuEklund/assembly",tags:["asm"],highlight:true},
-  {title:"Minecraft — Vulkan",desc:"Ongoing Minecraft clone built with Vulkan from scratch. Custom chunk meshing, terrain generation. YouTube devlog series.",thumb:"assets/EpicMinecraftClone.gif",link:"https://www.youtube.com/watch?v=fP3RNawUWzU",tags:["c","cpp","vulkan"],highlight:true},
+// ── Navbar scroll ───────────────────────────────────────────────────
+const nav = document.getElementById('navbar');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 40), { passive: true });
+
+// ── Mobile menu ─────────────────────────────────────────────────────
+const menuBtn = document.getElementById('menu-btn');
+const mobMenu = document.getElementById('mobile-menu');
+menuBtn.addEventListener('click', () => {
+  const open = mobMenu.classList.toggle('open');
+  menuBtn.setAttribute('aria-expanded', open);
+});
+function closeMob() { mobMenu.classList.remove('open'); menuBtn.setAttribute('aria-expanded', false); }
+
+// ── Section fade-in ─────────────────────────────────────────────────
+const secObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.sf').forEach(el => secObs.observe(el));
+
+// ── Projects data ───────────────────────────────────────────────────
+const PROJECTS = [
+  {title:"PlanetaryZigma",desc:"Risk of Rain 2 inspired game with procedurally generated planets. Custom Vulkan renderer built from scratch in Zig.",thumb:"assets/PlanetaryZigma.gif",link:"https://github.com/LuEklund/PlanetaryZigma",tags:["zig","vulkan"],hi:true},
+  {title:"WallensteinVR",desc:"Labyrinth VR game in Zig. Enemies hunt you — grab the collectible and race back before they reach you.",thumb:"assets/WallenstienVR.png",link:"https://github.com/LuEklund/WallensteinVR.git",tags:["zig","vulkan"],hi:true},
+  {title:"NES Snake — 6502 Assembly",desc:"Snake on real NES hardware in pure 6502 assembly. No OS, no abstraction — bare metal.",thumb:"assets/Snake_ASM.jpg",link:"https://github.com/LuEklund/assembly",tags:["asm"],hi:true},
+  {title:"Minecraft — Vulkan",desc:"Ongoing Minecraft clone built with Vulkan from scratch. Custom chunk meshing, terrain generation. YouTube devlog series.",thumb:"assets/EpicMinecraftClone.gif",link:"https://www.youtube.com/watch?v=fP3RNawUWzU",tags:["c","cpp","vulkan"],hi:true},
+  {title:"Fingrevie — Hexpansion",desc:"Tower defense on a procedurally expanding hex grid with upgrades. Unreal Engine 5.",thumb:"assets/HexPlanation.gif",link:"https://fingrevie.itch.io/hextd-prototype",tags:["cpp","unreal"],hi:true},
+  {title:"Cub3D — DDA Raycaster",desc:"Wolfenstein-inspired raycaster in pure C. 2D map → real-time 3D view via DDA. Zero dependencies beyond MiniLibX.",thumb:"https://github.com/jontssu/cub3D/blob/master/Peek%202024-01-09%2016-46.gif?raw=true",link:"https://github.com/jontssu/cub3D",tags:["c"],hi:true},
+  {title:"Vulkan Renderer",desc:"Building a Vulkan renderer from scratch — pipeline, render passes, sync, descriptor sets. Devlog on YouTube.",thumb:"assets/Vulkan.png",link:"https://www.youtube.com/watch?v=QDaCNKZ0rf4",tags:["c","cpp","vulkan"],hi:true},
   {title:"Chungustraction",desc:"Solo entry for DaniJam 2025, theme: Attraction. Built in Unity over 48 hours.",thumb:"assets/Attract.gif",link:"https://lucasdevs.itch.io/chungustraction",tags:["cs","unity"]},
-  {title:"Fingrevie — Hexpansion",desc:"Tower defense on a procedurally expanding hex grid with upgrades. Unreal Engine 5.",thumb:"assets/HexPlanation.gif",link:"https://fingrevie.itch.io/hextd-prototype",tags:["cpp","unreal"],highlight:true},
-  {title:"Cub3D — DDA Raycaster",desc:"Wolfenstein-inspired raycaster in pure C. 2D map → real-time 3D view via DDA. Zero dependencies beyond MiniLibX.",thumb:"https://github.com/jontssu/cub3D/blob/master/Peek%202024-01-09%2016-46.gif?raw=true",link:"https://github.com/jontssu/cub3D",tags:["c"]},
-  {title:"Vulkan Renderer",desc:"Building a Vulkan renderer from scratch — pipeline, render passes, sync, descriptor sets. Devlog on YouTube.",thumb:"assets/Vulkan.png",link:"https://www.youtube.com/watch?v=QDaCNKZ0rf4",tags:["c","cpp","vulkan"]},
   {title:"RibbitSpace",desc:"Space combat prototype in Unreal Engine. Custom ship movement and projectile system.",thumb:"assets/Ribbit.jpg",link:"https://www.youtube.com/watch?v=e1C9blkl-N0",tags:["cpp","unreal"]},
   {title:"TopDown RPG — Multiplayer",desc:"Top-down RPG in UE5. Replication netcode and Gameplay Ability System (GAS). C++ with Blueprints.",thumb:"https://github.com/LuEklund/Unreal-TopDown-RPG/blob/master/ProgressImages/TopDownRPG3.gif?raw=true",link:"https://github.com/LuEklund/Unreal-TopDown-RPG",tags:["cpp","unreal"]},
   {title:"ToonTanks",desc:"Tank shooter in UE5. Primarily C++ with minimal Blueprint usage.",thumb:"https://github.com/LuEklund/ToonTanks/blob/master/AnimationToon2.gif?raw=true",link:"https://github.com/LuEklund/ToonTanks",tags:["cpp","unreal"]},
@@ -140,78 +483,92 @@ const PROJECTS=[
   {title:"MergeGame",desc:"Stack coins to hit a target amount. Minimalist Unity puzzle game.",thumb:"assets/MergeGame.gif",link:"https://github.com/LuEklund/MergeGame",tags:["cs","unity"]},
   {title:"Lost Prince",desc:"Short Unity story game made with Visual Scripting. Atmosphere-first.",thumb:"assets/LostPrince.gif",link:"https://lucas-eklund.itch.io/lost-prince",tags:["cs","unity"]},
   {title:"Platformer — SFML",desc:"Side-scroller in C++/SFML. Custom physics and collision, no engine.",thumb:"https://github.com/LuEklund/Platformer-SFML/blob/master/assets/thumbnail.png?raw=true",link:"https://github.com/LuEklund/Platformer-SFML",tags:["cpp","sfml"]},
-  {title:"Snake — SFML",desc:"Classic Snake in C++/SFML. Clean game loop, no game library.",thumb:"https://github.com/LuEklund/Snake-SFML/blob/master/assets/thumbnail.png?raw=true",link:"https://github.com/LuEklund/Snake-SFML",tags:["cpp","sfml"]},
+  {title:"Snake — SFML",desc:"Classic Snake in C++/SFML. Clean game loop.",thumb:"https://github.com/LuEklund/Snake-SFML/blob/master/assets/thumbnail.png?raw=true",link:"https://github.com/LuEklund/Snake-SFML",tags:["cpp","sfml"]},
   {title:"TicTacToe — SFML",desc:"TicTacToe in C++/SFML.",thumb:"https://github.com/LuEklund/TicTacToe-SFML/blob/master/assets/thumbnail.png?raw=true",link:"https://github.com/LuEklund/TicTacToe-SFML",tags:["cpp","sfml"]},
   {title:"1D Combat — SFML",desc:"Player vs AI lane combat inspired by Age of War. Custom AI in pure C++.",thumb:"https://github.com/LuEklund/1D-Combat-SFML/blob/master/assets/thumbnail.png?raw=true",link:"https://github.com/LuEklund/1D-Combat-SFML",tags:["cpp","sfml"]},
-  {title:"42 — Hive Helsinki",desc:"Core 42 curriculum in pure C. Memory, pointers, data structures — no external libraries allowed.",thumb:"https://auth.42.fr/auth/resources/0nmse/login/students/img/42_logo.svg",link:"https://github.com/LuEklund/HIVE_2022",tags:["c"]},
+  {title:"42 — Hive Helsinki",desc:"Core 42 curriculum in pure C. Memory, pointers, data structures — no external libraries.",thumb:"https://auth.42.fr/auth/resources/0nmse/login/students/img/42_logo.svg",link:"https://github.com/LuEklund/HIVE_2022",tags:["c"]},
   {title:"ft_transcendence",desc:"Final Hive project. Full-stack: Django backend, vanilla JS, OAuth2, WebSockets, live Pong.",thumb:"https://auth.42.fr/auth/resources/0nmse/login/students/img/42_logo.svg",link:"https://github.com/LuEklund/ft_transcendence",tags:["web","py"]},
 ];
 
-const TM={
-  c:{l:"C",cl:"tc-c"},cpp:{l:"C++",cl:"tc-cpp"},cs:{l:"C#",cl:"tc-cs"},
-  zig:{l:"Zig",cl:"tc-zig"},asm:{l:"ASM",cl:"tc-asm"},py:{l:"Python",cl:"tc-py"},
-  unreal:{l:"Unreal",cl:"tc-unreal"},unity:{l:"Unity",cl:"tc-unity"},
-  vulkan:{l:"Vulkan",cl:"tc-vulkan"},web:{l:"JS/TS",cl:"tc-web"},
-  sfml:{l:"SFML",cl:"tc-sfml"},java:{l:"Java",cl:"tc-java"},
+const TL = {
+  c:{l:"C"},cpp:{l:"C++"},cs:{l:"C#"},zig:{l:"Zig"},asm:{l:"ASM"},
+  py:{l:"Python"},unreal:{l:"Unreal"},unity:{l:"Unity"},
+  vulkan:{l:"Vulkan"},web:{l:"JS/TS"},sfml:{l:"SFML"},
 };
 
-function build(){
-  const g=document.getElementById('grid');
-  g.innerHTML='';
-  PROJECTS.forEach((p,i)=>{
-    const tagsH=p.tags.map(t=>{const m=TM[t]||{l:t,cl:''};return`<span class="tag ${m.cl}">${m.l}</span>`;}).join('');
-    const imgH=p.thumb
-      ?`<img src="${p.thumb}" alt="${p.title}" loading="lazy" onerror="this.outerHTML='<div class=\\'img-ph\\'>NO PREVIEW</div>'">`
-      :`<div class="img-ph">NO PREVIEW</div>`;
-    const c=document.createElement('article');
-    c.className='card';
-    c.dataset.tags=p.tags.join(' ');
-    c.dataset.title=p.title.toLowerCase();
-    c.dataset.desc=p.desc.toLowerCase();
-    if(p.highlight) c.dataset.highlight='true';
-    c.innerHTML=`
-      <a class="card-link" href="${p.link}" target="_blank" rel="noopener" aria-label="${p.title}"></a>
-      <div class="ci">${imgH}<div class="ci-num">${String(i+1).padStart(2,'0')}</div></div>
-      <div class="cb">
-        <div class="ct">${p.title}</div>
-        <div class="cd">${p.desc}</div>
-        <div class="ctags">${tagsH}</div>
+// ── Build grid ──────────────────────────────────────────────────────
+function build() {
+  const g = document.getElementById('grid');
+  g.innerHTML = '';
+  PROJECTS.forEach((p, i) => {
+    const tags = p.tags.map(t => `<span class="tag tag-${t}">${(TL[t]||{l:t}).l}</span>`).join('');
+    const num = String(i + 1).padStart(2, '0');
+    const c = document.createElement('article');
+    c.className = 'card glass glass-hover rounded-xl overflow-hidden relative' + (p.hi ? ' card-highlight' : '');
+    c.dataset.tags = p.tags.join(' ');
+    c.dataset.title = p.title.toLowerCase();
+    c.dataset.desc = p.desc.toLowerCase();
+
+    c.innerHTML = `
+      <a class="absolute inset-0 z-10" href="${p.link}" target="_blank" rel="noopener" aria-label="View ${p.title}"></a>
+      <div class="relative overflow-hidden">
+        ${p.thumb
+          ? `<img class="card-img" src="${p.thumb}" alt="${p.title}" loading="lazy" onerror="this.outerHTML='<div class=\\'card-img-ph\\'>NO PREVIEW</div>'"/>`
+          : `<div class="card-img-ph">NO PREVIEW</div>`}
+        <div class="absolute bottom-2 left-2 z-20 font-mono" style="font-size:9px;font-family:'Orbitron',sans-serif;color:#00e5ff;background:rgba(3,8,14,.75);border:1px solid rgba(0,229,255,.25);padding:1px 6px;border-radius:3px;">${num}</div>
+        ${p.hi ? `<div class="absolute top-2 right-2 z-20 orb" style="font-size:8px;color:#f0b429;background:rgba(3,8,14,.8);border:1px solid rgba(240,180,41,.4);padding:2px 6px;border-radius:3px;">★ FEATURED</div>` : ''}
+      </div>
+      <div style="padding:14px 16px 16px;display:flex;flex-direction:column;gap:8px;">
+        <h3 style="color:#e2e8f0;font-weight:600;font-size:13px;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;">${p.title}</h3>
+        <p style="color:#475569;font-size:12px;line-height:1.55;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">${p.desc}</p>
+        <div style="display:flex;flex-wrap:wrap;gap:5px;padding-top:2px;">${tags}</div>
       </div>`;
     g.appendChild(c);
   });
-  const nr=document.createElement('div');
-  nr.className='nores';nr.id='nores';nr.textContent='No matching projects.';
-  g.appendChild(nr);
+
+  // Staggered card observer
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const i = parseInt(e.target.dataset.idx);
+        setTimeout(() => e.target.classList.add('vis'), (i % 8) * 55);
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.04, rootMargin: '0px 0px -20px 0px' });
+  document.querySelectorAll('.card').forEach((el, i) => { el.dataset.idx = i; obs.observe(el); });
+
   count();
 }
 
-let af='all',sq='';
-function filter(){
-  const cards=document.querySelectorAll('.card');
-  let v=0;
-  cards.forEach(c=>{
-    const tm=af==='all'||c.dataset.tags.split(' ').includes(af);
-    const sm=!sq||c.dataset.title.includes(sq)||c.dataset.desc.includes(sq)||c.dataset.tags.includes(sq);
-    c.classList.toggle('gone',!(tm&&sm));
-    if(tm&&sm)v++;
+// ── Filter + search ─────────────────────────────────────────────────
+let af = 'all', sq = '';
+function filter() {
+  const cards = document.querySelectorAll('.card');
+  let v = 0;
+  cards.forEach(c => {
+    const tm = af === 'all' || c.dataset.tags.split(' ').includes(af);
+    const sm = !sq || c.dataset.title.includes(sq) || c.dataset.desc.includes(sq) || c.dataset.tags.includes(sq);
+    c.classList.toggle('gone', !(tm && sm));
+    if (tm && sm) v++;
   });
-  document.getElementById('nores').style.display=v?'none':'block';
+  document.getElementById('nores').classList.toggle('hidden', v > 0);
   count(v);
 }
-function count(v){
-  const n=v!==undefined?v:PROJECTS.length;
-  document.getElementById('rcount').textContent=n+' projects';
+function count(v) {
+  const n = v !== undefined ? v : PROJECTS.length;
+  document.getElementById('rcount').textContent = n + ' project' + (n !== 1 ? 's' : '');
 }
 
-document.getElementById('filters').addEventListener('click',e=>{
-  const b=e.target.closest('.ftag');if(!b)return;
-  af=b.dataset.f;
-  document.querySelectorAll('.ftag').forEach(x=>x.classList.remove('on'));
-  b.classList.add('on');
+document.getElementById('filters').addEventListener('click', e => {
+  const b = e.target.closest('.ftag'); if (!b) return;
+  af = b.dataset.f;
+  document.querySelectorAll('.ftag').forEach(x => x.classList.remove('active'));
+  b.classList.add('active');
   filter();
 });
-document.getElementById('search').addEventListener('input',e=>{
-  sq=e.target.value.toLowerCase().trim();filter();
+document.getElementById('search').addEventListener('input', e => {
+  sq = e.target.value.toLowerCase().trim(); filter();
 });
 
 build();
