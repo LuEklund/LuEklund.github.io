@@ -776,13 +776,9 @@ let cAct=0, cTimer=null, cDragX=0, cWasDrag=false, cProgTimer=null;
 
 const AUTOPLAY_MS = 3800;
 
-function cW(){
-  const sc=document.getElementById('c-scene');
-  const w=(sc&&sc.offsetWidth>0)?sc.offsetWidth:window.innerWidth;
-  return Math.round(Math.min(w*0.82, w-80));
-}
-function cH(){ return Math.min(Math.round(cW() * 9/16), 520); }
-function cGap(){ return Math.round(cW() * 0.72); }
+function cW(){ return Math.min(window.innerWidth * 0.82, 960); }
+function cH(){ return Math.min(Math.round(cW() * 9/16), 540); }
+function cGap(){ return Math.round(cW() * 0.86); }
 
 function buildCarousel(){
   const track=document.getElementById('c-track');
