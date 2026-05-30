@@ -317,10 +317,9 @@ body > *:not(#rain):not(#cur):not(#cur2) { position: relative; z-index: 1; }
   transition: opacity .2s, transform .2s;
 }
 
-/* ─── Carousel info panel (inside HUD) ─────────────────── */
+/* ─── Carousel info panel ───────────────────────────── */
 #cinfo {
   padding: 18px 28px 22px;
-  border-top: 1px solid rgba(0,229,255,.09);
   text-align: center;
   transition: opacity .2s, transform .2s;
 }
@@ -583,6 +582,20 @@ footer { padding:16px; text-align:center; border-top:1px solid #060e08;
 <!-- ════════════════ FEATURED / CAROUSEL ════════════════ -->
 <section id="featured" aria-label="Featured projects">
 
+  <div class="c-wrap">
+    <button class="carrow" id="cprev" aria-label="Previous">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+      </svg>
+    </button>
+    <div id="c-scene"><div id="c-track"></div></div>
+    <button class="carrow" id="cnext" aria-label="Next">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+      </svg>
+    </button>
+  </div>
+
   <div class="c-hud">
     <div class="chud-lbl l" aria-hidden="true">FEATURED.SYS</div>
     <div class="chud-lbl r" aria-hidden="true" id="ci-idx"></div>
@@ -590,21 +603,6 @@ footer { padding:16px; text-align:center; border-top:1px solid #060e08;
     <span class="chud-c tr" aria-hidden="true"></span>
     <span class="chud-c bl" aria-hidden="true"></span>
     <span class="chud-c br" aria-hidden="true"></span>
-
-    <div class="c-wrap">
-      <button class="carrow" id="cprev" aria-label="Previous">
-        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
-        </svg>
-      </button>
-      <div id="c-scene"><div id="c-track"></div></div>
-      <button class="carrow" id="cnext" aria-label="Next">
-        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
-        </svg>
-      </button>
-    </div>
-
     <div id="cinfo" aria-live="polite">
       <div class="ci-tags" id="ci-tags"></div>
       <h2 class="ci-title" id="ci-title"></h2>
