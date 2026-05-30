@@ -3,218 +3,978 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Lucas Eklund</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style/Style.css">
+<title>Lucas Eklund — Game &amp; Systems Developer</title>
+<meta name="description" content="Lucas Eklund — game developer and systems programmer. Vulkan, Zig, C, C++, Unreal Engine."/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════════════════════════════════════════════════
+   RESET
+═══════════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; cursor: none; }
+html { scroll-behavior: smooth; }
+:focus-visible { outline: 2px solid #00e5ff; outline-offset: 2px; }
+a { text-decoration: none; color: inherit; }
+
+/* ═══════════════════════════════════════════════════════
+   COLOUR SYSTEM
+═══════════════════════════════════════════════════════ */
+:root {
+  --g:  #00e5ff;   /* tron cyan    */
+  --c:  #3b82f6;   /* deep blue    */
+  --bg: #020408;
+  --s1: #06090f;   /* surface 1    */
+  --s2: #080d16;   /* surface 2    */
+  --b1: #0a1422;   /* border green */
+  --b2: #0a1420;   /* border cyan  */
+  --tx: #2a5060;   /* muted text   */
+}
+
+/* ═══════════════════════════════════════════════════════
+   BODY + GRID TEXTURE
+═══════════════════════════════════════════════════════ */
+body {
+  background: var(--bg);
+  color: var(--tx);
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-thumb { background: #0a1825; }
+
+/* dot grid overlay */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image:
+    radial-gradient(circle, rgba(0,229,255,.12) 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 40%, transparent 100%);
+}
+
+/* matrix rain canvas */
+#rain {
+  position: fixed; inset: 0; z-index: 0;
+  pointer-events: none; opacity: .18;
+}
+
+body > *:not(#rain):not(#cur):not(#cur2) { position: relative; z-index: 1; }
+
+/* ═══════════════════════════════════════════════════════
+   CURSOR
+═══════════════════════════════════════════════════════ */
+#cur {
+  position: fixed; width: 8px; height: 8px; border-radius: 50%;
+  background: var(--g); pointer-events: none; z-index: 9999;
+  transform: translate(-50%,-50%);
+  box-shadow: 0 0 8px var(--g), 0 0 20px rgba(0,229,255,.4);
+  transition: transform .12s;
+}
+#cur2 {
+  position: fixed; width: 26px; height: 26px; border-radius: 50%;
+  border: 1px solid rgba(0,229,255,.25); pointer-events: none; z-index: 9998;
+  transform: translate(-50%,-50%);
+  transition: left .09s, top .09s;
+}
+
+/* ═══════════════════════════════════════════════════════
+   HEADER
+═══════════════════════════════════════════════════════ */
+#hdr {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+  height: 50px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 20px;
+  background: rgba(2,4,8,.96);
+  border-bottom: 1px solid rgba(0,229,255,.08);
+}
+.logo {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 900; font-size: 15px; letter-spacing: .18em;
+  color: var(--g);
+  text-shadow: 0 0 14px rgba(0,229,255,.5);
+}
+.logo span { color: #fff; text-shadow: none; }
+.hnav { display: flex; align-items: center; gap: 18px; }
+.hl {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px; color: #1a3545; letter-spacing: .08em;
+  transition: color .15s;
+}
+.hl:hover { color: var(--g); }
+.hbtn {
+  font-family: 'Share Tech Mono', monospace; font-size: 10px;
+  color: var(--g); border: 1px solid rgba(0,229,255,.3);
+  padding: 5px 13px; letter-spacing: .1em;
+  transition: all .15s; border-radius: 2px;
+}
+.hbtn:hover {
+  background: rgba(0,229,255,.06);
+  border-color: rgba(0,229,255,.7);
+  box-shadow: 0 0 12px rgba(0,229,255,.2);
+}
+
+/* ═══════════════════════════════════════════════════════
+   FEATURED SECTION
+═══════════════════════════════════════════════════════ */
+#featured {
+  min-height: 100vh;
+  padding-top: 50px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+  gap: 32px; padding-bottom: 20px;
+}
+
+/* radial spotlight */
+#featured::after {
+  content: '';
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  width: 120vw; height: 80vh;
+  background: radial-gradient(ellipse at center,
+    rgba(0,229,255,.04) 0%,
+    rgba(0,229,255,.02) 40%,
+    transparent 70%);
+  pointer-events: none; z-index: 0;
+}
+
+/* ─── HUD panel ─────────────────────────────────────────── */
+.c-hud {
+  position: relative;
+  width: min(96vw, 980px);
+  border: 1px solid rgba(0,229,255,.22);
+  border-radius: 3px;
+  background: rgba(0,229,255,.008);
+  box-shadow:
+    0 0 0 1px rgba(0,229,255,.04),
+    0 0 80px rgba(0,229,255,.1),
+    inset 0 0 80px rgba(0,0,0,.35);
+  z-index: 1;
+}
+.c-hud::before {
+  content: '';
+  position: absolute; inset: -6px;
+  border: 1px solid rgba(0,229,255,.07);
+  border-radius: 7px;
+  pointer-events: none;
+}
+.c-hud::after {
+  content: '';
+  position: absolute; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0,229,255,.55), transparent);
+  pointer-events: none; z-index: 10;
+}
+@keyframes chudScan {
+  0%   { top: 0; opacity: 0; }
+  4%   { opacity: 1; }
+  96%  { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+.chud-c { position: absolute; width: 22px; height: 22px; pointer-events: none; z-index: 5; }
+.chud-c.tl { top:-2px; left:-2px; border-top:2px solid var(--g); border-left:2px solid var(--g); }
+.chud-c.tr { top:-2px; right:-2px; border-top:2px solid var(--g); border-right:2px solid var(--g); }
+.chud-c.bl { bottom:-2px; left:-2px; border-bottom:2px solid var(--g); border-left:2px solid var(--g); }
+.chud-c.br { bottom:-2px; right:-2px; border-bottom:2px solid var(--g); border-right:2px solid var(--g); }
+.chud-lbl {
+  position: absolute; top: -17px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8px; letter-spacing: .18em; color: rgba(0,229,255,.38);
+  pointer-events: none; white-space: nowrap;
+}
+.chud-lbl.l { left: 4px; }
+.chud-lbl.r { right: 4px; }
+
+/* ─── Carousel ──────────────────────────────────────── */
+.c-wrap { width: 100%; position: relative; z-index: 1; }
+
+/* perspective scene */
+#c-scene {
+  width: 100%;
+  perspective: 1000px;
+  perspective-origin: 50% 50%;
+  overflow: hidden;
+  position: relative;
+}
+
+/* 3d track */
+#c-track {
+  width: 100%; height: 100%;
+  transform-style: preserve-3d;
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* slide */
+.cslide {
+  position: absolute;
+  border-radius: 4px; overflow: hidden;
+  border: 1px solid #0a1422;
+  background: #030608;
+  transition:
+    transform .55s cubic-bezier(.25,.46,.45,.94),
+    opacity   .42s ease,
+    border-color .3s,
+    box-shadow .3s;
+  will-change: transform, opacity;
+}
+.cslide img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  filter: saturate(.3) brightness(.45);
+  transition: filter .4s;
+}
+.cslide.cactive {
+  border-color: rgba(0,229,255,.35);
+  box-shadow:
+    0 0 0 1px rgba(0,229,255,.12),
+    0 0 40px rgba(0,229,255,.12),
+    0 0 80px rgba(0,229,255,.06);
+}
+.cslide.cactive img { filter: saturate(.9) brightness(.82); }
+
+/* bottom gradient overlay on slide */
+.cslide-grad {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top,
+    rgba(2,4,8,.9) 0%,
+    rgba(2,4,8,.1) 45%,
+    transparent   100%);
+  pointer-events: none;
+}
+
+/* slide index badge */
+.cslide-idx {
+  position: absolute; top: 10px; left: 12px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px; color: rgba(0,229,255,.5);
+  letter-spacing: .1em;
+}
+
+/* scan-line overlay on active slide */
+.cslide.cactive::before {
+  content: '';
+  position: absolute; inset: 0; z-index: 2;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(0,229,255,.018) 3px,
+    rgba(0,229,255,.018) 4px
+  );
+  pointer-events: none;
+}
+
+/* progress bar */
+.cprog {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 2px; z-index: 3;
+  background: rgba(0,229,255,.1);
+}
+.cprog-bar {
+  height: 100%; width: 0%;
+  background: linear-gradient(90deg, var(--g), var(--c));
+  box-shadow: 0 0 6px var(--g);
+}
+
+/* corner brackets on active slide */
+.cslide.cactive .cbracket { opacity: 1; }
+.cbracket {
+  position: absolute; z-index: 3; opacity: 0; transition: opacity .3s;
+  width: 18px; height: 18px; pointer-events: none;
+}
+.cbracket.tl { top: 8px; left: 8px;
+  border-top: 1.5px solid var(--g); border-left: 1.5px solid var(--g); }
+.cbracket.tr { top: 8px; right: 8px;
+  border-top: 1.5px solid var(--g); border-right: 1.5px solid var(--g); }
+.cbracket.bl { bottom: 10px; left: 8px;
+  border-bottom: 1.5px solid var(--g); border-left: 1.5px solid var(--g); }
+.cbracket.br { bottom: 10px; right: 8px;
+  border-bottom: 1.5px solid var(--g); border-right: 1.5px solid var(--g); }
+
+/* nav arrows */
+.carrow {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  z-index: 20; width: 40px; height: 40px;
+  border: 1px solid rgba(0,229,255,.15); border-radius: 2px;
+  background: rgba(2,4,8,.85);
+  color: #0e2535; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .15s;
+}
+.carrow:hover {
+  border-color: rgba(0,229,255,.5);
+  color: var(--g);
+  box-shadow: 0 0 14px rgba(0,229,255,.15);
+}
+#cprev { left: 12px; }
+#cnext { right: 12px; }
+@media(min-width:640px) { #cprev { left: 24px; } #cnext { right: 24px; } }
+
+/* project info above carousel */
+#cinfo-top {
+  z-index: 1; width: 100%;
+  max-width: 700px; margin: 0 auto 18px;
+  padding: 0 20px; text-align: center;
+  transition: opacity .2s, transform .2s;
+}
+
+/* ─── Carousel info panel ───────────────────────────── */
+#cinfo {
+  padding: 18px 28px 22px;
+  text-align: center;
+  transition: opacity .2s, transform .2s;
+}
+.ci-sys {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px; color: rgba(0,229,255,.4); letter-spacing: .2em;
+  margin-bottom: 6px;
+}
+.ci-tags { display: flex; justify-content: center; flex-wrap: wrap; gap: 4px; margin-bottom: 10px; }
+.ci-title {
+  font-family: 'Orbitron', sans-serif; font-weight: 700;
+  font-size: clamp(18px, 3.5vw, 32px); color: #d0f8ff;
+  letter-spacing: .05em; margin-bottom: 10px; line-height: 1.2;
+  text-shadow: 0 0 30px rgba(0,229,255,.25);
+}
+.ci-desc {
+  color: #00e5ff; font-size: 12px; line-height: 1.7;
+  margin-bottom: 18px;
+  max-width: 520px; margin-left: auto; margin-right: auto;
+  padding: 10px 14px;
+  border-left: 2px solid rgba(0,229,255,.22);
+  background: rgba(0,229,255,.025);
+  border-radius: 0 2px 2px 0;
+  text-align: left;
+}
+.ci-foot {
+  display: flex; align-items: center; justify-content: center;
+  gap: 24px; flex-wrap: wrap;
+}
+.ci-link {
+  font-family: 'Share Tech Mono', monospace; font-size: 10px;
+  color: var(--g); border: 1px solid rgba(0,229,255,.3);
+  padding: 8px 20px; letter-spacing: .1em;
+  transition: all .15s; border-radius: 2px;
+}
+.ci-link:hover {
+  background: rgba(0,229,255,.07);
+  border-color: var(--g);
+  box-shadow: 0 0 16px rgba(0,229,255,.2);
+}
+.cidots { display: flex; gap: 6px; align-items: center; }
+.cdot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: #0a1825; border: none; cursor: pointer;
+  transition: all .22s;
+}
+.cdot.don { background: var(--g); box-shadow: 0 0 6px var(--g); transform: scale(1.4); }
+
+/* scroll cue */
+.scue {
+  z-index: 1; margin-top: 40px; margin-bottom: 8px;
+  display: flex; flex-direction: column; align-items: center; gap: 5px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px; letter-spacing: .2em; color: #0a1825;
+  animation: scuebounce 2.2s ease-in-out infinite;
+}
+@keyframes scuebounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
+
+/* ═══════════════════════════════════════════════════════
+   PROJECTS SECTION
+═══════════════════════════════════════════════════════ */
+#projects { padding: 64px 0 0; }
+
+.proj-hd {
+  padding: 0 16px 12px;
+  display: flex; align-items: baseline; gap: 10px;
+}
+@media(min-width:640px){ .proj-hd{ padding: 0 24px 16px; } }
+.proj-title {
+  font-family: 'Orbitron', sans-serif; font-weight: 700;
+  font-size: 14px; color: #d0f8ff; letter-spacing: .1em;
+}
+.proj-ct {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px; color: rgba(0,229,255,.35);
+}
+
+/* filter + search */
+.fbar {
+  display: flex; align-items: center; gap: 6px;
+  padding: 0 16px 18px; flex-wrap: wrap;
+}
+@media(min-width:640px){ .fbar{ padding:0 24px 20px; gap:8px; } }
+.fprow { display: flex; gap: 4px; overflow-x: auto; flex: 1; scrollbar-width: none; min-width: 0; }
+.fprow::-webkit-scrollbar { display: none; }
+.fp {
+  flex-shrink: 0;
+  padding: 3px 8px; border-radius: 2px;
+  border: 1px solid #060c14;
+  color: #162535;
+  font-family: 'Share Tech Mono', monospace; font-size: 10px;
+  letter-spacing: .06em; cursor: pointer; background: transparent;
+  transition: all .15s; white-space: nowrap;
+}
+.fp:hover { border-color: rgba(0,229,255,.2); color: #2a5065; }
+.fp.fon {
+  border-color: rgba(0,229,255,.4); color: var(--g);
+  background: rgba(0,229,255,.04);
+  box-shadow: 0 0 8px rgba(0,229,255,.08);
+}
+.fsep { width: 1px; height: 18px; background: #060e0a; flex-shrink: 0; }
+.fsrch {
+  background: #040608; border: 1px solid #080d16;
+  border-radius: 2px; color: #3a6070;
+  font-family: 'Share Tech Mono', monospace; font-size: 10px;
+  padding: 5px 10px; width: 130px; outline: none;
+  transition: border-color .15s;
+}
+.fsrch:focus { border-color: rgba(0,229,255,.2); }
+.fsrch::placeholder { color: #0e1a22; }
+
+/* ─── Grid ──────────────────────────────────────────── */
+#pgrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px; padding: 0 8px 8px;
+}
+@media(min-width:480px)  { #pgrid { gap: 7px; padding: 0 10px 10px; } }
+@media(min-width:640px)  { #pgrid { grid-template-columns: repeat(3,1fr); gap:8px; padding:0 16px 16px; } }
+@media(min-width:1024px) { #pgrid { grid-template-columns: repeat(4,1fr); gap:10px; padding:0 24px 24px; } }
+@media(min-width:1400px) { #pgrid { grid-template-columns: repeat(5,1fr); } }
+
+/* ─── Grid card ─────────────────────────────────────── */
+.pc {
+  background: var(--s1);
+  border: 1px solid #060e0a;
+  border-radius: 3px; overflow: hidden;
+  display: flex; flex-direction: column;
+  position: relative; opacity: 0;
+  transition: border-color .18s, transform .18s, box-shadow .18s;
+}
+.pc.pvis { animation: pIn .3s ease forwards; }
+@keyframes pIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
+.pc.pgone { display: none !important; }
+.pc:hover {
+  border-color: rgba(0,229,255,.18);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(0,0,0,.6), 0 0 0 1px rgba(0,229,255,.06);
+}
+.pclink { position: absolute; inset: 0; z-index: 10; }
+
+.pcimg { height: 148px; overflow: hidden; background: #020508; flex-shrink: 0; }
+.pcimg img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  transition: transform .5s ease, filter .3s ease;
+}
+.pc:hover .pcimg img { transform: scale(1.04); }
+.pcph { width:100%; height:100%; display:flex; align-items:center; justify-content:center;
+  font-family:'Share Tech Mono',monospace; font-size:9px; letter-spacing:.18em; color:#0a1422; }
+
+.pcinfo { padding: 9px 11px 11px; flex: 1; display: flex; flex-direction: column; gap: 4px; }
+.pctags { display: flex; flex-wrap: wrap; gap: 3px; }
+.pctitle { color: #5a8a9a; font-weight: 600; font-size: 12px; line-height: 1.3; }
+.pcdesc { color: #1e2535; font-size: 10px; line-height: 1.5;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+/* empty */
+#pnores { display:none; padding:80px 0; text-align:center;
+  font-family:'Share Tech Mono',monospace; font-size:11px; color:#0a1422; }
+
+/* ═══════════════════════════════════════════════════════
+   TECH TAGS
+═══════════════════════════════════════════════════════ */
+.tag { display:inline-flex; align-items:center; padding:1px 5px; border-radius:2px;
+  font-size:9px; font-weight:600; border:1px solid; letter-spacing:.03em; white-space:nowrap; }
+.tag-c,.tag-cpp { color:#7dd3fc; border-color:rgba(125,211,252,.16); background:rgba(125,211,252,.03); }
+.tag-zig    { color:#fbbf24; border-color:rgba(251,191,36,.16);   background:rgba(251,191,36,.03); }
+.tag-asm    { color:#f87171; border-color:rgba(248,113,113,.16);  background:rgba(248,113,113,.03); }
+.tag-cs     { color:#c084fc; border-color:rgba(192,132,252,.16);  background:rgba(192,132,252,.03); }
+.tag-py     { color:#60a5fa; border-color:rgba(96,165,250,.16);   background:rgba(96,165,250,.03); }
+.tag-unreal { color:#94a3b8; border-color:rgba(148,163,184,.16);  background:rgba(148,163,184,.03); }
+.tag-unity  { color:#d0d8e0; border-color:rgba(208,216,224,.12);  background:rgba(208,216,224,.02); }
+.tag-vulkan { color:#fb923c; border-color:rgba(251,146,60,.16);   background:rgba(251,146,60,.03); }
+.tag-web    { color:#fbbf24; border-color:rgba(251,191,36,.16);   background:rgba(251,191,36,.03); }
+.tag-sfml   { color:#4ade80; border-color:rgba(74,222,128,.16);   background:rgba(74,222,128,.03); }
+
+/* ═══════════════════════════════════════════════════════
+   ABOUT
+═══════════════════════════════════════════════════════ */
+#about {
+  margin-top: 64px; padding: 52px 20px;
+  border-top: 1px solid #060e08;
+  scroll-margin-top: 50px;
+}
+@media(min-width:640px){ #about{ padding:60px 24px; } }
+.ainn { max-width: 860px; margin: 0 auto; }
+.a-ey { font-family:'Share Tech Mono',monospace; font-size:9px;
+  letter-spacing:.3em; color:rgba(0,229,255,.35); margin-bottom:6px; }
+.a-nm { font-family:'Orbitron',sans-serif; font-weight:900;
+  font-size:clamp(18px,3vw,26px); color:#d0f8ff; letter-spacing:.06em; margin-bottom:3px;
+  text-shadow:0 0 20px rgba(0,229,255,.15); }
+.a-ro { font-family:'Share Tech Mono',monospace; font-size:10px;
+  color:#0a1830; letter-spacing:.1em; margin-bottom:32px; }
+.agrid { display:grid; grid-template-columns:1fr; gap:28px; }
+@media(min-width:640px){ .agrid{ grid-template-columns:1.5fr 1fr 1fr; gap:24px; } }
+.a-lb { font-family:'Share Tech Mono',monospace; font-size:9px;
+  letter-spacing:.22em; color:#0e1a22; margin-bottom:11px; }
+.a-bio { color:#1a2535; font-size:12px; line-height:1.72; }
+.a-bio b { color:#2a5065; font-weight:500; }
+.a-mn { font-family:'Share Tech Mono',monospace; font-size:9px;
+  color:#0a1422; display:block; margin-top:9px; }
+.alink { display:flex; align-items:center; gap:8px; color:#162535;
+  font-size:12px; padding:7px 0; border-bottom:1px solid #060e08;
+  transition:color .15s; }
+.alink:last-child { border-bottom:none; }
+.alink:hover { color:#2a5065; }
+.alink:hover .aico { color:var(--g); }
+.aico { width:13px; height:13px; flex-shrink:0; color:#0e1a22; transition:color .15s; }
+.astk { display:flex; flex-wrap:wrap; gap:4px; margin-bottom:14px; }
+.aedu { padding:8px 0 8px 11px; border-left:2px solid #060c14; margin-bottom:6px; }
+.aedu:last-child { margin-bottom:0; }
+.aesc { color:#2a4055; font-size:12px; font-weight:600; }
+.aed  { color:#0e1a22; font-size:10px; margin-top:2px; }
+
+/* ═══════════════════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════════════════ */
+footer { padding:16px; text-align:center; border-top:1px solid #060e08;
+  font-family:'Share Tech Mono',monospace; font-size:10px; color:#0a1420; }
+
+/* ═══════════════════════════════════════════════════════
+   REDUCED MOTION
+═══════════════════════════════════════════════════════ */
+/* slide transition — filter animates independently of inline transform/opacity */
+.cslide.centering { animation: cslideIn .6s ease-out; }
+.cslide.cleaving  { animation: cslideOut .3s ease-in forwards; }
+@keyframes cslideIn {
+  0%   { filter: brightness(0) blur(10px); }
+  55%  { filter: brightness(.7) blur(2px); }
+  100% { filter: brightness(1) blur(0); }
+}
+@keyframes cslideOut {
+  0%   { filter: brightness(1) blur(0); }
+  100% { filter: brightness(.04) blur(8px); }
+}
+
+@media(prefers-reduced-motion:reduce){
+  #rain{display:none;}
+  *, *::before, *::after{animation-duration:.01ms!important;transition-duration:.01ms!important;}
+}
+</style>
 </head>
 <body>
 
-<div id="cur"></div>
-<canvas id="rain"></canvas>
+<canvas id="rain" aria-hidden="true"></canvas>
+<div id="cur"  aria-hidden="true"></div>
+<div id="cur2" aria-hidden="true"></div>
 
-<!-- ══ HEADER ══════════════════════════════ -->
-<header id="header">
+<!-- ════════════════ HEADER ═════════════════════════════ -->
+<header id="hdr">
+  <a href="#" class="logo" aria-label="Lucas Eklund">LUCAS <span>EKLUND</span></a>
+  <nav class="hnav">
+    <a href="#projects" class="hl">_projects</a>
+    <a href="#about"    class="hl">_about</a>
+    <a href="https://github.com/LuEklund" target="_blank" rel="noopener" class="hbtn">[ GitHub ]</a>
+  </nav>
+</header>
 
-  <div class="id-block">
-    <a href="https://www.linkedin.com/in/lucas-eklund/" target="_blank" class="id-pfp-link">
-      <img src="assets/leklund1000x1000.png" class="id-pfp" alt="Profile" onerror="this.style.display='none'"/>
-    </a>
-    <div>
-      <div class="id-name"><span>Lucas</span> Eklund</div>
-      <div class="id-role">Junior Software Developer</div>
+<!-- ════════════════ FEATURED / CAROUSEL ════════════════ -->
+<section id="featured" aria-label="Featured projects">
+
+  <div class="c-wrap">
+    <button class="carrow" id="cprev" aria-label="Previous">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+      </svg>
+    </button>
+    <div id="c-scene"><div id="c-track"></div></div>
+    <button class="carrow" id="cnext" aria-label="Next">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="c-hud">
+    <div class="chud-lbl l" aria-hidden="true">FEATURED.SYS</div>
+    <div class="chud-lbl r" aria-hidden="true" id="ci-idx"></div>
+    <span class="chud-c tl" aria-hidden="true"></span>
+    <span class="chud-c tr" aria-hidden="true"></span>
+    <span class="chud-c bl" aria-hidden="true"></span>
+    <span class="chud-c br" aria-hidden="true"></span>
+    <div id="cinfo" aria-live="polite">
+      <div class="ci-tags" id="ci-tags"></div>
+      <h2 class="ci-title" id="ci-title"></h2>
+      <p class="ci-desc" id="ci-desc"></p>
+      <div class="ci-foot">
+        <a class="ci-link" id="ci-link" target="_blank" rel="noopener">[ VIEW_PROJECT ]</a>
+        <div class="cidots" id="cidots"></div>
+      </div>
     </div>
   </div>
 
-  <div class="hd-div"></div>
-
-  <div class="contact-block">
-    <a href="mailto:lucasdevbusiness@gmail.com">lucasdevbusiness@gmail.com</a>
-    <a href="https://github.com/LuEklund" target="_blank">github.com/LuEklund</a>
+  <div class="scue" aria-hidden="true">
+    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="m19 9-7 7-7-7"/>
+    </svg>
+    SCROLL
   </div>
 
-</header>
+</section>
 
-<!-- ══ TOOLBAR ═════════════════════════════ -->
-<div id="toolbar">
-  <div class="tb-search">
-    <input id="search" type="text" placeholder="search..." autocomplete="off" spellcheck="false"/>
+<!-- ════════════════ ALL PROJECTS ════════════════════════ -->
+<section id="projects" aria-label="All projects">
+  <div class="proj-hd">
+    <h2 class="proj-title">// ALL_PROJECTS</h2>
+    <span class="proj-ct" id="pct"></span>
   </div>
-
-  <div class="tb-filters" id="filters">
-    <button class="ftag on" data-f="all">All</button>
-    <button class="ftag" data-f="c"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg"/>C</button>
-    <button class="ftag" data-f="cpp"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg"/>C++</button>
-    <button class="ftag" data-f="zig">Zig</button>
-    <button class="ftag" data-f="asm">ASM</button>
-    <button class="ftag" data-f="vulkan">Vulkan</button>
-    <button class="ftag" data-f="unreal"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/unrealengine/unrealengine-original.svg"/>Unreal</button>
-    <button class="ftag" data-f="unity"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/unity/unity-original.svg"/>Unity</button>
-    <button class="ftag" data-f="cs"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg"/>C#</button>
-    <button class="ftag" data-f="py"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg"/>Python</button>
-    <!-- <button class="ftag" data-f="java"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg"/>Java</button> -->
-    <button class="ftag" data-f="web">JS/TS</button>
-    <button class="ftag" data-f="sfml">SFML</button>
+  <div class="fbar">
+    <div class="fprow" id="fprow">
+      <button class="fp fon" data-f="all">ALL</button>
+      <button class="fp" data-f="c">C</button>
+      <button class="fp" data-f="cpp">C++</button>
+      <button class="fp" data-f="zig">ZIG</button>
+      <button class="fp" data-f="asm">ASM</button>
+      <button class="fp" data-f="vulkan">VULKAN</button>
+      <button class="fp" data-f="unreal">UNREAL</button>
+      <button class="fp" data-f="unity">UNITY</button>
+      <button class="fp" data-f="cs">C#</button>
+      <button class="fp" data-f="py">PYTHON</button>
+      <button class="fp" data-f="web">JS/TS</button>
+      <button class="fp" data-f="sfml">SFML</button>
+    </div>
+    <div class="fsep"></div>
+    <input class="fsrch" id="fsrch" type="text" placeholder="SEARCH_" autocomplete="off" aria-label="Search projects"/>
   </div>
+  <div id="pgrid" role="list"></div>
+  <div id="pnores" role="status">&gt; NO_RESULTS_FOUND_</div>
+</section>
 
-  <div class="tb-count" id="rcount"></div>
-</div>
-
-<!-- ══ GRID ════════════════════════════════ -->
-<div id="main">
-  <div id="grid"></div>
-</div>
-
-<!-- ══ FOOTER ══════════════════════════════ -->
-<footer>
-
-  <div class="about-snippet">
-    <div class="footer-label">// about me</div>
-    <p>
-      I am Lucas, a developer who loves going as low as possible. And telling stories.<br/>
-      I have studied at Hive Helsinki (42 Network) a truly amazing school focused on peer-to-peer learning the rpogramming lanagues C. No teachers.<br/>
-      Now I am learning about Vulkan and Zig. By making games and game engines. </br>
-      I am also a student at Åbo Akademi University. Studing Computer Engineering, (2nd year).</br>
-      </br>
-      (I use arch btw).</br>
-    </p>
+<!-- ════════════════ ABOUT ═══════════════════════════════ -->
+<section id="about" aria-label="About">
+  <div class="ainn">
+    <p class="a-ey">// ABOUT</p>
+    <h2 class="a-nm">Lucas Eklund</h2>
+    <p class="a-ro">GAME_DEV &nbsp;::&nbsp; SYSTEMS_PROGRAMMER &nbsp;::&nbsp; ARCH_LINUX</p>
+    <div class="agrid">
+      <div>
+        <p class="a-lb">// BACKGROUND</p>
+        <div style="display:flex;align-items:center;gap:11px;margin-bottom:13px;">
+          <img src="assets/leklund1000x1000.png" alt="Lucas Eklund"
+               style="width:48px;height:48px;border-radius:2px;object-fit:cover;border:1px solid #060c14;filter:grayscale(1) brightness(.6) sepia(.2) hue-rotate(185deg);flex-shrink:0;"
+               onerror="this.style.display='none'"/>
+          <div>
+            <div style="color:#3a6a7a;font-weight:600;font-size:13px;">Lucas Eklund</div>
+            <div style="color:#0e1a22;font-family:'Share Tech Mono',monospace;font-size:9px;">lucasdevbusiness@gmail.com</div>
+          </div>
+        </div>
+        <p class="a-bio">Developer who loves going as <b>low as possible</b>. Studied at <b>Hive Helsinki</b> (42 Network) — peer-to-peer C school, no teachers, no lectures. Currently Computer Engineering at <b>Åbo Akademi University</b> (2nd year). Building game engines from scratch and documenting on YouTube.<span class="a-mn">$ uname -a → Arch Linux x86_64</span></p>
+      </div>
+      <div>
+        <p class="a-lb">// CONTACT</p>
+        <a href="https://github.com/LuEklund" target="_blank" rel="noopener" class="alink">
+          <svg class="aico" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          github.com/LuEklund
+        </a>
+        <a href="https://www.linkedin.com/in/lucas-eklund/" target="_blank" rel="noopener" class="alink">
+          <svg class="aico" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          LinkedIn
+        </a>
+        <a href="mailto:lucasdevbusiness@gmail.com" class="alink">
+          <svg class="aico" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"/></svg>
+          lucasdevbusiness@gmail.com
+        </a>
+        <a href="https://www.youtube.com/@lucasdevs" target="_blank" rel="noopener" class="alink">
+          <svg class="aico" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          youtube/@lucasdevs
+        </a>
+      </div>
+      <div>
+        <p class="a-lb">// STACK</p>
+        <div class="astk">
+          <span class="tag tag-c">C</span><span class="tag tag-cpp">C++</span>
+          <span class="tag tag-zig">Zig</span><span class="tag tag-asm">6502 ASM</span>
+          <span class="tag tag-vulkan">Vulkan</span><span class="tag tag-unreal">Unreal 5</span>
+          <span class="tag tag-unity">Unity</span><span class="tag tag-sfml">SFML</span>
+          <span class="tag tag-py">Python</span><span class="tag tag-web">JS/TS</span>
+          <span class="tag tag-cs">C#</span>
+        </div>
+        <p class="a-lb" style="margin-top:14px;">// EDUCATION</p>
+        <div class="aedu"><div class="aesc">Åbo Akademi University</div><div class="aed">Computer Engineering · 2023 – present</div></div>
+        <div class="aedu"><div class="aesc">Hive Helsinki — 42 Network</div><div class="aed">Software Engineering · 2022 – 2023</div></div>
+      </div>
+    </div>
   </div>
+</section>
 
-  <div class="interests-snippet">
-    <div class="footer-label">// interests</div>
-    <ul>
-      <li>Game Development</li>
-      <li>Low Level / Systems Programming</li>
-      <li>Data-Oriented Design</li>
-      <li>Start-ups &amp; Entrepreneurship</li>
-      <li>YouTube &amp; Storytelling</li>
-      <li>Gym</li>
-      <li>Reading Non-Fiction</li>
-    </ul>
-  </div>
+<footer>[ © 2025 LUCAS_EKLUND :: GITHUB_PAGES ]</footer>
 
-</footer>
-
+<!-- ════════════════ SCRIPTS ═════════════════════════════ -->
 <script>
-// cursor
-const cur=document.getElementById('cur');
-document.addEventListener('mousemove',e=>{cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px';});
+/* ─── cursor ──────────────────────────────────────────── */
+const cur=document.getElementById('cur'),cur2=document.getElementById('cur2');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+(function raf(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;cur2.style.left=rx+'px';cur2.style.top=ry+'px';requestAnimationFrame(raf);})();
+document.addEventListener('mouseover',e=>{cur.style.transform=e.target.closest('a,button')?'translate(-50%,-50%) scale(2)':'translate(-50%,-50%) scale(1)';});
 
-
-// matrix rain
+/* ─── matrix rain ─────────────────────────────────────── */
 (function(){
-  const cv=document.getElementById('rain');
-  const cx=cv.getContext('2d');
-  const CH='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789zig::vulkan{}[];><=+-*/&|';
+  const cv=document.getElementById('rain'),cx=cv.getContext('2d');
+  const CH='アイウエオカキクケコサシスセソタチツテトナニヌネノ0123456789ABCDEF<>{}[];:/\\|';
   let W,H,drops;
-  function init(){
-    W=cv.width=innerWidth;H=cv.height=innerHeight;
-    drops=Array.from({length:Math.floor(W/14)},()=>Math.random()*H/14|0);
-  }
+  function init(){W=cv.width=innerWidth;H=cv.height=innerHeight;drops=Array.from({length:Math.ceil(W/16)},()=>Math.random()*H/18|0);}
   function draw(){
-    cx.fillStyle='rgba(3,8,14,.06)';cx.fillRect(0,0,W,H);
-    cx.fillStyle='rgba(0,224,255,1)';cx.font='16px "DM Mono",monospace';
+    cx.fillStyle='rgba(2,4,8,.055)';cx.fillRect(0,0,W,H);
+    cx.font='14px monospace';
     drops.forEach((d,i)=>{
-      cx.fillText(CH[Math.random()*CH.length|0],i*14,d*14);
-      if(d*14>H&&Math.random()>.97)drops[i]=0; else drops[i]++;
+      const bright=Math.random()>.92;
+      cx.fillStyle=bright?'rgba(180,230,255,.9)':'rgba(0,229,255,.65)';
+      cx.fillText(CH[Math.random()*CH.length|0],i*16,d*18);
+      if(d*18>H&&Math.random()>.965)drops[i]=0;else drops[i]++;
     });
   }
   init();window.addEventListener('resize',init);setInterval(draw,55);
 })();
 
-// data
-const PROJECTS=[
-  {title:"PlanetaryZigma",desc:"Making a Risk of rain 2 inspired game but with Procedual genrated planets",thumb:"assets/PlanetaryZigma.gif",link:"https://github.com/LuEklund/PlanetaryZigma",tags:["zig","vulkan"],highlight:true},
-  {title:"WallensteinVR",desc:"Labyrinth VR game in Zig. Enemies hunt you — grab the collectible and race back before they reach you.",thumb:"assets/WallenstienVR.png",link:"https://github.com/LuEklund/WallensteinVR.git",tags:["zig","vulkan"],highlight:true},
-  {title:"NES Snake — 6502 Assembly",desc:"Snake on real NES hardware in pure 6502 assembly. No OS, no abstraction, bare metal.",thumb:"assets/Snake_ASM.jpg",link:"https://github.com/LuEklund/assembly",tags:["asm"],highlight:true},
-  {title:"Minecraft — Vulkan",desc:"Ongoing Minecraft clone built with Vulkan from scratch. Custom chunk meshing, terrain generation. YouTube devlog series.",thumb:"assets/EpicMinecraftClone.gif",link:"https://www.youtube.com/watch?v=fP3RNawUWzU",tags:["c","cpp","vulkan"],highlight:true},
-  {title:"Chungustraction",desc:"Solo entry for DaniJam 2025, theme: Attraction. Built in Unity over 48 hours.",thumb:"assets/Attract.gif",link:"https://lucasdevs.itch.io/chungustraction",tags:["cs","unity"]},
-  {title:"Fingrevie — Hexpansion",desc:"Tower defense on a procedurally expanding hex grid with upgrades. Unreal Engine 5.",thumb:"assets/HexPlanation.gif",link:"https://fingrevie.itch.io/hextd-prototype",tags:["cpp","unreal"],highlight:true},
-  {title:"Cub3D — DDA Raycaster",desc:"Wolfenstein-inspired raycaster in pure C. 2D map → real-time 3D view via DDA. Zero dependencies beyond MiniLibX.",thumb:"https://github.com/jontssu/cub3D/blob/master/Peek%202024-01-09%2016-46.gif?raw=true",link:"https://github.com/jontssu/cub3D",tags:["c"]},
-  {title:"Vulkan Renderer",desc:"Building a Vulkan renderer from scratch — pipeline, render passes, sync, descriptor sets. Devlog on YouTube.",thumb:"assets/Vulkan.png",link:"https://www.youtube.com/watch?v=QDaCNKZ0rf4",tags:["c","cpp","vulkan"]},
-  {title:"RibbitSpace",desc:"Space combat prototype in Unreal Engine. Custom ship movement and projectile system.",thumb:"assets/Ribbit.jpg",link:"https://www.youtube.com/watch?v=e1C9blkl-N0",tags:["cpp","unreal"]},
-  {title:"TopDown RPG — Multiplayer",desc:"Top-down RPG in UE5. Replication netcode and Gameplay Ability System (GAS). C++ with Blueprints.",thumb:"https://github.com/LuEklund/Unreal-TopDown-RPG/blob/master/ProgressImages/TopDownRPG3.gif?raw=true",link:"https://github.com/LuEklund/Unreal-TopDown-RPG",tags:["cpp","unreal"]},
-  {title:"ToonTanks",desc:"Tank shooter in UE5. Primarily C++ with minimal Blueprint usage.",thumb:"https://github.com/LuEklund/ToonTanks/blob/master/AnimationToon2.gif?raw=true",link:"https://github.com/LuEklund/ToonTanks",tags:["cpp","unreal"]},
-  {title:"SFML RPG",desc:"RPG on SFML. Custom entity system, game loop, and state machine — no engine.",thumb:"assets/SFML-RPG.gif",link:"https://github.com/LuEklund/SFML-GameRPG",tags:["c","cpp","sfml"]},
-  {title:"PyDefend",desc:"2D base-defense in Python / PyGame. Place towers on every tile to win.",thumb:"assets/PyDefend.png",link:"https://lucasdevs.itch.io/pydefend",tags:["py"]},
-  {title:"Discord RPG Bot",desc:"Discord bot with quests, inventory, and 1v1 battle mechanics.",thumb:"assets/DiscordBot.png",link:"#",tags:["web"]},
-  {title:"MergeGame",desc:"Stack coins to hit a target amount. Minimalist Unity puzzle game.",thumb:"assets/MergeGame.gif",link:"https://github.com/LuEklund/MergeGame",tags:["cs","unity"]},
-  {title:"Lost Prince",desc:"Short Unity story game made with Visual Scripting. Atmosphere-first.",thumb:"assets/LostPrince.gif",link:"https://lucas-eklund.itch.io/lost-prince",tags:["cs","unity"]},
-  {title:"Platformer — SFML",desc:"Side-scroller in C++/SFML. Custom physics and collision, no engine.",thumb:"https://github.com/LuEklund/Platformer-SFML/blob/master/assets/thumbnail.png?raw=true",link:"https://github.com/LuEklund/Platformer-SFML",tags:["cpp","sfml"]},
-  {title:"Snake — SFML",desc:"Classic Snake in C++/SFML. Clean game loop, no game library.",thumb:"https://github.com/LuEklund/Snake-SFML/blob/master/assets/thumbnail.png?raw=true",link:"https://github.com/LuEklund/Snake-SFML",tags:["cpp","sfml"]},
-  {title:"TicTacToe — SFML",desc:"TicTacToe in C++/SFML.",thumb:"https://github.com/LuEklund/TicTacToe-SFML/blob/master/assets/thumbnail.png?raw=true",link:"https://github.com/LuEklund/TicTacToe-SFML",tags:["cpp","sfml"]},
-  {title:"1D Combat — SFML",desc:"Player vs AI lane combat inspired by Age of War. Custom AI in pure C++.",thumb:"https://github.com/LuEklund/1D-Combat-SFML/blob/master/assets/thumbnail.png?raw=true",link:"https://github.com/LuEklund/1D-Combat-SFML",tags:["cpp","sfml"]},
-  {title:"42 — Hive Helsinki",desc:"Core 42 curriculum in pure C. Memory, pointers, data structures — no external libraries allowed.",thumb:"https://auth.42.fr/auth/resources/0nmse/login/students/img/42_logo.svg",link:"https://github.com/LuEklund/HIVE_2022",tags:["c"]},
-  {title:"ft_transcendence",desc:"Final Hive project. Full-stack: Django backend, vanilla JS, OAuth2, WebSockets, live Pong.",thumb:"https://auth.42.fr/auth/resources/0nmse/login/students/img/42_logo.svg",link:"https://github.com/LuEklund/ft_transcendence",tags:["web","py"]},
+/* ─── data ────────────────────────────────────────────── */
+const TL={c:"C",cpp:"C++",cs:"C#",zig:"Zig",asm:"ASM",py:"Python",unreal:"Unreal",unity:"Unity",vulkan:"Vulkan",web:"JS/TS",sfml:"SFML"};
+
+const P=[
+  {t:"PlanetaryZigma",d:"Risk of Rain 2 inspired game with procedurally generated planets. Custom Vulkan renderer from scratch in Zig.",i:"assets/PlanetaryZigma.gif",u:"https://github.com/LuEklund/PlanetaryZigma",g:["zig","vulkan"],hi:1},
+  {t:"WallensteinVR",d:"Labyrinth VR game in Zig. Enemies hunt you — grab the collectible and race back before they reach you.",i:"assets/WallenstienVR.png",u:"https://github.com/LuEklund/WallensteinVR.git",g:["zig","vulkan"],hi:1},
+  {t:"NES Snake — 6502 ASM",d:"Snake on real NES hardware in pure 6502 assembly. No OS, no abstraction — bare metal.",i:"assets/Snake_ASM.jpg",u:"https://github.com/LuEklund/assembly",g:["asm"],hi:1},
+  {t:"Minecraft — Vulkan",d:"Ongoing Minecraft clone built with Vulkan from scratch. Custom chunk meshing, terrain generation. YouTube devlog.",i:"assets/EpicMinecraftClone.gif",u:"https://www.youtube.com/watch?v=fP3RNawUWzU",g:["c","cpp","vulkan"],hi:1},
+  {t:"Fingrevie — Hexpansion",d:"Tower defense on a procedurally expanding hex grid with upgrades. Unreal Engine 5.",i:"assets/HexPlanation.gif",u:"https://fingrevie.itch.io/hextd-prototype",g:["cpp","unreal"],hi:1},
+  {t:"Cub3D — DDA Raycaster",d:"Wolfenstein-inspired raycaster in pure C. 2D map → real-time 3D via DDA. Zero external dependencies.",i:"https://github.com/jontssu/cub3D/blob/master/Peek%202024-01-09%2016-46.gif?raw=true",u:"https://github.com/jontssu/cub3D",g:["c"],hi:1},
+  {t:"Vulkan Renderer",d:"Building a Vulkan renderer from scratch — pipeline, render passes, sync, descriptor sets. YouTube devlog.",i:"assets/Vulkan.png",u:"https://www.youtube.com/watch?v=QDaCNKZ0rf4",g:["c","cpp","vulkan"],hi:1},
+  {t:"Chungustraction",d:"Solo DaniJam 2025 entry, theme: Attraction. Built in Unity over 48 hours.",i:"assets/Attract.gif",u:"https://lucasdevs.itch.io/chungustraction",g:["cs","unity"]},
+  {t:"RibbitSpace",d:"Space combat prototype in Unreal Engine. Custom ship movement and projectile system.",i:"assets/Ribbit.jpg",u:"https://www.youtube.com/watch?v=e1C9blkl-N0",g:["cpp","unreal"]},
+  {t:"TopDown RPG — Multiplayer",d:"Top-down RPG in UE5 with replication netcode and Gameplay Ability System (GAS).",i:"https://github.com/LuEklund/Unreal-TopDown-RPG/blob/master/ProgressImages/TopDownRPG3.gif?raw=true",u:"https://github.com/LuEklund/Unreal-TopDown-RPG",g:["cpp","unreal"]},
+  {t:"ToonTanks",d:"Tank shooter in UE5. C++ with minimal Blueprint usage.",i:"https://github.com/LuEklund/ToonTanks/blob/master/AnimationToon2.gif?raw=true",u:"https://github.com/LuEklund/ToonTanks",g:["cpp","unreal"]},
+  {t:"SFML RPG",d:"RPG on SFML. Custom entity system, game loop, state machine — no engine.",i:"assets/SFML-RPG.gif",u:"https://github.com/LuEklund/SFML-GameRPG",g:["c","cpp","sfml"]},
+  {t:"PyDefend",d:"2D base-defense in Python/PyGame. Place towers on every tile to win.",i:"assets/PyDefend.png",u:"https://lucasdevs.itch.io/pydefend",g:["py"]},
+  {t:"Discord RPG Bot",d:"Discord bot with quests, inventory, and 1v1 battle mechanics.",i:"assets/DiscordBot.png",u:"#",g:["web"]},
+  {t:"MergeGame",d:"Stack coins to hit a target amount. Minimalist Unity puzzle game.",i:"assets/MergeGame.gif",u:"https://github.com/LuEklund/MergeGame",g:["cs","unity"]},
+  {t:"Lost Prince",d:"Short Unity story game made with Visual Scripting. Atmosphere-first.",i:"assets/LostPrince.gif",u:"https://lucas-eklund.itch.io/lost-prince",g:["cs","unity"]},
+  {t:"Platformer — SFML",d:"Side-scroller in C++/SFML. Custom physics and collision, no engine.",i:"https://github.com/LuEklund/Platformer-SFML/blob/master/assets/thumbnail.png?raw=true",u:"https://github.com/LuEklund/Platformer-SFML",g:["cpp","sfml"]},
+  {t:"Snake — SFML",d:"Classic Snake in C++/SFML.",i:"https://github.com/LuEklund/Snake-SFML/blob/master/assets/thumbnail.png?raw=true",u:"https://github.com/LuEklund/Snake-SFML",g:["cpp","sfml"]},
+  {t:"TicTacToe — SFML",d:"TicTacToe in C++/SFML.",i:"https://github.com/LuEklund/TicTacToe-SFML/blob/master/assets/thumbnail.png?raw=true",u:"https://github.com/LuEklund/TicTacToe-SFML",g:["cpp","sfml"]},
+  {t:"1D Combat — SFML",d:"Player vs AI lane combat inspired by Age of War. Custom AI in C++.",i:"https://github.com/LuEklund/1D-Combat-SFML/blob/master/assets/thumbnail.png?raw=true",u:"https://github.com/LuEklund/1D-Combat-SFML",g:["cpp","sfml"]},
+  {t:"42 — Hive Helsinki",d:"Core 42 curriculum in pure C. Memory, pointers, data structures — no external libraries.",i:"https://auth.42.fr/auth/resources/0nmse/login/students/img/42_logo.svg",u:"https://github.com/LuEklund/HIVE_2022",g:["c"]},
+  {t:"ft_transcendence",d:"Final Hive project. Full-stack: Django, vanilla JS, OAuth2, WebSockets, live Pong.",i:"https://auth.42.fr/auth/resources/0nmse/login/students/img/42_logo.svg",u:"https://github.com/LuEklund/ft_transcendence",g:["web","py"]},
 ];
+const FEAT=P.filter(p=>p.hi);
 
-const TM={
-  c:{l:"C",cl:"tc-c"},cpp:{l:"C++",cl:"tc-cpp"},cs:{l:"C#",cl:"tc-cs"},
-  zig:{l:"Zig",cl:"tc-zig"},asm:{l:"ASM",cl:"tc-asm"},py:{l:"Python",cl:"tc-py"},
-  unreal:{l:"Unreal",cl:"tc-unreal"},unity:{l:"Unity",cl:"tc-unity"},
-  vulkan:{l:"Vulkan",cl:"tc-vulkan"},web:{l:"JS/TS",cl:"tc-web"},
-  sfml:{l:"SFML",cl:"tc-sfml"},java:{l:"Java",cl:"tc-java"},
-};
+/* ════════════════════════════════════════════════════════
+   CAROUSEL
+════════════════════════════════════════════════════════ */
+let cAct=0, cTimer=null, cDragX=0, cWasDrag=false, cProgTimer=null;
 
-function build(){
-  const g=document.getElementById('grid');
-  g.innerHTML='';
-  PROJECTS.forEach((p,i)=>{
-    const tagsH=p.tags.map(t=>{const m=TM[t]||{l:t,cl:''};return`<span class="tag ${m.cl}">${m.l}</span>`;}).join('');
-    const imgH=p.thumb
-      ?`<img src="${p.thumb}" alt="${p.title}" loading="lazy" onerror="this.outerHTML='<div class=\\'img-ph\\'>NO PREVIEW</div>'">`
-      :`<div class="img-ph">NO PREVIEW</div>`;
-    const c=document.createElement('article');
-    c.className='card';
-    c.dataset.tags=p.tags.join(' ');
-    c.dataset.title=p.title.toLowerCase();
-    c.dataset.desc=p.desc.toLowerCase();
-    if(p.highlight) c.dataset.highlight='true';
-    c.innerHTML=`
-      <a class="card-link" href="${p.link}" target="_blank" rel="noopener" aria-label="${p.title}"></a>
-      <div class="ci">${imgH}<div class="ci-num">${String(i+1).padStart(2,'0')}</div></div>
-      <div class="cb">
-        <div class="ct">${p.title}</div>
-        <div class="cd">${p.desc}</div>
-        <div class="ctags">${tagsH}</div>
-      </div>`;
-    g.appendChild(c);
+const AUTOPLAY_MS = 3800;
+
+function cW(){ return Math.min(window.innerWidth * 0.82, 960); }
+function cH(){ return Math.min(Math.round(cW() * 9/16), 540); }
+function cGap(){ return Math.round(cW() * 0.86); }
+
+function buildCarousel(){
+  const track=document.getElementById('c-track');
+  track.innerHTML='';
+  FEAT.forEach((p,i)=>{
+    const s=document.createElement('div');
+    s.className='cslide'; s.dataset.i=i;
+    s.innerHTML=`<img src="${p.i}" alt="${p.t}" loading="lazy" onerror="this.style.display='none'">`
+               +`<div class="cslide-grad"></div>`
+               +`<div class="cslide-idx">[${String(i+1).padStart(2,'0')}/${String(FEAT.length).padStart(2,'0')}]</div>`
+               +`<div class="cbracket tl"></div><div class="cbracket tr"></div>`
+               +`<div class="cbracket bl"></div><div class="cbracket br"></div>`
+               +`<div class="cprog"><div class="cprog-bar" id="cpb${i}"></div></div>`;
+    s.addEventListener('click',()=>{ if(!cWasDrag) cGo(i); });
+    track.appendChild(s);
   });
-  const nr=document.createElement('div');
-  nr.className='nores';nr.id='nores';nr.textContent='No matching projects.';
-  g.appendChild(nr);
-  count();
+  buildDots();
+  cResize();
+  cRender();
+  cInfoSet(false);
+}
+
+function cResize(){
+  const h=cH();
+  document.getElementById('c-scene').style.height=h+'px';
+  document.querySelectorAll('.cslide').forEach(s=>{
+    s.style.width=cW()+'px'; s.style.height=h+'px';
+  });
+}
+
+function cRender(){
+  const gap=cGap(), N=FEAT.length;
+  document.querySelectorAll('.cslide').forEach((s,i)=>{
+    let d=i-cAct;
+    if(d > N/2) d -= N;
+    if(d < -N/2) d += N;
+    const a=Math.abs(d);
+    if(a>2){ s.style.opacity='0'; s.style.pointerEvents='none'; s.classList.remove('cactive'); return; }
+    const tx = d * gap;
+    const ry = -d * 44;
+    const tz = -a * 90;
+    const sc = Math.max(0.68, 1 - a * 0.16);
+    const op = a===0 ? 1 : a===1 ? 0.45 : 0.15;
+    s.style.transform=`translateX(${tx}px) rotateY(${ry}deg) translateZ(${tz}px) scale(${sc})`;
+    s.style.opacity=op;
+    s.style.zIndex=10-a;
+    s.style.pointerEvents=a<2?'auto':'none';
+    s.classList.toggle('cactive', i===cAct);
+  });
+}
+
+function cInfoSet(anim=true){
+  const p=FEAT[cAct];
+  const tags=p.g.map(k=>`<span class="tag tag-${k}">${TL[k]}</span>`).join('');
+  const panel=document.getElementById('cinfo');
+  function fill(){
+    document.getElementById('ci-idx').textContent=`// FEATURED_PROJECT [${String(cAct+1).padStart(2,'0')}/${String(FEAT.length).padStart(2,'0')}]`;
+    document.getElementById('ci-tags').innerHTML=tags;
+    document.getElementById('ci-title').textContent=p.t;
+    document.getElementById('ci-desc').textContent=p.d;
+    document.getElementById('ci-link').href=p.u;
+    document.querySelectorAll('.cdot').forEach((d,i)=>d.classList.toggle('don',i===cAct));
+  }
+  if(anim){
+    panel.style.opacity='0'; panel.style.transform='translateY(8px)';
+    setTimeout(()=>{ fill(); panel.style.opacity='1'; panel.style.transform='none'; }, 170);
+  } else { fill(); panel.style.opacity='1'; panel.style.transform='none'; }
+}
+
+function cStartProg(){
+  const bar=document.getElementById('cpb'+cAct);
+  if(!bar)return;
+  bar.style.transition='none'; bar.style.width='0%';
+  requestAnimationFrame(()=>{
+    bar.style.transition=`width ${AUTOPLAY_MS}ms linear`;
+    bar.style.width='100%';
+  });
+}
+function cStopProg(){
+  FEAT.forEach((_,i)=>{
+    const b=document.getElementById('cpb'+i);
+    if(b){ b.style.transition='none'; b.style.width='0%'; }
+  });
+}
+
+function cGo(idx){
+  const slides=Array.from(document.querySelectorAll('.cslide'));
+  const prev=slides[cAct];
+
+  cAct=((idx%FEAT.length)+FEAT.length)%FEAT.length;
+  cRender(); cInfoSet();
+  cStopProg(); cStartProg();
+  cResetAuto();
+
+  if(prev){ prev.classList.remove('cleaving'); void prev.offsetWidth; prev.classList.add('cleaving'); setTimeout(()=>prev.classList.remove('cleaving'),280); }
+  const next=slides[cAct];
+  if(next){ next.classList.remove('centering'); void next.offsetWidth; next.classList.add('centering'); setTimeout(()=>next.classList.remove('centering'),650); }
+}
+
+function buildDots(){
+  const c=document.getElementById('cidots'); c.innerHTML='';
+  FEAT.forEach((_,i)=>{
+    const d=document.createElement('button');
+    d.className='cdot'; d.setAttribute('aria-label',`Project ${i+1}`);
+    d.addEventListener('click',()=>cGo(i));
+    c.appendChild(d);
+  });
+}
+
+function cStartAuto(){ cTimer=setInterval(()=>cGo(cAct+1), AUTOPLAY_MS); }
+function cResetAuto(){ clearInterval(cTimer); cStartAuto(); }
+
+document.getElementById('cprev').addEventListener('click',()=>cGo(cAct-1));
+document.getElementById('cnext').addEventListener('click',()=>cGo(cAct+1));
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowLeft')cGo(cAct-1);
+  if(e.key==='ArrowRight')cGo(cAct+1);
+});
+
+const cScene=document.getElementById('c-scene');
+cScene.addEventListener('mousedown',e=>{cDragX=e.clientX;cWasDrag=false;},{passive:true});
+cScene.addEventListener('mousemove',e=>{if(Math.abs(e.clientX-cDragX)>8)cWasDrag=true;},{passive:true});
+cScene.addEventListener('mouseup',e=>{ if(cWasDrag&&Math.abs(e.clientX-cDragX)>40)cGo(cAct+(e.clientX<cDragX?1:-1)); },{passive:true});
+cScene.addEventListener('touchstart',e=>{cDragX=e.touches[0].clientX;cWasDrag=false;},{passive:true});
+cScene.addEventListener('touchmove', e=>{if(Math.abs(e.touches[0].clientX-cDragX)>8)cWasDrag=true;},{passive:true});
+cScene.addEventListener('touchend',  e=>{ const d=e.changedTouches[0].clientX-cDragX; if(cWasDrag&&Math.abs(d)>40)cGo(cAct+(d<0?1:-1)); },{passive:true});
+cScene.addEventListener('mouseenter',()=>{ clearInterval(cTimer); cStopProg(); });
+cScene.addEventListener('mouseleave',()=>{ cStartAuto(); cStartProg(); });
+
+window.addEventListener('resize',()=>{ cResize(); cRender(); });
+
+buildCarousel();
+cStartAuto();
+cStartProg();
+
+/* ════════════════════════════════════════════════════════
+   PROJECT GRID
+════════════════════════════════════════════════════════ */
+function buildGrid(){
+  const g=document.getElementById('pgrid'); g.innerHTML='';
+  P.forEach(p=>{
+    const tags=p.g.map(k=>`<span class="tag tag-${k}">${TL[k]}</span>`).join('');
+    const el=document.createElement('article');
+    el.className='pc';
+    el.dataset.tags=p.g.join(' ');
+    el.dataset.title=p.t.toLowerCase();
+    el.dataset.desc=p.d.toLowerCase();
+    el.setAttribute('role','listitem');
+    el.innerHTML=`
+      <a href="${p.u}" target="_blank" rel="noopener" aria-label="${p.t}" class="pclink"></a>
+      <div class="pcimg">${p.i?`<img src="${p.i}" alt="${p.t}" loading="lazy" onerror="this.outerHTML='<div class=\\'pcph\\'>NO_PREVIEW</div>'">`:`<div class="pcph">NO_PREVIEW</div>`}</div>
+      <div class="pcinfo">
+        <div class="pctags">${tags}</div>
+        <h3 class="pctitle">${p.t}</h3>
+        <p class="pcdesc">${p.d}</p>
+      </div>`;
+    g.appendChild(el);
+  });
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        const i=+e.target.dataset.ii;
+        setTimeout(()=>e.target.classList.add('pvis'),(i%8)*32);
+        obs.unobserve(e.target);
+      }
+    });
+  },{threshold:.01,rootMargin:'0px 0px -4px 0px'});
+  document.querySelectorAll('.pc').forEach((el,i)=>{el.dataset.ii=i;obs.observe(el);});
+  pCount();
 }
 
 let af='all',sq='';
-function filter(){
-  const cards=document.querySelectorAll('.card');
+function pFilter(){
   let v=0;
-  cards.forEach(c=>{
+  document.querySelectorAll('.pc').forEach(c=>{
     const tm=af==='all'||c.dataset.tags.split(' ').includes(af);
     const sm=!sq||c.dataset.title.includes(sq)||c.dataset.desc.includes(sq)||c.dataset.tags.includes(sq);
-    c.classList.toggle('gone',!(tm&&sm));
+    c.classList.toggle('pgone',!(tm&&sm));
     if(tm&&sm)v++;
   });
-  document.getElementById('nores').style.display=v?'none':'block';
-  count(v);
+  document.getElementById('pnores').style.display=v===0?'block':'none';
+  pCount(v);
 }
-function count(v){
-  const n=v!==undefined?v:PROJECTS.length;
-  document.getElementById('rcount').textContent=n+' projects';
+function pCount(v){
+  const n=v!==undefined?v:P.length;
+  document.getElementById('pct').textContent=`[${n}]`;
 }
 
-document.getElementById('filters').addEventListener('click',e=>{
-  const b=e.target.closest('.ftag');if(!b)return;
+document.getElementById('fprow').addEventListener('click',e=>{
+  const b=e.target.closest('.fp');if(!b)return;
   af=b.dataset.f;
-  document.querySelectorAll('.ftag').forEach(x=>x.classList.remove('on'));
-  b.classList.add('on');
-  filter();
+  document.querySelectorAll('.fp').forEach(x=>x.classList.remove('fon'));
+  b.classList.add('fon'); pFilter();
 });
-document.getElementById('search').addEventListener('input',e=>{
-  sq=e.target.value.toLowerCase().trim();filter();
+document.getElementById('fsrch').addEventListener('input',e=>{
+  sq=e.target.value.toLowerCase().trim(); pFilter();
 });
 
-build();
+buildGrid();
 </script>
 </body>
 </html>
