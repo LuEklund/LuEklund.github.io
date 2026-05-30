@@ -506,19 +506,20 @@ footer { padding:16px; text-align:center; border-top:1px solid #060e08;
 /* ═══════════════════════════════════════════════════════
    REDUCED MOTION
 ═══════════════════════════════════════════════════════ */
-/* slide transition flash */
-#cflash {
-  position: absolute; inset: 0; z-index: 15;
-  pointer-events: none; opacity: 0;
-  background: rgba(0,229,255,.12);
+/* slide entrance / exit zoom */
+.cslide.centering img {
+  animation: czoominimg .55s cubic-bezier(.22,1,.36,1);
 }
-#cflash.flash { animation: cflashanim .35s ease; }
-@keyframes cflashanim {
-  0%  { opacity: 0; }
-  12% { opacity: 1; }
-  30% { opacity: 0.4; }
-  50% { opacity: 0.8; }
-  100%{ opacity: 0; }
+.cslide.cleaving img {
+  animation: czoomoutimg .22s ease-in forwards;
+}
+@keyframes czoominimg {
+  from { transform: scale(1.14); filter: saturate(.05) brightness(.18) !important; }
+  to   { transform: scale(1); }
+}
+@keyframes czoomoutimg {
+  from { transform: scale(1); }
+  to   { transform: scale(0.86); filter: brightness(.15) !important; }
 }
 
 @media(prefers-reduced-motion:reduce){
@@ -559,7 +560,7 @@ footer { padding:16px; text-align:center; border-top:1px solid #060e08;
       </svg>
     </button>
 
-    <div id="c-scene"><div id="cflash" aria-hidden="true"></div><div id="c-track"></div></div>
+    <div id="c-scene"><div id="c-track"></div></div>
 
     <button class="carrow" id="cnext" aria-label="Next">
       <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
@@ -827,19 +828,18 @@ function cStopProg(){
   });
 }
 
-function triggerFlash(){
-  const f=document.getElementById('cflash');
-  f.classList.remove('flash');
-  void f.offsetWidth;
-  f.classList.add('flash');
-}
-
 function cGo(idx){
+  const slides=Array.from(document.querySelectorAll('.cslide'));
+  const prev=slides[cAct];
+
   cAct=((idx%FEAT.length)+FEAT.length)%FEAT.length;
-  triggerFlash();
   cRender(); cInfoSet();
   cStopProg(); cStartProg();
   cResetAuto();
+
+  if(prev){ prev.classList.remove('cleaving'); void prev.offsetWidth; prev.classList.add('cleaving'); setTimeout(()=>prev.classList.remove('cleaving'),280); }
+  const next=slides[cAct];
+  if(next){ next.classList.remove('centering'); void next.offsetWidth; next.classList.add('centering'); setTimeout(()=>next.classList.remove('centering'),650); }
 }
 
 function buildDots(){
