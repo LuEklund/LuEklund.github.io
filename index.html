@@ -4,389 +4,592 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Lucas Eklund — Game &amp; Systems Developer</title>
-<meta name="description" content="Lucas Eklund — game developer and systems programmer. Vulkan, Zig, C, C++, Unreal."/>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
+<meta name="description" content="Portfolio of Lucas Eklund — game developer and systems programmer. Vulkan, Zig, C, C++, Unreal Engine."/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
-/* ── Reset ───────────────────────────────────────────────── */
-*{box-sizing:border-box;cursor:none;}
-html{scroll-behavior:smooth;}
-body{background:#03080e;color:#cbd5e1;font-family:'Space Grotesk',ui-sans-serif,system-ui;overflow-x:hidden;margin:0;}
-::-webkit-scrollbar{width:4px;}
-::-webkit-scrollbar-track{background:#03080e;}
-::-webkit-scrollbar-thumb{background:rgba(0,229,255,.18);border-radius:2px;}
-:focus-visible{outline:2px solid rgba(0,229,255,.5);outline-offset:2px;}
-.orb{font-family:'Orbitron',sans-serif;}
+/* ─── Foundation ─────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; cursor: none; }
+html { scroll-behavior: smooth; }
+body {
+  background: #0c0c0c;
+  color: #ccc;
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  overflow-x: hidden;
+}
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: #0c0c0c; }
+::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 2px; }
+:focus-visible { outline: 2px solid #00e5ff; outline-offset: 2px; }
+a { text-decoration: none; color: inherit; }
+.orb { font-family: 'Orbitron', sans-serif; }
 
-/* ── Custom cursor ───────────────────────────────────────── */
-#cur{position:fixed;width:8px;height:8px;background:#00e5ff;border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);box-shadow:0 0 8px rgba(0,229,255,.9);transition:transform .15s,width .2s,height .2s;mix-blend-mode:screen;}
-#cur-ring{position:fixed;width:26px;height:26px;border:1px solid rgba(0,229,255,.28);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:left .1s ease,top .1s ease;}
+/* ─── Custom cursor ───────────────────────────────────── */
+#cr  { position:fixed; width:8px; height:8px; background:#00e5ff; border-radius:50%; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); box-shadow:0 0 6px rgba(0,229,255,.8); transition:transform .15s,opacity .15s; mix-blend-mode:screen; }
+#crr { position:fixed; width:24px; height:24px; border:1px solid rgba(0,229,255,.25); border-radius:50%; pointer-events:none; z-index:9998; transform:translate(-50%,-50%); transition:left .09s ease,top .09s ease; }
 
-/* ── Matrix rain ─────────────────────────────────────────── */
-#rain{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.25;}
-body>*:not(#rain):not(#cur):not(#cur-ring){position:relative;z-index:1;}
+/* ─── Scanline bg texture ─────────────────────────────── */
+body::before {
+  content:'';
+  position:fixed;
+  inset:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.04) 2px,rgba(0,0,0,.04) 4px);
+  pointer-events:none;
+  z-index:0;
+}
+body > * { position:relative; z-index:1; }
 
-/* ── Header ──────────────────────────────────────────────── */
-#hdr{position:fixed;top:0;left:0;right:0;z-index:50;height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:rgba(3,8,14,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,229,255,.07);}
-@media(min-width:640px){#hdr{padding:0 24px;}}
+/* ─── Header ──────────────────────────────────────────── */
+#hdr {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: 52px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 20px;
+  background: rgba(12,12,12,.97);
+  border-bottom: 1px solid #1a1a1a;
+}
+#hdr-logo {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 900;
+  font-size: 15px;
+  letter-spacing: .18em;
+  color: #fff;
+}
+#hdr-logo span { color: #00e5ff; }
+#hdr-nav { display: flex; align-items: center; gap: 20px; }
+.nav-link {
+  font-size: 12px;
+  font-weight: 500;
+  color: #666;
+  letter-spacing: .04em;
+  transition: color .15s;
+}
+.nav-link:hover { color: #ccc; }
+.nav-gh {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  color: #00e5ff;
+  border: 1px solid rgba(0,229,255,.3);
+  padding: 5px 12px;
+  border-radius: 3px;
+  transition: background .15s, border-color .15s;
+}
+.nav-gh:hover { background: rgba(0,229,255,.06); border-color: rgba(0,229,255,.55); }
 
-/* ── Filter bar ──────────────────────────────────────────── */
-#fbar{position:fixed;top:52px;left:0;right:0;z-index:40;height:44px;display:flex;align-items:center;gap:8px;padding:0 10px;background:rgba(3,8,14,.88);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(30,58,95,.35);}
-@media(min-width:640px){#fbar{padding:0 20px;gap:10px;}}
-.pills{display:flex;gap:4px;overflow-x:auto;flex:1;scrollbar-width:none;-ms-overflow-style:none;padding:3px 0;}
-.pills::-webkit-scrollbar{display:none;}
-.ftag{display:inline-flex;align-items:center;padding:3px 8px;border-radius:3px;border:1px solid rgba(71,85,105,.35);color:#47556980;font-size:10px;font-family:'Orbitron',sans-serif;font-weight:700;letter-spacing:.04em;cursor:pointer;background:transparent;transition:all .15s ease;white-space:nowrap;flex-shrink:0;}
-.ftag:hover{border-color:rgba(0,229,255,.28);color:#94a3b8;}
-.ftag.active{border-color:rgba(0,229,255,.55);color:#00e5ff;background:rgba(0,229,255,.07);text-shadow:0 0 8px rgba(0,229,255,.3);}
-.search-side{display:flex;align-items:center;gap:6px;flex-shrink:0;}
-#search{background:rgba(8,15,31,.85);border:1px solid rgba(71,85,105,.28);border-radius:3px;color:#cbd5e1;font-size:10px;padding:4px 8px;width:110px;outline:none;font-family:'Space Grotesk',sans-serif;transition:border-color .15s;}
-#search:focus{border-color:rgba(0,229,255,.38);}
-#search::placeholder{color:#293548;}
-#rcount{font-family:'Orbitron',sans-serif;font-size:9px;color:#00e5ff;white-space:nowrap;opacity:.7;}
-@media(min-width:640px){#search{width:140px;}}
+/* ─── Filter strip ────────────────────────────────────── */
+#fstrip {
+  position: fixed; top: 52px; left: 0; right: 0; z-index: 90;
+  height: 42px;
+  display: flex; align-items: center; gap: 8px;
+  padding: 0 16px;
+  background: rgba(10,10,10,.97);
+  border-bottom: 1px solid #161616;
+}
+@media(min-width:640px){ #fstrip{ padding:0 24px; } }
+.fp { display:flex; align-items:center; gap:4px; overflow-x:auto; flex:1; scrollbar-width:none; }
+.fp::-webkit-scrollbar { display:none; }
+.ft {
+  flex-shrink: 0;
+  padding: 3px 9px;
+  border-radius: 3px;
+  border: 1px solid #252525;
+  color: #444;
+  font-size: 10px;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  letter-spacing: .05em;
+  cursor: pointer;
+  background: transparent;
+  transition: all .15s;
+  white-space: nowrap;
+}
+.ft:hover { border-color: #444; color: #888; }
+.ft.on { border-color: #00e5ff; color: #00e5ff; background: rgba(0,229,255,.06); }
+.fsep { width: 1px; height: 18px; background: #1e1e1e; flex-shrink: 0; }
+.fright { display:flex; align-items:center; gap:6px; flex-shrink:0; }
+#fsearch {
+  width: 120px;
+  background: #141414;
+  border: 1px solid #222;
+  border-radius: 3px;
+  color: #ccc;
+  font-size: 10px;
+  font-family: 'Space Grotesk', sans-serif;
+  padding: 4px 8px;
+  outline: none;
+  transition: border-color .15s;
+}
+#fsearch:focus { border-color: #2a2a2a; }
+#fsearch::placeholder { color: #2e2e2e; }
+#fct {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 9px;
+  color: #333;
+  white-space: nowrap;
+}
+@media(min-width:640px){ #fsearch{ width:150px; } }
 
-/* ── Main container ──────────────────────────────────────── */
-main{padding-top:104px;}
+/* ─── Main ────────────────────────────────────────────── */
+main { padding-top: 94px; }
 
-/* ── Gallery grid ────────────────────────────────────────── */
-#grid{display:grid;grid-template-columns:repeat(2,1fr);grid-auto-flow:dense;gap:6px;padding:0 8px 8px;}
-@media(min-width:480px){#grid{grid-template-columns:repeat(2,1fr);gap:7px;padding:0 10px 10px;}}
-@media(min-width:640px){#grid{grid-template-columns:repeat(4,1fr);gap:8px;padding:0 16px 16px;}}
-@media(min-width:1024px){#grid{gap:10px;padding:0 20px 20px;}}
+/* ─── Tech tags ───────────────────────────────────────── */
+.tag { display:inline-flex; align-items:center; padding:1px 6px; border-radius:2px; font-size:9px; font-weight:600; border:1px solid; letter-spacing:.03em; white-space:nowrap; }
+.tag-c,.tag-cpp { color:#7dd3fc; border-color:rgba(125,211,252,.2); background:rgba(125,211,252,.04); }
+.tag-zig   { color:#fbbf24; border-color:rgba(251,191,36,.2); background:rgba(251,191,36,.04); }
+.tag-asm   { color:#f87171; border-color:rgba(248,113,113,.2); background:rgba(248,113,113,.04); }
+.tag-cs    { color:#c084fc; border-color:rgba(192,132,252,.2); background:rgba(192,132,252,.04); }
+.tag-py    { color:#60a5fa; border-color:rgba(96,165,250,.2);  background:rgba(96,165,250,.04);  }
+.tag-unreal{ color:#94a3b8; border-color:rgba(148,163,184,.2); background:rgba(148,163,184,.04); }
+.tag-unity { color:#e2e8f0; border-color:rgba(226,232,240,.14);background:rgba(226,232,240,.03); }
+.tag-vulkan{ color:#fb923c; border-color:rgba(251,146,60,.2);  background:rgba(251,146,60,.04);  }
+.tag-web   { color:#fbbf24; border-color:rgba(251,191,36,.2);  background:rgba(251,191,36,.04);  }
+.tag-sfml  { color:#4ade80; border-color:rgba(74,222,128,.2);  background:rgba(74,222,128,.04);  }
 
-/* ── Gallery card ────────────────────────────────────────── */
-.card{position:relative;overflow:hidden;border-radius:8px;height:180px;border:1px solid rgba(0,229,255,.08);cursor:pointer;transition:border-color .25s,box-shadow .25s;opacity:0;}
-.card.hi{height:260px;}
-@media(min-width:640px){.card.hi{grid-column:span 2;height:340px;}}
-.card:not(.hi):hover{border-color:rgba(0,229,255,.25);}
-.card.hi:hover{border-color:rgba(240,180,41,.38);box-shadow:0 0 24px rgba(240,180,41,.06);}
-.card.gone{display:none!important;}
-.card.vis{animation:cardIn .35s ease forwards;}
-@keyframes cardIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+/* ─── Project Grid ────────────────────────────────────── */
+#grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-flow: dense;
+  gap: 8px;
+  padding: 10px 10px 0;
+}
+@media(min-width:640px)  { #grid { grid-template-columns:repeat(4,1fr); gap:10px; padding:12px 16px 0; } }
+@media(min-width:1024px) { #grid { gap:12px; padding:16px 24px 0; } }
 
-/* card image */
-.card-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.45) brightness(.55);transition:transform .55s ease,filter .35s ease;}
-.card:hover .card-img{transform:scale(1.04);filter:saturate(.78) brightness(.7);}
-.card-ph{position:absolute;inset:0;background:#080f1f;display:flex;align-items:center;justify-content:center;font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:.18em;color:#1e3a5f;}
+/* ─── Card: base ──────────────────────────────────────── */
+.card {
+  background: #111;
+  border: 1px solid #1e1e1e;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform .22s ease, box-shadow .22s ease, border-color .2s ease;
+  opacity: 0;
+}
+.card.vis { animation: fadeUp .32s ease forwards; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:none} }
+.card.gone { display:none!important; }
 
-/* gradient overlay */
-.card-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(2,6,9,.98) 0%,rgba(2,6,9,.1) 58%,transparent 100%);transition:background .3s;}
-.card:hover .card-ov{background:linear-gradient(to top,rgba(2,6,9,.99) 0%,rgba(2,6,9,.5) 62%,rgba(2,6,9,.06) 100%);}
+/* hover */
+.card:not(.hi):hover {
+  transform: translateY(-3px);
+  border-color: rgba(0,229,255,.2);
+  box-shadow: 0 14px 40px rgba(0,0,0,.65);
+}
+.card.hi:hover {
+  transform: translateY(-3px);
+  border-color: rgba(240,180,41,.3);
+  box-shadow: 0 14px 40px rgba(0,0,0,.65);
+}
 
-/* content area */
-.card-body{position:absolute;bottom:0;left:0;right:0;padding:8px 10px 10px;z-index:10;display:flex;flex-direction:column;gap:3px;}
-.card.hi .card-body{padding:12px 14px 14px;gap:5px;}
-.card-tags{display:flex;flex-wrap:wrap;gap:3px;}
-.card-title{color:#e2e8f0;font-weight:600;font-size:12px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.card.hi .card-title{font-size:14px;}
-.card-desc{color:#94a3b8;font-size:10px;line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;opacity:0;transform:translateY(5px);transition:opacity .18s ease,transform .18s ease;margin-top:1px;}
-.card.hi .card-desc{font-size:11px;-webkit-line-clamp:3;}
-.card:hover .card-desc{opacity:1;transform:none;}
-.card-cta{color:#00e5ff;font-size:9px;font-family:'Orbitron',sans-serif;font-weight:700;letter-spacing:.06em;opacity:0;transform:translateY(4px);transition:opacity .15s .05s ease,transform .15s .05s ease;margin-top:2px;}
-.card.hi .card-cta{font-size:10px;}
-.card:hover .card-cta{opacity:1;transform:none;}
+/* ─── Card: featured (span-2 + side-by-side on desktop) ─ */
+.card.hi { border-color: rgba(240,180,41,.1); }
+@media(min-width:640px) {
+  .card.hi {
+    grid-column: span 2;
+    flex-direction: row;
+    height: 280px;
+  }
+  .card.hi .cimg { flex: 0 0 56%; height: 100%; }
+  .card.hi .cinfo { justify-content: center; padding: 22px 24px; gap: 8px; }
+  .card.hi .ctitle { font-size: 18px; font-weight: 700; color: #fff; }
+  .card.hi .cdesc { -webkit-line-clamp: 4; color: #666; font-size: 12px; }
+  .card.hi .ccta { opacity: 1; transform: none; margin-top: 12px; }
+}
+@media(min-width:1024px) {
+  .card.hi { height: 300px; }
+  .card.hi .ctitle { font-size: 20px; }
+}
 
-/* badges */
-.badge{position:absolute;top:8px;right:8px;z-index:10;font-family:'Orbitron',sans-serif;font-size:8px;font-weight:700;color:#f0b429;background:rgba(3,8,14,.82);border:1px solid rgba(240,180,41,.38);padding:2px 6px;border-radius:3px;letter-spacing:.04em;}
+/* ─── Card: image wrapper ─────────────────────────────── */
+.cimg {
+  overflow: hidden;
+  height: 170px;
+  flex-shrink: 0;
+  background: #0a0a0a;
+}
+.card.hi .cimg { height: 220px; } /* mobile fallback for featured */
+.cimg img, .cimg .cph {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.cimg img {
+  filter: saturate(.45) brightness(.6);
+  transition: transform .55s ease, filter .35s ease;
+}
+.card:hover .cimg img {
+  transform: scale(1.04);
+  filter: saturate(.82) brightness(.72);
+}
+.cph {
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 9px; letter-spacing: .18em; color: #1e1e1e;
+}
 
-/* ── Tech tag pills ──────────────────────────────────────── */
-.tag{display:inline-flex;align-items:center;padding:1px 5px;border-radius:2px;font-size:9px;font-weight:600;border:1px solid;letter-spacing:.03em;white-space:nowrap;}
-.tag-c,.tag-cpp{color:#7dd3fc;border-color:rgba(125,211,252,.2);background:rgba(125,211,252,.04);}
-.tag-zig{color:#fbbf24;border-color:rgba(251,191,36,.2);background:rgba(251,191,36,.04);}
-.tag-asm{color:#f87171;border-color:rgba(248,113,113,.2);background:rgba(248,113,113,.04);}
-.tag-cs{color:#c084fc;border-color:rgba(192,132,252,.2);background:rgba(192,132,252,.04);}
-.tag-py{color:#60a5fa;border-color:rgba(96,165,250,.2);background:rgba(96,165,250,.04);}
-.tag-unreal{color:#94a3b8;border-color:rgba(148,163,184,.2);background:rgba(148,163,184,.04);}
-.tag-unity{color:#e2e8f0;border-color:rgba(226,232,240,.14);background:rgba(226,232,240,.03);}
-.tag-vulkan{color:#fb923c;border-color:rgba(251,146,60,.2);background:rgba(251,146,60,.04);}
-.tag-web{color:#fbbf24;border-color:rgba(251,191,36,.2);background:rgba(251,191,36,.04);}
-.tag-sfml{color:#4ade80;border-color:rgba(74,222,128,.2);background:rgba(74,222,128,.04);}
+/* ─── Card: info section ──────────────────────────────── */
+.cinfo {
+  padding: 12px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
+}
+.ctags { display: flex; flex-wrap: wrap; gap: 3px; }
+.ctitle {
+  color: #e8e8e8;
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 1.3;
+  margin-top: 1px;
+}
+.cdesc {
+  color: #4a4a4a;
+  font-size: 11px;
+  line-height: 1.55;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex: 1;
+}
+.ccta {
+  color: #00e5ff;
+  font-size: 9px;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  letter-spacing: .07em;
+  opacity: 0;
+  transform: translateY(3px);
+  transition: opacity .18s ease, transform .18s ease;
+  margin-top: auto;
+  display: block;
+}
+.card:hover .ccta { opacity: 1; transform: none; }
+.feat-badge {
+  display: inline-block;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 8px;
+  font-weight: 700;
+  color: #f0b429;
+  border: 1px solid rgba(240,180,41,.3);
+  padding: 2px 7px;
+  border-radius: 2px;
+  letter-spacing: .05em;
+  width: fit-content;
+  margin-bottom: 2px;
+}
 
-/* ── Empty state ─────────────────────────────────────────── */
-#nores{display:none;padding:80px 0;text-align:center;font-family:monospace;font-size:12px;color:#334155;}
+/* ─── Empty state ─────────────────────────────────────── */
+#nores {
+  display: none;
+  padding: 100px 0;
+  text-align: center;
+  font-family: monospace;
+  font-size: 12px;
+  color: #2a2a2a;
+}
 
-/* ── About section ───────────────────────────────────────── */
-#about{padding:60px 16px 48px;border-top:1px solid rgba(30,58,95,.3);scroll-margin-top:56px;}
-@media(min-width:640px){#about{padding:72px 24px 56px;}}
-.about-inner{max-width:960px;margin:0 auto;}
-.about-label{font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:.25em;color:#00e5ff;text-transform:uppercase;margin-bottom:12px;opacity:.75;}
-.about-grid{display:grid;grid-template-columns:1fr;gap:32px;margin-top:32px;}
-@media(min-width:768px){.about-grid{grid-template-columns:1.6fr 1fr 1fr;gap:28px;}}
-.link-row{display:flex;align-items:center;gap:9px;color:#475569;font-size:12px;padding:7px 0;border-bottom:1px solid rgba(30,58,95,.25);transition:color .15s;text-decoration:none;}
-.link-row:last-child{border-bottom:none;}
-.link-row:hover{color:#94a3b8;}
-.link-row:hover .lr-icon{color:#00e5ff;}
-.lr-icon{width:14px;height:14px;flex-shrink:0;color:#293548;transition:color .15s;}
-.interest{color:#475569;font-size:11px;padding:3px 0;display:flex;align-items:center;gap:6px;}
-.interest::before{content:'→';color:#293548;font-family:monospace;font-size:10px;}
+/* ─── About ───────────────────────────────────────────── */
+#about {
+  margin-top: 64px;
+  padding: 56px 20px 56px;
+  border-top: 1px solid #161616;
+  scroll-margin-top: 52px;
+}
+@media(min-width:640px){ #about{ padding:64px 24px 64px; } }
+.about-wrap { max-width: 900px; margin: 0 auto; }
+.about-eyebrow {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 9px;
+  letter-spacing: .28em;
+  color: #00e5ff;
+  opacity: .6;
+  margin-bottom: 8px;
+}
+.about-name {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 900;
+  font-size: 28px;
+  color: #fff;
+  letter-spacing: .04em;
+  margin-bottom: 4px;
+}
+.about-role {
+  font-size: 12px;
+  color: #444;
+  letter-spacing: .06em;
+  font-family: 'Orbitron', sans-serif;
+  margin-bottom: 36px;
+}
+.about-cols {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+}
+@media(min-width:640px){ .about-cols{ grid-template-columns:1.5fr 1fr 1fr; gap:28px; } }
+.about-col-label {
+  font-size: 9px;
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: .22em;
+  color: #333;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+.about-bio { color: #555; font-size: 12px; line-height: 1.7; }
+.about-bio span { color: #888; }
+.about-bio .mono { font-family: monospace; font-size: 10px; color: #2a2a2a; display: block; margin-top: 10px; }
+.alink {
+  display: flex; align-items: center; gap: 9px;
+  color: #444; font-size: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid #161616;
+  transition: color .15s;
+}
+.alink:last-child { border-bottom: none; }
+.alink:hover { color: #888; }
+.alink:hover .alink-icon { color: #00e5ff; }
+.alink-icon { width:14px; height:14px; flex-shrink:0; color:#2a2a2a; transition:color .15s; }
+.stack-tags { display:flex; flex-wrap:wrap; gap:4px; margin-bottom:16px; }
+.edu-item {
+  padding: 10px 0 10px 12px;
+  border-left: 2px solid #1e1e1e;
+  margin-bottom: 8px;
+}
+.edu-item:last-child { margin-bottom: 0; }
+.edu-school { color: #888; font-size: 12px; font-weight: 600; }
+.edu-detail { color: #333; font-size: 10px; margin-top: 3px; }
 
-/* ── Footer ──────────────────────────────────────────────── */
-footer{padding:14px 16px;text-align:center;border-top:1px solid rgba(30,58,95,.18);font-family:monospace;font-size:10px;color:#1e3a5f;}
+/* ─── Footer ──────────────────────────────────────────── */
+footer {
+  padding: 20px;
+  border-top: 1px solid #111;
+  text-align: center;
+  font-family: monospace;
+  font-size: 10px;
+  color: #252525;
+  margin-top: 0;
+}
 
-/* ── Reduced motion ──────────────────────────────────────── */
-@media(prefers-reduced-motion:reduce){
-  #rain{display:none;}
-  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;}
+/* ─── Reduced motion ──────────────────────────────────── */
+@media(prefers-reduced-motion:reduce) {
+  *, *::before, *::after { animation-duration:.01ms!important; transition-duration:.01ms!important; }
 }
 </style>
 </head>
 <body>
 
-<!-- Custom cursor -->
-<div id="cur" aria-hidden="true"></div>
-<div id="cur-ring" aria-hidden="true"></div>
+<div id="cr" aria-hidden="true"></div>
+<div id="crr" aria-hidden="true"></div>
 
-<!-- Matrix rain -->
-<canvas id="rain" aria-hidden="true"></canvas>
-
-<!-- ══════════════════════ HEADER ══════════════════════════ -->
+<!-- ══════════════ HEADER ══════════════════════════════ -->
 <header id="hdr">
-  <a href="#" class="orb font-black text-base tracking-widest" style="color:#00e5ff;text-shadow:0 0 14px rgba(0,229,255,.4);" aria-label="Lucas Eklund portfolio">
-    LU<span style="color:#fff;">EK</span>
-  </a>
-  <nav style="display:flex;align-items:center;gap:14px;">
-    <a href="#about"
-       class="text-slate-400 hover:text-cyan-300 transition-colors text-xs font-medium tracking-wide">About</a>
-    <a href="https://github.com/LuEklund" target="_blank" rel="noopener"
-       class="orb text-xs font-bold px-3 py-1.5 rounded transition-all duration-200"
-       style="border:1px solid rgba(0,229,255,.35);color:#00e5ff;"
-       onmouseenter="this.style.background='rgba(0,229,255,.08)'" onmouseleave="this.style.background='transparent'">
-      GitHub
-    </a>
+  <a href="#" id="hdr-logo" aria-label="Lucas Eklund portfolio"><span>LU</span>EK</a>
+  <nav id="hdr-nav" aria-label="Site navigation">
+    <a href="#about" class="nav-link">About</a>
+    <a href="https://github.com/LuEklund" target="_blank" rel="noopener" class="nav-gh" aria-label="GitHub profile">GitHub</a>
   </nav>
 </header>
 
-<!-- ══════════════════════ FILTER BAR ═════════════════════ -->
-<div id="fbar" role="search" aria-label="Filter projects">
-  <div class="pills" id="pills">
-    <button class="ftag active" data-f="all">All</button>
-    <button class="ftag" data-f="c">C</button>
-    <button class="ftag" data-f="cpp">C++</button>
-    <button class="ftag" data-f="zig">Zig</button>
-    <button class="ftag" data-f="asm">ASM</button>
-    <button class="ftag" data-f="vulkan">Vulkan</button>
-    <button class="ftag" data-f="unreal">Unreal</button>
-    <button class="ftag" data-f="unity">Unity</button>
-    <button class="ftag" data-f="cs">C#</button>
-    <button class="ftag" data-f="py">Python</button>
-    <button class="ftag" data-f="web">JS/TS</button>
-    <button class="ftag" data-f="sfml">SFML</button>
+<!-- ══════════════ FILTER STRIP ════════════════════════ -->
+<div id="fstrip" role="search" aria-label="Filter projects">
+  <div class="fp" id="pills">
+    <button class="ft on" data-f="all">All</button>
+    <button class="ft" data-f="c">C</button>
+    <button class="ft" data-f="cpp">C++</button>
+    <button class="ft" data-f="zig">Zig</button>
+    <button class="ft" data-f="asm">ASM</button>
+    <button class="ft" data-f="vulkan">Vulkan</button>
+    <button class="ft" data-f="unreal">Unreal</button>
+    <button class="ft" data-f="unity">Unity</button>
+    <button class="ft" data-f="cs">C#</button>
+    <button class="ft" data-f="py">Python</button>
+    <button class="ft" data-f="web">JS/TS</button>
+    <button class="ft" data-f="sfml">SFML</button>
   </div>
-  <div class="search-side">
-    <svg class="lr-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
-      <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607z"/>
-    </svg>
-    <input id="search" type="text" placeholder="search..."
-           autocomplete="off" spellcheck="false" aria-label="Search projects"/>
-    <span id="rcount" aria-live="polite" aria-atomic="true"></span>
+  <div class="fsep"></div>
+  <div class="fright">
+    <input id="fsearch" type="text" placeholder="search…" autocomplete="off" spellcheck="false" aria-label="Search projects"/>
+    <span id="fct" aria-live="polite"></span>
   </div>
 </div>
 
-<!-- ══════════════════════ MAIN ════════════════════════════ -->
+<!-- ══════════════ MAIN ═════════════════════════════════ -->
 <main>
-
-  <!-- Project grid -->
   <div id="grid" role="list" aria-label="Projects"></div>
-  <div id="nores" role="status">&gt; no matching projects_</div>
+  <div id="nores" role="status">&gt;&nbsp;no results_</div>
 
-  <!-- ═══════════════════ ABOUT ═══════════════════════════ -->
-  <section id="about" aria-label="About Lucas Eklund">
-    <div class="about-inner">
+  <!-- ════════════ ABOUT ══════════════════════════════ -->
+  <section id="about" aria-label="About">
+    <div class="about-wrap">
+      <p class="about-eyebrow">// About</p>
+      <h2 class="about-name">Lucas Eklund</h2>
+      <p class="about-role">Game Dev &nbsp;·&nbsp; Systems Programmer &nbsp;·&nbsp; Arch Linux</p>
 
-      <p class="about-label">// About</p>
-      <h2 class="orb font-bold text-2xl sm:text-3xl text-white">Lucas Eklund</h2>
-      <p class="text-slate-500 text-sm mt-1 orb tracking-widest" style="font-size:10px;">Game &amp; Systems Developer · Arch Linux · Hive Helsinki</p>
+      <div class="about-cols">
 
-      <div class="about-grid">
-
-        <!-- Bio column -->
+        <!-- Bio -->
         <div>
-          <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+          <p class="about-col-label">Background</p>
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
             <img src="assets/leklund1000x1000.png" alt="Lucas Eklund"
-                 style="width:56px;height:56px;border-radius:50%;object-fit:cover;border:1px solid rgba(0,229,255,.22);filter:grayscale(1) brightness(.85);flex-shrink:0;"
+                 style="width:52px;height:52px;border-radius:50%;object-fit:cover;border:1px solid #1e1e1e;filter:grayscale(1) brightness(.8);flex-shrink:0;"
                  onerror="this.style.display='none'"/>
             <div>
-              <div style="color:#e2e8f0;font-weight:600;font-size:14px;">Lucas Eklund</div>
-              <div style="color:#334155;font-size:10px;font-family:monospace;">lucasdevbusiness@gmail.com</div>
+              <div style="color:#888;font-size:13px;font-weight:600;">Lucas Eklund</div>
+              <div style="color:#2e2e2e;font-size:10px;font-family:monospace;">lucasdevbusiness@gmail.com</div>
             </div>
           </div>
-          <p style="color:#475569;font-size:12px;line-height:1.65;">
-            Developer who loves going as <span style="color:#94a3b8;">low as possible</span>. Studied at Hive Helsinki (42 Network) — peer-to-peer C school, no teachers, no lectures. Currently a Computer Engineering student at <span style="color:#94a3b8;">Åbo Akademi University</span> (2nd year), building game engines from scratch and documenting the journey on YouTube.
-          </p>
-          <div style="margin-top:12px;">
-            <div style="display:flex;flex-wrap:wrap;gap:4px;">
-              <span class="tag tag-c">C</span>
-              <span class="tag tag-cpp">C++</span>
-              <span class="tag tag-zig">Zig</span>
-              <span class="tag tag-asm">6502 ASM</span>
-              <span class="tag tag-vulkan">Vulkan</span>
-              <span class="tag tag-unreal">Unreal Engine 5</span>
-              <span class="tag tag-unity">Unity</span>
-              <span class="tag tag-sfml">SFML</span>
-              <span class="tag tag-py">Python</span>
-              <span class="tag tag-web">JS/TS</span>
-              <span class="tag tag-cs">C#</span>
-              <span class="tag tag-asm" style="color:#a78bfa;border-color:rgba(167,139,250,.2);">Arch Linux</span>
-            </div>
-          </div>
-          <p style="color:#1e3a5f;font-family:monospace;font-size:10px;margin-top:10px;">$ uname -a → Arch Linux x86_64</p>
+          <p class="about-bio">Developer who loves going as <span>low as possible</span>. Studied at <span>Hive Helsinki</span> (42 Network) — a peer-to-peer C programming school with no teachers, no lectures. Currently a Computer Engineering student at <span>Åbo Akademi University</span> (2nd year), building game engines from scratch and documenting the journey on YouTube.<span class="mono">$ uname -a → Arch Linux x86_64</span></p>
         </div>
 
-        <!-- Contact column -->
+        <!-- Links -->
         <div>
-          <p class="about-label">// Links</p>
-          <a href="https://github.com/LuEklund" target="_blank" rel="noopener" class="link-row">
-            <svg class="lr-icon" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          <p class="about-col-label">Contact</p>
+          <a href="https://github.com/LuEklund" target="_blank" rel="noopener" class="alink">
+            <svg class="alink-icon" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
             github.com/LuEklund
           </a>
-          <a href="https://www.linkedin.com/in/lucas-eklund/" target="_blank" rel="noopener" class="link-row">
-            <svg class="lr-icon" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          <a href="https://www.linkedin.com/in/lucas-eklund/" target="_blank" rel="noopener" class="alink">
+            <svg class="alink-icon" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
             LinkedIn
           </a>
-          <a href="mailto:lucasdevbusiness@gmail.com" class="link-row">
-            <svg class="lr-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"/></svg>
+          <a href="mailto:lucasdevbusiness@gmail.com" class="alink">
+            <svg class="alink-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"/></svg>
             lucasdevbusiness@gmail.com
           </a>
-          <a href="https://www.youtube.com/@lucasdevs" target="_blank" rel="noopener" class="link-row">
-            <svg class="lr-icon" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          <a href="https://www.youtube.com/@lucasdevs" target="_blank" rel="noopener" class="alink">
+            <svg class="alink-icon" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
             youtube/@lucasdevs
           </a>
         </div>
 
-        <!-- Interests column -->
+        <!-- Stack + Education -->
         <div>
-          <p class="about-label">// Education</p>
-          <div style="margin-bottom:20px;">
-            <div style="padding:10px 0 10px 12px;border-left:2px solid rgba(0,229,255,.35);margin-bottom:8px;">
-              <div style="color:#e2e8f0;font-weight:600;font-size:12px;">Åbo Akademi University</div>
-              <div style="color:#334155;font-size:10px;margin-top:2px;">Computer Engineering · 2023 – present</div>
-            </div>
-            <div style="padding:10px 0 10px 12px;border-left:2px solid rgba(100,116,139,.3);">
-              <div style="color:#e2e8f0;font-weight:600;font-size:12px;">Hive Helsinki — 42 Network</div>
-              <div style="color:#334155;font-size:10px;margin-top:2px;">Software Engineering · 2022 – 2023</div>
-            </div>
+          <p class="about-col-label">Stack</p>
+          <div class="stack-tags">
+            <span class="tag tag-c">C</span>
+            <span class="tag tag-cpp">C++</span>
+            <span class="tag tag-zig">Zig</span>
+            <span class="tag tag-asm">6502 ASM</span>
+            <span class="tag tag-vulkan">Vulkan</span>
+            <span class="tag tag-unreal">Unreal 5</span>
+            <span class="tag tag-unity">Unity</span>
+            <span class="tag tag-sfml">SFML</span>
+            <span class="tag tag-py">Python</span>
+            <span class="tag tag-web">JS/TS</span>
+            <span class="tag tag-cs">C#</span>
           </div>
-          <p class="about-label">// Interests</p>
-          <div class="interest">Game dev from bare metal</div>
-          <div class="interest">Data-oriented design</div>
-          <div class="interest">Vulkan / GPU graphics</div>
-          <div class="interest">YouTube dev content</div>
-          <div class="interest">Start-ups &amp; product</div>
+          <p class="about-col-label" style="margin-top:16px;">Education</p>
+          <div class="edu-item">
+            <div class="edu-school">Åbo Akademi University</div>
+            <div class="edu-detail">Computer Engineering · 2023 – present</div>
+          </div>
+          <div class="edu-item">
+            <div class="edu-school">Hive Helsinki — 42 Network</div>
+            <div class="edu-detail">Software Engineering · 2022 – 2023</div>
+          </div>
         </div>
 
       </div>
     </div>
   </section>
-
 </main>
 
 <footer>© 2025 Lucas Eklund &nbsp;·&nbsp; HTML + Tailwind &nbsp;·&nbsp; GitHub Pages</footer>
 
-<!-- ══════════════════════ SCRIPTS ════════════════════════ -->
+<!-- ══════════════ SCRIPTS ══════════════════════════════ -->
 <script>
-// ── Custom cursor ────────────────────────────────────────
-const cur=document.getElementById('cur'),ring=document.getElementById('cur-ring');
+// Cursor
+const cr=document.getElementById('cr'),crr=document.getElementById('crr');
 let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
-(function raf(){rx+=(mx-rx)*.14;ry+=(my-ry)*.14;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(raf);})();
-document.addEventListener('mouseover',e=>{
-  cur.style.transform=e.target.closest('a,button')?'translate(-50%,-50%) scale(1.7)':'translate(-50%,-50%) scale(1)';
-});
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cr.style.left=mx+'px';cr.style.top=my+'px';});
+(function raf(){rx+=(mx-rx)*.13;ry+=(my-ry)*.13;crr.style.left=rx+'px';crr.style.top=ry+'px';requestAnimationFrame(raf);})();
+document.addEventListener('mouseover',e=>{cr.style.transform=e.target.closest('a,button')?'translate(-50%,-50%) scale(1.8)':'translate(-50%,-50%) scale(1)';});
 
-// ── Matrix rain ──────────────────────────────────────────
-(function(){
-  const cv=document.getElementById('rain'),cx=cv.getContext('2d');
-  const CH='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789zig::vulkan{}[];><=+-*/&|';
-  let W,H,drops;
-  function init(){W=cv.width=innerWidth;H=cv.height=innerHeight;drops=Array.from({length:Math.floor(W/14)},()=>Math.random()*H/14|0);}
-  function draw(){
-    cx.fillStyle='rgba(3,8,14,.055)';cx.fillRect(0,0,W,H);
-    cx.fillStyle='rgba(0,229,255,.75)';cx.font='14px monospace';
-    drops.forEach((d,i)=>{cx.fillText(CH[Math.random()*CH.length|0],i*14,d*14);if(d*14>H&&Math.random()>.97)drops[i]=0;else drops[i]++;});
-  }
-  init();window.addEventListener('resize',init);setInterval(draw,58);
-})();
-
-// ── Project data ─────────────────────────────────────────
-const PROJECTS=[
-  {title:"PlanetaryZigma",desc:"Risk of Rain 2 inspired game with procedurally generated planets. Custom Vulkan renderer built from scratch in Zig.",thumb:"assets/PlanetaryZigma.gif",link:"https://github.com/LuEklund/PlanetaryZigma",tags:["zig","vulkan"],hi:true},
-  {title:"WallensteinVR",desc:"Labyrinth VR game in Zig. Enemies hunt you — grab the collectible and race back before they reach you.",thumb:"assets/WallenstienVR.png",link:"https://github.com/LuEklund/WallensteinVR.git",tags:["zig","vulkan"],hi:true},
-  {title:"NES Snake — 6502 ASM",desc:"Snake on real NES hardware in pure 6502 assembly. No OS, no abstraction — bare metal.",thumb:"assets/Snake_ASM.jpg",link:"https://github.com/LuEklund/assembly",tags:["asm"],hi:true},
-  {title:"Minecraft — Vulkan",desc:"Ongoing Minecraft clone built with Vulkan from scratch. Custom chunk meshing, terrain generation. YouTube devlog series.",thumb:"assets/EpicMinecraftClone.gif",link:"https://www.youtube.com/watch?v=fP3RNawUWzU",tags:["c","cpp","vulkan"],hi:true},
-  {title:"Fingrevie — Hexpansion",desc:"Tower defense on a procedurally expanding hex grid with upgrades. Unreal Engine 5.",thumb:"assets/HexPlanation.gif",link:"https://fingrevie.itch.io/hextd-prototype",tags:["cpp","unreal"],hi:true},
-  {title:"Cub3D — DDA Raycaster",desc:"Wolfenstein-inspired raycaster in pure C. 2D map → real-time 3D view via DDA. Zero dependencies beyond MiniLibX.",thumb:"https://github.com/jontssu/cub3D/blob/master/Peek%202024-01-09%2016-46.gif?raw=true",link:"https://github.com/jontssu/cub3D",tags:["c"],hi:true},
-  {title:"Vulkan Renderer",desc:"Building a Vulkan renderer from scratch — pipeline, render passes, sync, descriptor sets. Devlog on YouTube.",thumb:"assets/Vulkan.png",link:"https://www.youtube.com/watch?v=QDaCNKZ0rf4",tags:["c","cpp","vulkan"],hi:true},
-  {title:"Chungustraction",desc:"Solo entry for DaniJam 2025, theme: Attraction. Built in Unity over 48 hours.",thumb:"assets/Attract.gif",link:"https://lucasdevs.itch.io/chungustraction",tags:["cs","unity"]},
-  {title:"RibbitSpace",desc:"Space combat prototype in Unreal Engine. Custom ship movement and projectile system.",thumb:"assets/Ribbit.jpg",link:"https://www.youtube.com/watch?v=e1C9blkl-N0",tags:["cpp","unreal"]},
-  {title:"TopDown RPG — Multiplayer",desc:"Top-down RPG in UE5. Replication netcode and Gameplay Ability System (GAS). C++ with Blueprints.",thumb:"https://github.com/LuEklund/Unreal-TopDown-RPG/blob/master/ProgressImages/TopDownRPG3.gif?raw=true",link:"https://github.com/LuEklund/Unreal-TopDown-RPG",tags:["cpp","unreal"]},
-  {title:"ToonTanks",desc:"Tank shooter in UE5. Primarily C++ with minimal Blueprint usage.",thumb:"https://github.com/LuEklund/ToonTanks/blob/master/AnimationToon2.gif?raw=true",link:"https://github.com/LuEklund/ToonTanks",tags:["cpp","unreal"]},
-  {title:"SFML RPG",desc:"RPG on SFML. Custom entity system, game loop, and state machine — no engine.",thumb:"assets/SFML-RPG.gif",link:"https://github.com/LuEklund/SFML-GameRPG",tags:["c","cpp","sfml"]},
-  {title:"PyDefend",desc:"2D base-defense in Python / PyGame. Place towers on every tile to win.",thumb:"assets/PyDefend.png",link:"https://lucasdevs.itch.io/pydefend",tags:["py"]},
-  {title:"Discord RPG Bot",desc:"Discord bot with quests, inventory, and 1v1 battle mechanics.",thumb:"assets/DiscordBot.png",link:"#",tags:["web"]},
-  {title:"MergeGame",desc:"Stack coins to hit a target amount. Minimalist Unity puzzle game.",thumb:"assets/MergeGame.gif",link:"https://github.com/LuEklund/MergeGame",tags:["cs","unity"]},
-  {title:"Lost Prince",desc:"Short Unity story game made with Visual Scripting. Atmosphere-first.",thumb:"assets/LostPrince.gif",link:"https://lucas-eklund.itch.io/lost-prince",tags:["cs","unity"]},
-  {title:"Platformer — SFML",desc:"Side-scroller in C++/SFML. Custom physics and collision, no engine.",thumb:"https://github.com/LuEklund/Platformer-SFML/blob/master/assets/thumbnail.png?raw=true",link:"https://github.com/LuEklund/Platformer-SFML",tags:["cpp","sfml"]},
-  {title:"Snake — SFML",desc:"Classic Snake in C++/SFML. Clean game loop.",thumb:"https://github.com/LuEklund/Snake-SFML/blob/master/assets/thumbnail.png?raw=true",link:"https://github.com/LuEklund/Snake-SFML",tags:["cpp","sfml"]},
-  {title:"TicTacToe — SFML",desc:"TicTacToe in C++/SFML.",thumb:"https://github.com/LuEklund/TicTacToe-SFML/blob/master/assets/thumbnail.png?raw=true",link:"https://github.com/LuEklund/TicTacToe-SFML",tags:["cpp","sfml"]},
-  {title:"1D Combat — SFML",desc:"Player vs AI lane combat inspired by Age of War. Custom AI in pure C++.",thumb:"https://github.com/LuEklund/1D-Combat-SFML/blob/master/assets/thumbnail.png?raw=true",link:"https://github.com/LuEklund/1D-Combat-SFML",tags:["cpp","sfml"]},
-  {title:"42 — Hive Helsinki",desc:"Core 42 curriculum in pure C. Memory, pointers, data structures — no external libraries.",thumb:"https://auth.42.fr/auth/resources/0nmse/login/students/img/42_logo.svg",link:"https://github.com/LuEklund/HIVE_2022",tags:["c"]},
-  {title:"ft_transcendence",desc:"Final Hive project. Full-stack: Django backend, vanilla JS, OAuth2, WebSockets, live Pong.",thumb:"https://auth.42.fr/auth/resources/0nmse/login/students/img/42_logo.svg",link:"https://github.com/LuEklund/ft_transcendence",tags:["web","py"]},
+// Projects
+const P=[
+  {t:"PlanetaryZigma",d:"Risk of Rain 2 inspired game with procedurally generated planets. Custom Vulkan renderer built from scratch in Zig.",i:"assets/PlanetaryZigma.gif",u:"https://github.com/LuEklund/PlanetaryZigma",g:["zig","vulkan"],hi:1},
+  {t:"WallensteinVR",d:"Labyrinth VR game in Zig. Enemies hunt you — grab the collectible and race back before they reach you.",i:"assets/WallenstienVR.png",u:"https://github.com/LuEklund/WallensteinVR.git",g:["zig","vulkan"],hi:1},
+  {t:"NES Snake — 6502 ASM",d:"Snake on real NES hardware in pure 6502 assembly. No OS, no abstraction — bare metal gaming.",i:"assets/Snake_ASM.jpg",u:"https://github.com/LuEklund/assembly",g:["asm"],hi:1},
+  {t:"Minecraft — Vulkan",d:"Ongoing Minecraft clone built with Vulkan from scratch. Custom chunk meshing, terrain generation. YouTube devlog series.",i:"assets/EpicMinecraftClone.gif",u:"https://www.youtube.com/watch?v=fP3RNawUWzU",g:["c","cpp","vulkan"],hi:1},
+  {t:"Fingrevie — Hexpansion",d:"Tower defense on a procedurally expanding hex grid with upgrades. Unreal Engine 5.",i:"assets/HexPlanation.gif",u:"https://fingrevie.itch.io/hextd-prototype",g:["cpp","unreal"],hi:1},
+  {t:"Cub3D — DDA Raycaster",d:"Wolfenstein-inspired raycaster in pure C. 2D map → real-time 3D via DDA. Zero external dependencies.",i:"https://github.com/jontssu/cub3D/blob/master/Peek%202024-01-09%2016-46.gif?raw=true",u:"https://github.com/jontssu/cub3D",g:["c"],hi:1},
+  {t:"Vulkan Renderer",d:"Building a Vulkan renderer from scratch — pipeline, render passes, synchronisation, descriptor sets.",i:"assets/Vulkan.png",u:"https://www.youtube.com/watch?v=QDaCNKZ0rf4",g:["c","cpp","vulkan"],hi:1},
+  {t:"Chungustraction",d:"Solo entry for DaniJam 2025, theme: Attraction. Built in Unity over 48 hours.",i:"assets/Attract.gif",u:"https://lucasdevs.itch.io/chungustraction",g:["cs","unity"]},
+  {t:"RibbitSpace",d:"Space combat prototype in Unreal Engine. Custom ship movement and projectile system.",i:"assets/Ribbit.jpg",u:"https://www.youtube.com/watch?v=e1C9blkl-N0",g:["cpp","unreal"]},
+  {t:"TopDown RPG — Multiplayer",d:"Top-down RPG in UE5 with replication netcode and Gameplay Ability System (GAS).",i:"https://github.com/LuEklund/Unreal-TopDown-RPG/blob/master/ProgressImages/TopDownRPG3.gif?raw=true",u:"https://github.com/LuEklund/Unreal-TopDown-RPG",g:["cpp","unreal"]},
+  {t:"ToonTanks",d:"Tank shooter in UE5. Primarily C++ with minimal Blueprint usage.",i:"https://github.com/LuEklund/ToonTanks/blob/master/AnimationToon2.gif?raw=true",u:"https://github.com/LuEklund/ToonTanks",g:["cpp","unreal"]},
+  {t:"SFML RPG",d:"RPG on SFML. Custom entity system, game loop, and state machine — no engine.",i:"assets/SFML-RPG.gif",u:"https://github.com/LuEklund/SFML-GameRPG",g:["c","cpp","sfml"]},
+  {t:"PyDefend",d:"2D base-defense in Python / PyGame. Place towers on every tile to win.",i:"assets/PyDefend.png",u:"https://lucasdevs.itch.io/pydefend",g:["py"]},
+  {t:"Discord RPG Bot",d:"Discord bot with quests, inventory, and 1v1 battle mechanics.",i:"assets/DiscordBot.png",u:"#",g:["web"]},
+  {t:"MergeGame",d:"Stack coins to hit a target amount. Minimalist Unity puzzle game.",i:"assets/MergeGame.gif",u:"https://github.com/LuEklund/MergeGame",g:["cs","unity"]},
+  {t:"Lost Prince",d:"Short Unity story game made with Visual Scripting. Atmosphere-first.",i:"assets/LostPrince.gif",u:"https://lucas-eklund.itch.io/lost-prince",g:["cs","unity"]},
+  {t:"Platformer — SFML",d:"Side-scroller in C++/SFML. Custom physics and collision, no engine.",i:"https://github.com/LuEklund/Platformer-SFML/blob/master/assets/thumbnail.png?raw=true",u:"https://github.com/LuEklund/Platformer-SFML",g:["cpp","sfml"]},
+  {t:"Snake — SFML",d:"Classic Snake in C++/SFML. Clean game loop.",i:"https://github.com/LuEklund/Snake-SFML/blob/master/assets/thumbnail.png?raw=true",u:"https://github.com/LuEklund/Snake-SFML",g:["cpp","sfml"]},
+  {t:"TicTacToe — SFML",d:"TicTacToe in C++/SFML.",i:"https://github.com/LuEklund/TicTacToe-SFML/blob/master/assets/thumbnail.png?raw=true",u:"https://github.com/LuEklund/TicTacToe-SFML",g:["cpp","sfml"]},
+  {t:"1D Combat — SFML",d:"Player vs AI lane combat inspired by Age of War. Custom AI in pure C++.",i:"https://github.com/LuEklund/1D-Combat-SFML/blob/master/assets/thumbnail.png?raw=true",u:"https://github.com/LuEklund/1D-Combat-SFML",g:["cpp","sfml"]},
+  {t:"42 — Hive Helsinki",d:"Core 42 curriculum in pure C. Memory, pointers, data structures — no external libraries.",i:"https://auth.42.fr/auth/resources/0nmse/login/students/img/42_logo.svg",u:"https://github.com/LuEklund/HIVE_2022",g:["c"]},
+  {t:"ft_transcendence",d:"Final Hive project. Full-stack: Django backend, vanilla JS, OAuth2, WebSockets, live Pong.",i:"https://auth.42.fr/auth/resources/0nmse/login/students/img/42_logo.svg",u:"https://github.com/LuEklund/ft_transcendence",g:["web","py"]},
 ];
 
 const TL={c:"C",cpp:"C++",cs:"C#",zig:"Zig",asm:"ASM",py:"Python",unreal:"Unreal",unity:"Unity",vulkan:"Vulkan",web:"JS/TS",sfml:"SFML"};
 
-// ── Build gallery grid ───────────────────────────────────
 function build(){
   const g=document.getElementById('grid');
   g.innerHTML='';
-  PROJECTS.forEach(p=>{
-    const tags=p.tags.map(t=>`<span class="tag tag-${t}">${TL[t]||t}</span>`).join('');
-    const c=document.createElement('article');
-    c.className='card'+(p.hi?' hi':'');
-    c.dataset.tags=p.tags.join(' ');
-    c.dataset.title=p.title.toLowerCase();
-    c.dataset.desc=p.desc.toLowerCase();
-    c.setAttribute('role','listitem');
-    const imgHtml=p.thumb
-      ?`<img class="card-img" src="${p.thumb}" alt="${p.title}" loading="lazy" onerror="this.outerHTML='<div class=\\'card-ph\\'>NO PREVIEW</div>'">`
-      :`<div class="card-ph">NO PREVIEW</div>`;
-    c.innerHTML=`
-      <a href="${p.link}" target="_blank" rel="noopener" aria-label="View ${p.title}" style="position:absolute;inset:0;z-index:20;display:block;"></a>
-      ${imgHtml}
-      <div class="card-ov"></div>
-      ${p.hi?`<div class="badge">★ FEAT</div>`:''}
-      <div class="card-body">
-        <div class="card-tags">${tags}</div>
-        <h3 class="card-title">${p.title}</h3>
-        <p class="card-desc">${p.desc}</p>
-        <span class="card-cta">View Project →</span>
+  P.forEach(p=>{
+    const tags=p.g.map(k=>`<span class="tag tag-${k}">${TL[k]||k}</span>`).join('');
+    const el=document.createElement('article');
+    el.className='card'+(p.hi?' hi':'');
+    el.dataset.tags=p.g.join(' ');
+    el.dataset.title=p.t.toLowerCase();
+    el.dataset.desc=p.d.toLowerCase();
+    el.setAttribute('role','listitem');
+    const imgEl=p.i
+      ?`<img src="${p.i}" alt="${p.t}" loading="lazy" onerror="this.outerHTML='<div class=\\'cph\\'>NO PREVIEW</div>'">`
+      :`<div class="cph">NO PREVIEW</div>`;
+    el.innerHTML=`
+      <a href="${p.u}" target="_blank" rel="noopener" aria-label="View ${p.t}"
+         style="position:absolute;inset:0;z-index:10;display:block;"></a>
+      <div class="cimg">${imgEl}</div>
+      <div class="cinfo">
+        ${p.hi?`<span class="feat-badge">★ FEATURED</span>`:''}
+        <div class="ctags">${tags}</div>
+        <h3 class="ctitle">${p.t}</h3>
+        <p class="cdesc">${p.d}</p>
+        <span class="ccta">View Project &nbsp;→</span>
       </div>`;
-    g.appendChild(c);
+    el.style.position='relative';
+    g.appendChild(el);
   });
 
-  // Staggered entrance animation
+  // staggered entrance
   const obs=new IntersectionObserver(entries=>{
     entries.forEach(e=>{
       if(e.isIntersecting){
-        const i=parseInt(e.target.dataset.idx);
-        setTimeout(()=>e.target.classList.add('vis'),(i%8)*40);
+        const i=+e.target.dataset.i;
+        setTimeout(()=>e.target.classList.add('vis'),(i%8)*38);
         obs.unobserve(e.target);
       }
     });
   },{threshold:0.01,rootMargin:'0px 0px -5px 0px'});
-  document.querySelectorAll('.card').forEach((el,i)=>{el.dataset.idx=i;obs.observe(el);});
-
+  document.querySelectorAll('.card').forEach((el,i)=>{el.dataset.i=i;obs.observe(el);});
   count();
 }
 
-// ── Filter + search ──────────────────────────────────────
+// filter + search
 let af='all',sq='';
-function filter(){
+function applyFilter(){
   let v=0;
   document.querySelectorAll('.card').forEach(c=>{
-    const tm=af==='all'||c.dataset.tags.split(' ').includes(af);
-    const sm=!sq||c.dataset.title.includes(sq)||c.dataset.desc.includes(sq)||c.dataset.tags.includes(sq);
-    const show=tm&&sm;
+    const tMatch=af==='all'||c.dataset.tags.split(' ').includes(af);
+    const sMatch=!sq||c.dataset.title.includes(sq)||c.dataset.desc.includes(sq)||c.dataset.tags.includes(sq);
+    const show=tMatch&&sMatch;
     c.classList.toggle('gone',!show);
     if(show)v++;
   });
@@ -394,19 +597,18 @@ function filter(){
   count(v);
 }
 function count(v){
-  const n=v!==undefined?v:PROJECTS.length;
-  document.getElementById('rcount').textContent=n+' project'+(n!==1?'s':'');
+  const n=v!==undefined?v:P.length;
+  document.getElementById('fct').textContent=n+(n!==1?' projects':' project');
 }
-
 document.getElementById('pills').addEventListener('click',e=>{
-  const b=e.target.closest('.ftag');if(!b)return;
+  const b=e.target.closest('.ft');if(!b)return;
   af=b.dataset.f;
-  document.querySelectorAll('.ftag').forEach(x=>x.classList.remove('active'));
-  b.classList.add('active');
-  filter();
+  document.querySelectorAll('.ft').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');
+  applyFilter();
 });
-document.getElementById('search').addEventListener('input',e=>{
-  sq=e.target.value.toLowerCase().trim();filter();
+document.getElementById('fsearch').addEventListener('input',e=>{
+  sq=e.target.value.toLowerCase().trim();applyFilter();
 });
 
 build();
