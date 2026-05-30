@@ -122,8 +122,7 @@ body > *:not(#rain):not(#cur):not(#cur2) { position: relative; z-index: 1; }
   padding-top: 50px;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   position: relative; overflow: hidden;
-  gap: 36px;
-  padding-bottom: 20px;
+  gap: 0;
 }
 
 /* radial spotlight */
@@ -139,56 +138,27 @@ body > *:not(#rain):not(#cur):not(#cur2) { position: relative; z-index: 1; }
   pointer-events: none; z-index: 0;
 }
 
-/* ─── HUD panel ─────────────────────────────────────────── */
-.c-hud {
-  position: relative;
-  width: min(96vw, 980px);
-  border: 1px solid rgba(0,229,255,.22);
-  border-radius: 3px;
-  background: rgba(0,229,255,.008);
-  box-shadow:
-    0 0 0 1px rgba(0,229,255,.04),
-    0 0 80px rgba(0,229,255,.1),
-    inset 0 0 80px rgba(0,0,0,.35);
-  z-index: 1;
+.feat-ident {
+  position: absolute; top: 60px; left: 20px;
+  text-align: left; z-index: 2;
 }
-/* double outer glow border */
-.c-hud::before {
-  content: '';
-  position: absolute; inset: -6px;
-  border: 1px solid rgba(0,229,255,.07);
-  border-radius: 7px;
-  pointer-events: none;
-}
-/* sweeping scan-line */
-.c-hud::after {
-  content: '';
-  position: absolute; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(0,229,255,.55), transparent);
-  animation: chudScan 5s linear infinite;
-  pointer-events: none; z-index: 10;
-}
-@keyframes chudScan {
-  0%   { top: 0; opacity: 0; }
-  4%   { opacity: 1; }
-  96%  { opacity: 1; }
-  100% { top: 100%; opacity: 0; }
-}
-/* HUD corner brackets */
-.chud-c { position: absolute; width: 22px; height: 22px; pointer-events: none; z-index: 5; }
-.chud-c.tl { top:-2px; left:-2px; border-top:2px solid var(--g); border-left:2px solid var(--g); }
-.chud-c.tr { top:-2px; right:-2px; border-top:2px solid var(--g); border-right:2px solid var(--g); }
-.chud-c.bl { bottom:-2px; left:-2px; border-bottom:2px solid var(--g); border-left:2px solid var(--g); }
-.chud-c.br { bottom:-2px; right:-2px; border-bottom:2px solid var(--g); border-right:2px solid var(--g); }
-/* HUD edge labels */
-.chud-lbl {
-  position: absolute; top: -17px;
+.feat-ident .feat-name { font-size: clamp(13px, 1.8vw, 18px); }
+@media(min-width:640px){ .feat-ident{ left: 28px; } }
+.feat-sys {
   font-family: 'Share Tech Mono', monospace;
-  font-size: 8px; letter-spacing: .18em; color: rgba(0,229,255,.38);
-  pointer-events: none; white-space: nowrap;
+  font-size: 10px; letter-spacing: .25em; color: var(--g);
+  opacity: .5; margin-bottom: 6px;
 }
-.chud-lbl.l { left: 4px; }
-.chud-lbl.r { right: 4px; }
+.feat-name {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 900; font-size: clamp(22px, 4vw, 38px);
+  color: #fff; letter-spacing: .08em;
+  text-shadow: 0 0 30px rgba(0,229,255,.2);
+}
+.feat-role {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px; color: #0e2535; letter-spacing: .12em; margin-top: 4px;
+}
 
 /* ─── Carousel ──────────────────────────────────────── */
 .c-wrap { width: 100%; position: relative; z-index: 1; }
@@ -314,12 +284,49 @@ body > *:not(#rain):not(#cur):not(#cur2) { position: relative; z-index: 1; }
 #cnext { right: 12px; }
 @media(min-width:640px) { #cprev { left: 24px; } #cnext { right: 24px; } }
 
-/* ─── Carousel info panel (inside HUD) ─────────────────── */
-#cinfo {
-  padding: 18px 28px 22px;
-  border-top: 1px solid rgba(0,229,255,.09);
-  text-align: center;
+/* project info above carousel */
+#cinfo-top {
+  z-index: 1; width: 100%;
+  max-width: 700px; margin: 0 auto 18px;
+  padding: 0 20px; text-align: center;
   transition: opacity .2s, transform .2s;
+}
+
+/* sci-fi carousel frame */
+.c-frame {
+  position: absolute; inset: 0; pointer-events: none;
+  border: 1px solid rgba(0,229,255,.16);
+  border-radius: 4px;
+  box-shadow: 0 0 50px rgba(0,229,255,.06), inset 0 0 60px rgba(0,0,0,.2);
+}
+.c-frame::after {
+  content: '';
+  position: absolute; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0,229,255,.45), transparent);
+  animation: cscan 6s linear infinite;
+  pointer-events: none;
+}
+@keyframes cscan {
+  0%   { top: 0; opacity: 0; }
+  5%   { opacity: 1; }
+  95%  { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+.cf-tl,.cf-tr,.cf-bl,.cf-br {
+  position: absolute; width: 14px; height: 14px; pointer-events: none;
+}
+.cf-tl{ top:-1px; left:-1px; border-top:2px solid var(--g); border-left:2px solid var(--g); }
+.cf-tr{ top:-1px; right:-1px; border-top:2px solid var(--g); border-right:2px solid var(--g); }
+.cf-bl{ bottom:-1px; left:-1px; border-bottom:2px solid var(--g); border-left:2px solid var(--g); }
+.cf-br{ bottom:-1px; right:-1px; border-bottom:2px solid var(--g); border-right:2px solid var(--g); }
+
+/* ─── Carousel info panel ───────────────────────────── */
+#cinfo {
+  z-index: 1;
+  max-width: 640px;
+  margin: 14px auto 0;
+  padding: 0 20px;
+  text-align: center;
 }
 .ci-sys {
   font-family: 'Share Tech Mono', monospace;
@@ -542,22 +549,17 @@ footer { padding:16px; text-align:center; border-top:1px solid #060e08;
 /* ═══════════════════════════════════════════════════════
    REDUCED MOTION
 ═══════════════════════════════════════════════════════ */
-/* slide transition — filter on the slide itself (no conflict with inline transform/opacity) */
-.cslide.centering {
-  animation: cslideIn .6s ease-out;
+/* slide entrance / exit animation */
+.ccover {
+  position: absolute; inset: 0; z-index: 5;
+  background: #020408; pointer-events: none; opacity: 0;
 }
-.cslide.cleaving {
-  animation: cslideOut .3s ease-in forwards;
-}
-@keyframes cslideIn {
-  0%   { filter: brightness(0) blur(10px); }
-  55%  { filter: brightness(.7) blur(2px); }
-  100% { filter: brightness(1) blur(0); }
-}
-@keyframes cslideOut {
-  0%   { filter: brightness(1) blur(0); }
-  100% { filter: brightness(.04) blur(8px); }
-}
+.cslide.centering .ccover { animation: ccoverIn .65s ease-out forwards; }
+.cslide.cleaving  .ccover { animation: ccoverOut .28s ease-in forwards; }
+.cslide.centering img      { animation: czoomIn .65s cubic-bezier(.22,1,.36,1); }
+@keyframes ccoverIn  { 0%{opacity:1} 100%{opacity:0} }
+@keyframes ccoverOut { 0%{opacity:0} 100%{opacity:.95} }
+@keyframes czoomIn   { from{transform:scale(1.1)} to{transform:scale(1)} }
 
 @media(prefers-reduced-motion:reduce){
   #rain{display:none;}
@@ -573,7 +575,7 @@ footer { padding:16px; text-align:center; border-top:1px solid #060e08;
 
 <!-- ════════════════ HEADER ═════════════════════════════ -->
 <header id="hdr">
-  <a href="#" class="logo" aria-label="Lucas Eklund">LUCAS <span>EKLUND</span></a>
+  <a href="#" class="logo" aria-label="Lucas Eklund"><span>LU</span>EK</a>
   <nav class="hnav">
     <a href="#projects" class="hl">_projects</a>
     <a href="#about"    class="hl">_about</a>
@@ -584,36 +586,43 @@ footer { padding:16px; text-align:center; border-top:1px solid #060e08;
 <!-- ════════════════ FEATURED / CAROUSEL ════════════════ -->
 <section id="featured" aria-label="Featured projects">
 
-  <div class="c-hud">
-    <div class="chud-lbl l" aria-hidden="true">FEATURED.SYS</div>
-    <div class="chud-lbl r" aria-hidden="true" id="ci-idx"></div>
-    <span class="chud-c tl" aria-hidden="true"></span>
-    <span class="chud-c tr" aria-hidden="true"></span>
-    <span class="chud-c bl" aria-hidden="true"></span>
-    <span class="chud-c br" aria-hidden="true"></span>
+  <div class="feat-ident">
+    <p class="feat-sys">// LUCAS_EKLUND</p>
+    <h1 class="feat-name">Lucas Eklund</h1>
+    <p class="feat-role">GAME_DEV &nbsp;::&nbsp; SYS_PROG</p>
+  </div>
 
-    <div class="c-wrap">
-      <button class="carrow" id="cprev" aria-label="Previous">
-        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
-        </svg>
-      </button>
-      <div id="c-scene"><div id="c-track"></div></div>
-      <button class="carrow" id="cnext" aria-label="Next">
-        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
-        </svg>
-      </button>
+  <div id="cinfo-top" aria-live="polite">
+    <p class="ci-sys" id="ci-idx"></p>
+    <div class="ci-tags" id="ci-tags"></div>
+    <h2 class="ci-title" id="ci-title"></h2>
+    <p class="ci-desc" id="ci-desc"></p>
+  </div>
+
+  <div class="c-wrap">
+    <button class="carrow" id="cprev" aria-label="Previous">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+      </svg>
+    </button>
+
+    <div id="c-scene"><div id="c-track"></div></div>
+    <div class="c-frame" aria-hidden="true">
+      <span class="cf-tl"></span><span class="cf-tr"></span>
+      <span class="cf-bl"></span><span class="cf-br"></span>
     </div>
 
-    <div id="cinfo" aria-live="polite">
-      <div class="ci-tags" id="ci-tags"></div>
-      <h2 class="ci-title" id="ci-title"></h2>
-      <p class="ci-desc" id="ci-desc"></p>
-      <div class="ci-foot">
-        <a class="ci-link" id="ci-link" target="_blank" rel="noopener">[ VIEW_PROJECT ]</a>
-        <div class="cidots" id="cidots"></div>
-      </div>
+    <button class="carrow" id="cnext" aria-label="Next">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+      </svg>
+    </button>
+  </div>
+
+  <div id="cinfo">
+    <div class="ci-foot">
+      <a class="ci-link" id="ci-link" target="_blank" rel="noopener">[ VIEW_PROJECT ]</a>
+      <div class="cidots" id="cidots"></div>
     </div>
   </div>
 
@@ -789,6 +798,7 @@ function buildCarousel(){
     s.className='cslide'; s.dataset.i=i;
     s.innerHTML=`<img src="${p.i}" alt="${p.t}" loading="lazy" onerror="this.style.display='none'">`
                +`<div class="cslide-grad"></div>`
+               +`<div class="ccover"></div>`
                +`<div class="cslide-idx">[${String(i+1).padStart(2,'0')}/${String(FEAT.length).padStart(2,'0')}]</div>`
                +`<div class="cbracket tl"></div><div class="cbracket tr"></div>`
                +`<div class="cbracket bl"></div><div class="cbracket br"></div>`
@@ -834,7 +844,7 @@ function cRender(){
 function cInfoSet(anim=true){
   const p=FEAT[cAct];
   const tags=p.g.map(k=>`<span class="tag tag-${k}">${TL[k]}</span>`).join('');
-  const panel=document.getElementById('cinfo');
+  const panel=document.getElementById('cinfo-top');
   function fill(){
     document.getElementById('ci-idx').textContent=`// FEATURED_PROJECT [${String(cAct+1).padStart(2,'0')}/${String(FEAT.length).padStart(2,'0')}]`;
     document.getElementById('ci-tags').innerHTML=tags;
