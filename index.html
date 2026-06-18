@@ -526,12 +526,12 @@ body > *:not(#rain):not(#cur):not(#cur2) { position: relative; z-index: 1; }
 .alink:last-child { border-bottom:none; }
 .alink:hover { color:#2a5065; }
 .alink:hover .aico { color:var(--g); }
-.aico { width:13px; height:13px; flex-shrink:0; color:#0e1a22; transition:color .15s; }
+.aico { width:13px; height:13px; flex-shrink:0; color:#007bff; transition:color .15s; }
 .astk { display:flex; flex-wrap:wrap; gap:4px; margin-bottom:14px; }
 .aedu { padding:8px 0 8px 11px; border-left:2px solid #060c14; margin-bottom:6px; }
 .aedu:last-child { margin-bottom:0; }
-.aesc { color:#2a4055; font-size:12px; font-weight:600; }
-.aed  { color:#0e1a22; font-size:10px; margin-top:2px; }
+.aesc { color:#007bff; font-size:12px; font-weight:600; }
+.aed  { color:#00e5ff; font-size:10px; margin-top:2px; }
 
 /* ═══════════════════════════════════════════════════════
    FOOTER
@@ -667,7 +667,7 @@ footer { padding:16px; text-align:center; border-top:1px solid #060e08;
             <div style="color:#00e5ff;font-family:'Share Tech Mono',monospace;font-size:9px;">lucasdevbusiness@gmail.com</div>
           </div>
         </div>
-        <p class="a-bio">Developer who loves going as <b>low as possible</b>. Studied at <b>Hive Helsinki</b> (42 Network) — peer-to-peer C school, no teachers, no lectures. Currently Computer Engineering at <b>Åbo Akademi University</b> (2nd year). Building game engines from scratch and documenting on YouTube.<span class="a-mn">$ uname -a → Arch Linux x86_64</span></p>
+        <p class="a-bio">Developer who loves level programing <b>low as possible</b>. Studied at <b>Hive Helsinki</b> (42 Network) — peer-to-peer C school, no teachers, no lectures. Currently Computer Engineering at <b>Åbo Akademi University</b> (2nd year). Building game engines from scratch and documenting on YouTube.<span class="a-mn">$ uname -a → Arch Linux x86_64</span></p>
       </div>
       <div>
         <p class="a-lb">// CONTACT</p>
@@ -685,7 +685,7 @@ footer { padding:16px; text-align:center; border-top:1px solid #060e08;
         </a>
         <a href="https://www.youtube.com/@LucasDevelop" target="_blank" rel="noopener" class="alink">
           <svg class="aico" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-          youtube/@lucasdevs
+          youtube/@lucasdevelop
         </a>
       </div>
       <div>
@@ -699,14 +699,14 @@ footer { padding:16px; text-align:center; border-top:1px solid #060e08;
           <span class="tag tag-cs">C#</span>
         </div>
         <p class="a-lb" style="margin-top:14px;">// EDUCATION</p>
-        <div class="aedu"><div class="aesc">Åbo Akademi University</div><div class="aed">Computer Engineering · 2023 – present</div></div>
-        <div class="aedu"><div class="aesc">Hive Helsinki — 42 Network</div><div class="aed">Software Engineering · 2022 – 2023</div></div>
+        <div class="aedu"><div class="aesc">Åbo Akademi University</div><div class="aed">Computer Engineering · 2024 – present</div></div>
+        <div class="aedu"><div class="aesc">Hive Helsinki — 42 Network</div><div class="aed">Software Engineering · 2022 – 2024</div></div>
       </div>
     </div>
   </div>
 </section>
 
-<footer>[ © 2025 LUCAS_EKLUND :: GITHUB_PAGES ]</footer>
+<footer>[ © 2026 LUCAS_EKLUND :: GITHUB_PAGES ]</footer>
 
 <!-- ════════════════ SCRIPTS ═════════════════════════════ -->
 <script>
@@ -720,7 +720,7 @@ document.addEventListener('mouseover',e=>{cur.style.transform=e.target.closest('
 /* ─── matrix rain ─────────────────────────────────────── */
 (function(){
   const cv=document.getElementById('rain'),cx=cv.getContext('2d');
-  const CH='アイウエオカキクケコサシスセソタチツテトナニヌネノ0123456789ABCDEF<>{}[];:/\\|';
+  const CH='0123456789';
   let W,H,drops;
   function init(){W=cv.width=innerWidth;H=cv.height=innerHeight;drops=Array.from({length:Math.ceil(W/16)},()=>Math.random()*H/18|0);}
   function draw(){
@@ -741,13 +741,14 @@ const TL={c:"C",cpp:"C++",cs:"C#",zig:"Zig",asm:"ASM",py:"Python",unreal:"Unreal
 
 const P=[
   {t:"PlanetaryZigma",d:"Risk of Rain 2 inspired game with procedurally generated planets. Custom Vulkan renderer from scratch in Zig.",i:"assets/PlanetaryZigma.gif",u:"https://github.com/LuEklund/PlanetaryZigma",g:["zig","vulkan"],hi:1},
-  {t:"WallensteinVR",d:"Labyrinth VR game in Zig. Enemies hunt you — grab the collectible and race back before they reach you.",i:"assets/WallenstienVR.png",u:"https://github.com/LuEklund/WallensteinVR.git",g:["zig","vulkan"],hi:1},
-  {t:"NES Snake — 6502 ASM",d:"Snake on real NES hardware in pure 6502 assembly. No OS, no abstraction — bare metal.",i:"assets/Snake_ASM.jpg",u:"https://github.com/LuEklund/assembly",g:["asm"],hi:1},
-  {t:"Minecraft — Vulkan",d:"Ongoing Minecraft clone built with Vulkan from scratch. Custom chunk meshing, terrain generation. YouTube devlog.",i:"assets/EpicMinecraftClone.gif",u:"https://www.youtube.com/watch?v=fP3RNawUWzU",g:["c","cpp","vulkan"],hi:1},
+  {t:"WallensteinVR",d:"Labyrinth VR game in Zig. Enemies hunt you, grab the collectible and race back before they reach you.",i:"assets/WallenstienVR.png",u:"https://github.com/LuEklund/WallensteinVR.git",g:["zig","vulkan"],hi:1},
+  {t:"NES Snake — 6502 ASM",d:"Snake  NES in 6502 assembly",i:"assets/Snake_ASM.jpg",u:"https://github.com/LuEklund/assembly",g:["asm"],hi:1},
+  {t:"Minecraft — Vulkan",d:"Minecraft clone built with Vulkan from scratch. Custom chunk meshing, terrain generation. YouTube devlog.",i:"assets/EpicMinecraftClone.gif",u:"https://www.youtube.com/watch?v=fP3RNawUWzU",g:["c","cpp","vulkan"],hi:1},
   {t:"Fingrevie — Hexpansion",d:"Tower defense on a procedurally expanding hex grid with upgrades. Unreal Engine 5.",i:"assets/HexPlanation.gif",u:"https://fingrevie.itch.io/hextd-prototype",g:["cpp","unreal"],hi:1},
   {t:"Cub3D — DDA Raycaster",d:"Wolfenstein-inspired raycaster in pure C. 2D map → real-time 3D via DDA. Zero external dependencies.",i:"https://github.com/jontssu/cub3D/blob/master/Peek%202024-01-09%2016-46.gif?raw=true",u:"https://github.com/jontssu/cub3D",g:["c"],hi:1},
   {t:"Vulkan Renderer",d:"Building a Vulkan renderer from scratch — pipeline, render passes, sync, descriptor sets. YouTube devlog.",i:"assets/Vulkan.png",u:"https://www.youtube.com/watch?v=QDaCNKZ0rf4",g:["c","cpp","vulkan"],hi:1},
   {t:"Chungustraction",d:"Solo DaniJam 2025 entry, theme: Attraction. Built in Unity over 48 hours.",i:"assets/Attract.gif",u:"https://lucasdevs.itch.io/chungustraction",g:["cs","unity"]},
+  {t:"StreamerFighter",d:"Game stream overlay, viewers joins a fighter simulation by typing in the chat. Youtube, Twicth API.",i:"assets/StreamFighter.gif",u:"https://github.com/LuEklund/StreamerFighter",g:["cs","unity"]},
   {t:"RibbitSpace",d:"Space combat prototype in Unreal Engine. Custom ship movement and projectile system.",i:"assets/Ribbit.jpg",u:"https://www.youtube.com/watch?v=e1C9blkl-N0",g:["cpp","unreal"]},
   {t:"TopDown RPG — Multiplayer",d:"Top-down RPG in UE5 with replication netcode and Gameplay Ability System (GAS).",i:"https://github.com/LuEklund/Unreal-TopDown-RPG/blob/master/ProgressImages/TopDownRPG3.gif?raw=true",u:"https://github.com/LuEklund/Unreal-TopDown-RPG",g:["cpp","unreal"]},
   {t:"ToonTanks",d:"Tank shooter in UE5. C++ with minimal Blueprint usage.",i:"https://github.com/LuEklund/ToonTanks/blob/master/AnimationToon2.gif?raw=true",u:"https://github.com/LuEklund/ToonTanks",g:["cpp","unreal"]},
