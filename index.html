@@ -367,15 +367,7 @@ body > *:not(#rain):not(#cur):not(#cur2) { position: relative; z-index: 1; }
 }
 .cdot.don { background: var(--g); box-shadow: 0 0 6px var(--g); transform: scale(1.4); }
 
-/* scroll cue */
-.scue {
-  z-index: 1; margin-top: 40px; margin-bottom: 8px;
-  display: flex; flex-direction: column; align-items: center; gap: 5px;
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 9px; letter-spacing: .2em; color: #0a1825;
-  animation: scuebounce 2.2s ease-in-out infinite;
-}
-@keyframes scuebounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
+
 
 /* ═══════════════════════════════════════════════════════
    PROJECTS SECTION
@@ -612,12 +604,7 @@ footer { padding:16px; text-align:center; border-top:1px solid #060e08;
     </div>
   </div>
 
-  <div class="scue" aria-hidden="true">
-    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-      <path stroke-linecap="round" stroke-linejoin="round" d="m19 9-7 7-7-7"/>
-    </svg>
-    SCROLL
-  </div>
+
 
 </section>
 
@@ -740,7 +727,7 @@ document.addEventListener('mouseover',e=>{cur.style.transform=e.target.closest('
 const TL={c:"C",cpp:"C++",cs:"C#",zig:"Zig",asm:"ASM",py:"Python",unreal:"Unreal",unity:"Unity",vulkan:"Vulkan",web:"JS/TS",sfml:"SFML"};
 
 const P=[
-  {t:"PlanetaryZigma",d:"Risk of Rain 2 inspired game with procedurally generated planets. Custom Vulkan renderer from scratch in Zig.",i:"assets/PlanetaryZigma.gif",u:"https://github.com/LuEklund/PlanetaryZigma",g:["zig","vulkan"],hi:1},
+  {t:"PlanetaryZigma",d:"Risk of Rain 2 inspired game with procedurally generated planets. Custom Vulkan renderer from scratch in Zig. Server-Client UDP, Steamworks. Server authoritative",i:"assets/PlanetaryZigma.gif",u:"https://github.com/LuEklund/PlanetaryZigma",g:["zig","vulkan"],hi:1},
   {t:"WallensteinVR",d:"Labyrinth VR game in Zig. Enemies hunt you, grab the collectible and race back before they reach you.",i:"assets/WallenstienVR.png",u:"https://github.com/LuEklund/WallensteinVR.git",g:["zig","vulkan"],hi:1},
   {t:"NES Snake — 6502 ASM",d:"Snake  NES in 6502 assembly",i:"assets/Snake_ASM.jpg",u:"https://github.com/LuEklund/assembly",g:["asm"],hi:1},
   {t:"Minecraft — Vulkan",d:"Minecraft clone built with Vulkan from scratch. Custom chunk meshing, terrain generation. YouTube devlog.",i:"assets/EpicMinecraftClone.gif",u:"https://www.youtube.com/watch?v=fP3RNawUWzU",g:["c","cpp","vulkan"],hi:1},
