@@ -16,7 +16,7 @@ section { padding: 48px 0; }
 a { color: var(--accent); }
 h2 { font-size: 1.4rem; margin: 0 0 20px; }
 
-#me { display: flex; align-items: center; gap: 24px; padding: 40px 0 0; }
+#me { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px; padding: 40px 0 0; }
 #me img { width: 120px; height: 120px; border-radius: 50%; }
 #me h1 { margin: 0; font-size: 2.4rem; }
 #projects { padding-top: 32px; }
@@ -25,6 +25,7 @@ h2 { font-size: 1.4rem; margin: 0 0 20px; }
 .social a { display: flex; align-items: center; gap: 8px; padding: 6px 14px 6px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); color: var(--fg); font-weight: 600; text-decoration: none; }
 .social svg { width: 22px; height: 22px; }
 .subs { color: var(--muted); font-weight: 400; }
+@media (max-width: 600px) { #me img { width: 72px; height: 72px; } #me h1 { font-size: 1.8rem; } .social { margin-left: 0; } }
 .social a:hover { border-color: var(--accent); }
 
 .langs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
