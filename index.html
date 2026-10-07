@@ -60,6 +60,7 @@ h3 { font-size: 1.1rem; margin: 0 0 12px; }
 .timeline time { display: block; color: var(--muted); font-size: .85rem; }
 .timeline b { display: block; }
 #about .links { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 20px; }
+@media (hover: none), (max-width: 600px) { .card .desc { display: block; height: auto; padding: 0 12px 12px; background: none; color: var(--muted); } .card .meta { height: auto; padding-bottom: 8px; } .card:hover > b, .card:hover .meta { display: flex; } .card:hover > b { display: block; } }
 </style>
 </head>
 <body>
@@ -176,6 +177,13 @@ for (const c of cards) {
   if (!v) continue;
   c.onmouseenter = () => v.play();
   c.onmouseleave = () => { v.pause(); v.currentTime = 0; };
+}
+// phones: play only the clip crossing the middle of the screen
+if (matchMedia('(hover: none), (max-width: 600px)').matches) {
+  const io = new IntersectionObserver(entries => {
+    for (const en of entries) en.isIntersecting ? en.target.play() : en.target.pause();
+  }, { rootMargin: '-45% 0px -45% 0px' });
+  for (const v of document.querySelectorAll('.card video')) io.observe(v);
 }
 </script>
 </body>
