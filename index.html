@@ -30,8 +30,11 @@ h2 { font-size: 1.4rem; margin: 0 0 20px; }
 
 .langs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
 .langs button { display: flex; align-items: center; gap: 8px; padding: 8px 14px; font: 600 .95rem system-ui, sans-serif;
-  color: var(--fg); background: var(--card); border: 1px solid var(--line); border-radius: 999px; cursor: pointer; opacity: .35; filter: grayscale(1); }
+  color: var(--fg); background: var(--card); border: 1px solid var(--line); border-radius: 999px; cursor: pointer; position: relative; --near: 0; opacity: calc(.35 + .5 * var(--near)); filter: grayscale(calc(1 - var(--near))); }
 .langs button[aria-pressed=true] { opacity: 1; filter: none; border-color: var(--accent); }
+.pop { position: absolute; z-index: 2; white-space: nowrap; font-size: .85rem; font-weight: 700; color: var(--accent); pointer-events: none; animation: pop 1s ease-out forwards; }
+.pop.minus { color: var(--muted); }
+@keyframes pop { from { opacity: 0; transform: translate(-50%, -40%); } 20% { opacity: 1; } to { opacity: 0; transform: translate(-50%, -150%); } }
 .langs img { width: 20px; height: 20px; }
 .glyph { font-size: .8rem; color: #f5c542; }
 
@@ -47,7 +50,8 @@ h2 { font-size: 1.4rem; margin: 0 0 20px; }
 .meta img { width: 18px; height: 18px; }
 .meta span { font-size: .75rem; padding: 1px 7px; border-radius: 4px; background: var(--line); color: var(--muted); }
 .meta .asm { font-weight: 700; color: var(--fg); background: none; padding: 0; }
-hr { border: 0; border-top: 1px solid var(--line); margin: 24px 0; }
+.group + .group { margin-top: 32px; }
+.group h3 { color: var(--muted); }
 .card:hover { border-color: var(--accent); }
 
 .facts { display: grid; grid-template-columns: max-content 1fr; gap: 8px 24px; margin: 0 0 32px; }
@@ -80,8 +84,8 @@ h3 { font-size: 1.1rem; margin: 0 0 12px; }
   <div class="langs">
     <button data-lang="star" aria-pressed="true"><span class="glyph">★</span>Featured</button>
     <button data-lang="zig" aria-pressed="true"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/zig/zig-original.svg" alt="">Zig</button>
-    <button data-lang="c" aria-pressed="false"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg" alt="">C</button>
-    <button data-lang="cpp" aria-pressed="false"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="">C++</button>
+    <button data-lang="c" aria-pressed="true"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg" alt="">C</button>
+    <button data-lang="cpp" aria-pressed="true"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="">C++</button>
     <button data-lang="cs" aria-pressed="false"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg" alt="">C#</button>
     <button data-lang="asm" aria-pressed="false"><span class="glyph">ASM</span>Assembly</button>
     <button data-lang="py" aria-pressed="false"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="">Python</button>
@@ -89,36 +93,41 @@ h3 { font-size: 1.1rem; margin: 0 0 12px; }
     <button data-lang="lua" aria-pressed="false"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/lua/lua-original.svg" alt="">Lua</button>
     <button id="all" aria-pressed="false">All</button>
   </div>
-  <div class="grid" id="featured">
-    <a class="card" href="https://github.com/LuEklund/PlanetaryZigma" target="_blank" rel="noopener" data-lang="zig star"><video src="assets/planetary-zigma.mp4" poster="assets/planetary-zigma.webp" preload="none" muted loop playsinline></video><b>PlanetaryZigma</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/zig/zig-original.svg" alt="Zig" title="Zig"><span>Vulkan</span><span>Multiplayer</span><span>Steam</span></span><span class="desc">Co-op roguelike on procedural planets. Own Vulkan renderer, UDP netcode, hot-reloading.</span></a>
-    <a class="card" href="https://github.com/LuEklund/BAR-Rewind" target="_blank" rel="noopener" data-lang="zig lua star"><video src="assets/bar-rewind.mp4" poster="assets/bar-rewind.webp" preload="none" muted loop playsinline></video><b>BAR Rewind</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/zig/zig-original.svg" alt="Zig" title="Zig"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/lua/lua-original.svg" alt="Lua" title="Lua"><span>Tools</span><span>Replays</span></span><span class="desc">Rewind and scrub Beyond All Reason replays.</span></a>
-    <a class="card" href="https://github.com/LuEklund/StreamerFighter" target="_blank" rel="noopener" data-lang="cs star"><video src="assets/streamer-fighter.mp4" poster="assets/streamer-fighter.webp" preload="none" muted loop playsinline></video><b>StreamerFighter</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg" alt="C#" title="C#"><span>Unity</span><span>Twitch</span><span>YouTube API</span></span><span class="desc">Viewers join a fighting game by typing in chat.</span></a>
-    <a class="card" href="https://github.com/LuEklund/WallensteinVR" target="_blank" rel="noopener" data-lang="zig star"><img src="assets/wallenstein-vr.webp" alt="" loading="lazy"><b>WallensteinVR</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/zig/zig-original.svg" alt="Zig" title="Zig"><span>OpenXR</span><span>Vulkan</span><span>VR</span></span><span class="desc">VR labyrinth game with OpenXR + Vulkan.</span></a>
-    <a class="card" href="https://github.com/LuEklund/assembly" target="_blank" rel="noopener" data-lang="asm star"><img src="assets/snake-6502.webp" alt="" loading="lazy"><b>NES Snake</b><span class="meta"><span class="asm">ASM</span><span>NES</span><span>6502</span></span><span class="desc">Snake for the NES in 6502 assembly.</span></a>
-    <a class="card" href="https://github.com/LuEklund/MinecraftVulkan" target="_blank" rel="noopener" data-lang="cpp star"><video src="assets/minecraft-vulkan.mp4" poster="assets/minecraft-vulkan.webp" preload="none" muted loop playsinline></video><b>Minecraft Vulkan</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++" title="C++"><span>Vulkan</span><span>Voxels</span></span><span class="desc">Voxel world with a Vulkan renderer from scratch.</span></a>
-    <a class="card" href="https://github.com/LuEklund/Hexpansion" target="_blank" rel="noopener" data-lang="cpp star"><video src="assets/hexpansion.mp4" poster="assets/hexpansion.webp" preload="none" muted loop playsinline></video><b>Hexpansion</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++" title="C++"><span>Unreal 5</span><span>Tower defense</span></span><span class="desc">Roguelike tower defense on an expanding hex grid. Unreal 5.</span></a>
-    <a class="card" href="https://github.com/jontssu/cub3D" target="_blank" rel="noopener" data-lang="c star"><video src="assets/cub3d.mp4" poster="assets/cub3d.webp" preload="none" muted loop playsinline></video><b>Cub3D</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg" alt="C" title="C"><span>Raycaster</span><span>Hive</span></span><span class="desc">Wolfenstein-style raycaster in pure C.</span></a>
+  <div class="group">
+    <h3>★ Featured</h3>
+    <div class="grid">
+    <a class="card" href="https://github.com/LuEklund/PlanetaryZigma" target="_blank" rel="noopener" data-lang="zig star"><video src="assets/planetary-zigma.mp4" poster="assets/planetary-zigma.webp" preload="none" muted loop playsinline></video><b>PlanetaryZigma</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/zig/zig-original.svg" alt="Zig" title="Zig"><span>Vulkan</span><span>Multiplayer</span></span><span class="desc">Co-op roguelike on procedural planets. Own Vulkan renderer, UDP netcode, hot-reloading.</span></a>
+    <a class="card" href="https://github.com/LuEklund/BAR-Rewind" target="_blank" rel="noopener" data-lang="zig lua star"><video src="assets/bar-rewind.mp4" poster="assets/bar-rewind.webp" preload="none" muted loop playsinline></video><b>BAR Rewind</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/zig/zig-original.svg" alt="Zig" title="Zig"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/lua/lua-original.svg" alt="Lua" title="Lua"><span>Tool</span></span><span class="desc">Rewind and scrub Beyond All Reason replays.</span></a>
+    <a class="card" href="https://github.com/LuEklund/StreamerFighter" target="_blank" rel="noopener" data-lang="cs star"><video src="assets/streamer-fighter.mp4" poster="assets/streamer-fighter.webp" preload="none" muted loop playsinline></video><b>StreamerFighter</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg" alt="C#" title="C#"><span>Unity</span></span><span class="desc">Viewers join a fighting game by typing in chat.</span></a>
+    <a class="card" href="https://github.com/LuEklund/WallensteinVR" target="_blank" rel="noopener" data-lang="zig star"><img src="assets/wallenstein-vr.webp" alt="" loading="lazy"><b>WallensteinVR</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/zig/zig-original.svg" alt="Zig" title="Zig"><span>VR</span><span>Vulkan</span></span><span class="desc">VR labyrinth game with OpenXR + Vulkan.</span></a>
+    <a class="card" href="https://github.com/LuEklund/assembly" target="_blank" rel="noopener" data-lang="asm star"><img src="assets/snake-6502.webp" alt="" loading="lazy"><b>NES Snake</b><span class="meta"><span class="asm">ASM</span><span>NES</span></span><span class="desc">Snake for the NES in 6502 assembly.</span></a>
+    <a class="card" href="https://github.com/LuEklund/MinecraftVulkan" target="_blank" rel="noopener" data-lang="cpp star"><video src="assets/minecraft-vulkan.mp4" poster="assets/minecraft-vulkan.webp" preload="none" muted loop playsinline></video><b>Minecraft Vulkan</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++" title="C++"><span>Vulkan</span></span><span class="desc">Voxel world with a Vulkan renderer from scratch.</span></a>
+    <a class="card" href="https://github.com/LuEklund/Hexpansion" target="_blank" rel="noopener" data-lang="cpp star"><video src="assets/hexpansion.mp4" poster="assets/hexpansion.webp" preload="none" muted loop playsinline></video><b>Hexpansion</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++" title="C++"><span>Unreal 5</span></span><span class="desc">Roguelike tower defense on an expanding hex grid. Unreal 5.</span></a>
+    <a class="card" href="https://github.com/jontssu/cub3D" target="_blank" rel="noopener" data-lang="c star"><video src="assets/cub3d.mp4" poster="assets/cub3d.webp" preload="none" muted loop playsinline></video><b>Cub3D</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg" alt="C" title="C"><span>School</span></span><span class="desc">Wolfenstein-style raycaster in pure C.</span></a>
+    </div>
   </div>
-  <hr>
-  <div class="grid" id="rest">
+  <div class="group">
+    <h3>More projects</h3>
+    <div class="grid">
     <a class="card" href="https://github.com/LuEklund/Vulkan-0.1" target="_blank" rel="noopener" data-lang="cpp"><img src="assets/vulkan.webp" alt="" loading="lazy"><b>Vulkan Renderer</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++" title="C++"><span>Vulkan</span></span><span class="desc">First steps in Vulkan.</span></a>
     <a class="card" href="https://lucasdevs.itch.io/chungustraction" target="_blank" rel="noopener" data-lang="cs"><video src="assets/chungustraction.mp4" poster="assets/chungustraction.webp" preload="none" muted loop playsinline></video><b>Chungustraction</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg" alt="C#" title="C#"><span>Unity</span><span>Game jam</span></span><span class="desc">DaniJam 2025 entry, theme: Attraction.</span></a>
-    <a class="card" href="https://www.youtube.com/watch?v=e1C9blkl-N0" target="_blank" rel="noopener" data-lang="cpp"><img src="assets/ribbit-space.webp" alt="" loading="lazy"><b>RibbitSpace</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++" title="C++"><span>Space combat</span></span><span class="desc">Space combat prototype.</span></a>
-    <a class="card" href="https://github.com/LuEklund/Unreal-TopDown-RPG" target="_blank" rel="noopener" data-lang="cpp"><video src="assets/unreal-topdown-rpg.mp4" poster="assets/unreal-topdown-rpg.webp" preload="none" muted loop playsinline></video><b>TopDown RPG</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++" title="C++"><span>Unreal 5</span><span>Multiplayer</span><span>GAS</span></span><span class="desc">Multiplayer RPG in Unreal 5 with GAS.</span></a>
+    <a class="card" href="https://www.youtube.com/watch?v=e1C9blkl-N0" target="_blank" rel="noopener" data-lang="cpp"><img src="assets/ribbit-space.webp" alt="" loading="lazy"><b>RibbitSpace</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++" title="C++"><span>Unreal 5</span></span><span class="desc">Space combat prototype.</span></a>
+    <a class="card" href="https://github.com/LuEklund/Unreal-TopDown-RPG" target="_blank" rel="noopener" data-lang="cpp"><video src="assets/unreal-topdown-rpg.mp4" poster="assets/unreal-topdown-rpg.webp" preload="none" muted loop playsinline></video><b>TopDown RPG</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++" title="C++"><span>Unreal 5</span><span>Multiplayer</span></span><span class="desc">Multiplayer RPG in Unreal 5 with GAS.</span></a>
     <a class="card" href="https://github.com/LuEklund/ToonTanks" target="_blank" rel="noopener" data-lang="cpp"><video src="assets/toon-tanks.mp4" poster="assets/toon-tanks.webp" preload="none" muted loop playsinline></video><b>ToonTanks</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++" title="C++"><span>Unreal 5</span></span><span class="desc">Tank shooter in Unreal 5.</span></a>
     <a class="card" href="https://github.com/LuEklund/SFML-GameRPG" target="_blank" rel="noopener" data-lang="cpp"><video src="assets/sfml-rpg.mp4" poster="assets/sfml-rpg.webp" preload="none" muted loop playsinline></video><b>SFML RPG</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++" title="C++"><span>SFML</span></span><span class="desc">RPG with no engine, on SFML.</span></a>
-    <a class="card" href="https://www.youtube.com/watch?v=PyilFiclHH8" target="_blank" rel="noopener" data-lang="py"><img src="assets/pydefend.webp" alt="" loading="lazy"><b>PyDefend</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" title="Python"><span>PyGame</span><span>Tower defense</span></span><span class="desc">Tower defense in PyGame.</span></a>
-    <a class="card" href="https://github.com/LuEklund/LucasBot" target="_blank" rel="noopener" data-lang="js"><img src="assets/discord-bot.webp" alt="" loading="lazy"><b>Discord RPG Bot</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript" title="JavaScript"><span>Discord</span></span><span class="desc">Discord bot with quests and 1v1 battles.</span></a>
+    <a class="card" href="https://www.youtube.com/watch?v=PyilFiclHH8" target="_blank" rel="noopener" data-lang="py"><img src="assets/pydefend.webp" alt="" loading="lazy"><b>PyDefend</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" title="Python"><span>PyGame</span></span><span class="desc">Tower defense in PyGame.</span></a>
+    <a class="card" href="https://github.com/LuEklund/LucasBot" target="_blank" rel="noopener" data-lang="js"><img src="assets/discord-bot.webp" alt="" loading="lazy"><b>Discord RPG Bot</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript" title="JavaScript"><span>Bot</span></span><span class="desc">Discord bot with quests and 1v1 battles.</span></a>
     <a class="card" href="https://github.com/LuEklund/MergeGame" target="_blank" rel="noopener" data-lang="cs"><video src="assets/merge-game.mp4" poster="assets/merge-game.webp" preload="none" muted loop playsinline></video><b>MergeGame</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg" alt="C#" title="C#"><span>Unity</span></span><span class="desc">Stack coins to pay the Money Man.</span></a>
-    <a class="card" href="https://lucas-eklund.itch.io/lost-prince" target="_blank" rel="noopener" data-lang="cs"><video src="assets/lost-prince.mp4" poster="assets/lost-prince.webp" preload="none" muted loop playsinline></video><b>Lost Prince</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg" alt="C#" title="C#"><span>Unity</span><span>Visual scripting</span></span><span class="desc">Short story game in Unity.</span></a>
+    <a class="card" href="https://lucas-eklund.itch.io/lost-prince" target="_blank" rel="noopener" data-lang="cs"><video src="assets/lost-prince.mp4" poster="assets/lost-prince.webp" preload="none" muted loop playsinline></video><b>Lost Prince</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg" alt="C#" title="C#"><span>Unity</span></span><span class="desc">Short story game in Unity.</span></a>
     <a class="card" href="https://github.com/LuEklund/Platformer-SFML" target="_blank" rel="noopener" data-lang="cpp"><img src="assets/platformer-sfml.webp" alt="" loading="lazy"><b>Platformer</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++" title="C++"><span>SFML</span></span><span class="desc">2D platformer in SFML.</span></a>
     <a class="card" href="https://github.com/LuEklund/Snake-SFML" target="_blank" rel="noopener" data-lang="cpp"><img src="assets/snake-sfml.webp" alt="" loading="lazy"><b>Snake</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++" title="C++"><span>SFML</span></span><span class="desc">Snake in SFML.</span></a>
     <a class="card" href="https://github.com/LuEklund/TicTacToe-SFML" target="_blank" rel="noopener" data-lang="cpp"><img src="assets/tictactoe-sfml.webp" alt="" loading="lazy"><b>TicTacToe</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++" title="C++"><span>SFML</span></span><span class="desc">TicTacToe in SFML.</span></a>
     <a class="card" href="https://github.com/LuEklund/1D-Combat-SFML" target="_blank" rel="noopener" data-lang="cpp"><img src="assets/1d-combat-sfml.webp" alt="" loading="lazy"><b>1D Combat</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++" title="C++"><span>SFML</span></span><span class="desc">Age of War-style lane battler in SFML.</span></a>
-    <a class="card" href="https://github.com/LuEklund/gifer" target="_blank" rel="noopener" data-lang="zig"><img src="assets/gifer.svg" alt="" loading="lazy"><b>gifer</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/zig/zig-original.svg" alt="Zig" title="Zig"><span>Tools</span><span>Screen capture</span></span><span class="desc">Capture your screen and turn it into a GIF.</span></a>
-    <a class="card" href="https://github.com/LuEklund/Minishell" target="_blank" rel="noopener" data-lang="c"><img src="assets/minishell.svg" alt="" loading="lazy"><b>Minishell</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg" alt="C" title="C"><span>Shell</span><span>Hive</span></span><span class="desc">Bash-like shell in C: pipes, redirections, env vars. Hive project.</span></a>
-    <a class="card" href="https://github.com/LuEklund/HIVE_2022" target="_blank" rel="noopener" data-lang="c"><img src="assets/42.svg" alt="" loading="lazy"><b>Hive Helsinki</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg" alt="C" title="C"><span>Hive</span></span><span class="desc">42 curriculum in pure C.</span></a>
-    <a class="card" href="https://github.com/LuEklund/ft_transcendence" target="_blank" rel="noopener" data-lang="py js"><img src="assets/42.svg" alt="" loading="lazy"><b>ft_transcendence</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" title="Python"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript" title="JavaScript"><span>Django</span><span>Web</span><span>Hive</span></span><span class="desc">Full-stack Pong site, final Hive project.</span></a>
+    <a class="card" href="https://github.com/LuEklund/gifer" target="_blank" rel="noopener" data-lang="zig"><img src="assets/gifer.svg" alt="" loading="lazy"><b>gifer</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/zig/zig-original.svg" alt="Zig" title="Zig"><span>Tool</span></span><span class="desc">Capture your screen and turn it into a GIF.</span></a>
+    <a class="card" href="https://github.com/LuEklund/Minishell" target="_blank" rel="noopener" data-lang="c"><img src="assets/minishell.svg" alt="" loading="lazy"><b>Minishell</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg" alt="C" title="C"><span>School</span></span><span class="desc">Bash-like shell in C: pipes, redirections, env vars. Hive project.</span></a>
+    <a class="card" href="https://github.com/LuEklund/HIVE_2022" target="_blank" rel="noopener" data-lang="c"><img src="assets/42.svg" alt="" loading="lazy"><b>Hive Helsinki</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg" alt="C" title="C"><span>School</span></span><span class="desc">42 curriculum in pure C.</span></a>
+    <a class="card" href="https://github.com/LuEklund/ft_transcendence" target="_blank" rel="noopener" data-lang="py js"><img src="assets/42.svg" alt="" loading="lazy"><b>ft_transcendence</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" title="Python"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript" title="JavaScript"><span>Web</span><span>School</span></span><span class="desc">Full-stack Pong site, final Hive project.</span></a>
+    </div>
   </div>
 </section>
 
@@ -152,25 +161,50 @@ h3 { font-size: 1.1rem; margin: 0 0 12px; }
 <script>
 const buttons = [...document.querySelectorAll('.langs button[data-lang]')];
 const all = document.getElementById('all');
-const DEFAULT = ['star', 'zig'];
+const DEFAULT = ['star', 'zig', 'c', 'cpp'];
 function press(b, on) { b.setAttribute('aria-pressed', on); }
-all.onclick = () => {
-  const allOn = all.getAttribute('aria-pressed') === 'true';
-  for (const b of buttons) press(b, allOn ? DEFAULT.includes(b.dataset.lang) : true);
-  filter();
-};
 const cards = [...document.querySelectorAll('.card')];
 function filter() {
   press(all, buttons.every(b => b.getAttribute('aria-pressed') === 'true'));
   const on = buttons.filter(b => b.getAttribute('aria-pressed') === 'true').map(b => b.dataset.lang);
   for (const c of cards) c.hidden = on.length && !c.dataset.lang.split(' ').some(l => on.includes(l));
-  for (const g of document.querySelectorAll('.grid')) g.hidden = !g.querySelector('.card:not([hidden])');
-  document.querySelector('hr').hidden = document.getElementById('featured').hidden || document.getElementById('rest').hidden;
+  const [featured, more] = document.querySelectorAll('.group');
+  for (const g of [featured, more]) g.hidden = !g.querySelector('.card:not([hidden])');
+  more.querySelector('h3').hidden = featured.hidden;
 }
-for (const b of buttons) b.onclick = () => {
-  b.setAttribute('aria-pressed', b.getAttribute('aria-pressed') !== 'true');
+const shown = () => cards.filter(c => !c.hidden).length;
+function pop(b, diff) {
+  if (!diff) return;
+  const n = Math.abs(diff);
+  const el = document.createElement('span');
+  el.className = diff > 0 ? 'pop' : 'pop minus';
+  el.textContent = `${diff > 0 ? '+' : '−'}${n} project${n > 1 ? 's' : ''}`;
+  const r = b.getBoundingClientRect();
+  el.style.left = `${r.left + r.width / 2 + scrollX}px`;
+  el.style.top = `${r.top + scrollY}px`;
+  el.onanimationend = () => el.remove();
+  document.body.append(el);
+}
+document.querySelector('.langs').onclick = e => {
+  const b = e.target.closest('button');
+  if (!b) return;
+  const before = shown();
+  if (b === all) {
+    const allOn = all.getAttribute('aria-pressed') === 'true';
+    for (const x of buttons) press(x, allOn ? DEFAULT.includes(x.dataset.lang) : true);
+  } else press(b, b.getAttribute('aria-pressed') !== 'true');
   filter();
+  pop(b, shown() - before);
 };
+const near = [...buttons, all];
+document.addEventListener('mousemove', e => {
+  for (const b of near) {
+    const r = b.getBoundingClientRect();
+    const dx = Math.max(r.left - e.clientX, 0, e.clientX - r.right);
+    const dy = Math.max(r.top - e.clientY, 0, e.clientY - r.bottom);
+    b.style.setProperty('--near', Math.max(0, 1 - Math.hypot(dx, dy) / 120));
+  }
+});
 filter();
 for (const c of cards) {
   const v = c.querySelector('video');
