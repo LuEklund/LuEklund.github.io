@@ -1,968 +1,181 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Lucas Eklund — Game &amp; Systems Developer</title>
-<meta name="description" content="Lucas Eklund — game developer and systems programmer. Vulkan, Zig, C, C++, Unreal Engine."/>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Lucas Eklund: game engines, Vulkan, Zig, C, C++.">
+<title>Lucas Eklund</title>
+<link rel="icon" href="assets/favicon.png">
 <style>
-/* ═══════════════════════════════════════════════════════
-   RESET
-═══════════════════════════════════════════════════════ */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; cursor: none; }
-html { scroll-behavior: smooth; }
-:focus-visible { outline: 2px solid #00e5ff; outline-offset: 2px; }
-a { text-decoration: none; color: inherit; }
+:root { --bg: #111418; --fg: #e6e9ec; --muted: #9aa5b1; --accent: #8fb3dc; --card: #1a1f25; --line: #2a3139; }
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.5 system-ui, sans-serif; }
+main { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
+section { padding: 48px 0; }
+a { color: var(--accent); }
+h2 { font-size: 1.4rem; margin: 0 0 20px; }
 
-/* ═══════════════════════════════════════════════════════
-   COLOUR SYSTEM
-═══════════════════════════════════════════════════════ */
-:root {
-  --g:  #00e5ff;   /* tron cyan    */
-  --c:  #3b82f6;   /* deep blue    */
-  --bg: #020408;
-  --s1: #06090f;   /* surface 1    */
-  --s2: #080d16;   /* surface 2    */
-  --b1: #0a1422;   /* border green */
-  --b2: #0a1420;   /* border cyan  */
-  --tx: #2a5060;   /* muted text   */
-}
+#me { display: flex; align-items: center; gap: 24px; padding: 40px 0 0; }
+#me img { width: 120px; height: 120px; border-radius: 50%; }
+#me h1 { margin: 0; font-size: 2.4rem; }
+#projects { padding-top: 32px; }
+.social { display: flex; gap: 16px; margin-left: 8px; }
+.social { gap: 10px; }
+.social a { display: flex; align-items: center; gap: 8px; padding: 6px 14px 6px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); color: var(--fg); font-weight: 600; text-decoration: none; }
+.social svg { width: 22px; height: 22px; }
+.subs { color: var(--muted); font-weight: 400; }
+.social a:hover { border-color: var(--accent); }
 
-/* ═══════════════════════════════════════════════════════
-   BODY + GRID TEXTURE
-═══════════════════════════════════════════════════════ */
-body {
-  background: var(--bg);
-  color: var(--tx);
-  font-family: 'Space Grotesk', system-ui, sans-serif;
-  overflow-x: hidden;
-  min-height: 100vh;
-}
-::-webkit-scrollbar { width: 3px; }
-::-webkit-scrollbar-thumb { background: #0a1825; }
+.langs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+.langs button { display: flex; align-items: center; gap: 8px; padding: 8px 14px; font: 600 .95rem system-ui, sans-serif;
+  color: var(--fg); background: var(--card); border: 1px solid var(--line); border-radius: 999px; cursor: pointer; opacity: .35; filter: grayscale(1); }
+.langs button[aria-pressed=true] { opacity: 1; filter: none; border-color: var(--accent); }
+.langs img { width: 20px; height: 20px; }
+.glyph { font-size: .8rem; color: #f5c542; }
 
-/* dot grid overlay */
-body::before {
-  content: '';
-  position: fixed; inset: 0; z-index: 0; pointer-events: none;
-  background-image:
-    radial-gradient(circle, rgba(0,229,255,.12) 1px, transparent 1px);
-  background-size: 28px 28px;
-  mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 40%, transparent 100%);
-}
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+.card { position: relative; display: block; background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; color: var(--fg); text-decoration: none; }
+.card > img, .card > a > img, .card > video { display: block; width: 100%; aspect-ratio: 16/9; object-fit: cover; background: #000; }
+.card b { display: block; padding: 10px 12px 4px; }
+.meta { height: 44px; padding: 0 12px 12px; }
+.meta { display: flex; flex-wrap: wrap; align-content: flex-start; align-items: center; gap: 6px; overflow: hidden; }
+.desc { display: none; height: 82px; padding: 10px 12px; background: #000; color: #fff; font-size: .9rem; line-height: 1.4; overflow: hidden; }
+.card:hover .meta, .card:focus-visible .meta, .card:hover > b, .card:focus-visible > b { display: none; }
+.card:hover .desc, .card:focus-visible .desc { display: block; }
+.meta img { width: 18px; height: 18px; }
+.meta span { font-size: .75rem; padding: 1px 7px; border-radius: 4px; background: var(--line); color: var(--muted); }
+.meta .asm { font-weight: 700; color: var(--fg); background: none; padding: 0; }
+hr { border: 0; border-top: 1px solid var(--line); margin: 24px 0; }
+.card:hover { border-color: var(--accent); }
 
-/* matrix rain canvas */
-#rain {
-  position: fixed; inset: 0; z-index: 0;
-  pointer-events: none; opacity: .18;
-}
-
-body > *:not(#rain):not(#cur):not(#cur2) { position: relative; z-index: 1; }
-
-/* ═══════════════════════════════════════════════════════
-   CURSOR
-═══════════════════════════════════════════════════════ */
-#cur {
-  position: fixed; width: 8px; height: 8px; border-radius: 50%;
-  background: var(--g); pointer-events: none; z-index: 9999;
-  transform: translate(-50%,-50%);
-  box-shadow: 0 0 8px var(--g), 0 0 20px rgba(0,229,255,.4);
-  transition: transform .12s;
-}
-#cur2 {
-  position: fixed; width: 26px; height: 26px; border-radius: 50%;
-  border: 1px solid rgba(0,229,255,.25); pointer-events: none; z-index: 9998;
-  transform: translate(-50%,-50%);
-  transition: left .09s, top .09s;
-}
-
-/* ═══════════════════════════════════════════════════════
-   HEADER
-═══════════════════════════════════════════════════════ */
-#hdr {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 500;
-  height: 50px;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 20px;
-  background: rgba(2,4,8,.96);
-  border-bottom: 1px solid rgba(0,229,255,.08);
-}
-.logo {
-  font-family: 'Orbitron', sans-serif;
-  font-weight: 900; font-size: 15px; letter-spacing: .18em;
-  color: var(--g);
-  text-shadow: 0 0 14px rgba(0,229,255,.5);
-}
-.logo span { color: #fff; text-shadow: none; }
-.hnav { display: flex; align-items: center; gap: 18px; }
-.hl {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 11px; color: #00e5ff; letter-spacing: .08em;
-  transition: color .15s;
-}
-.hl:hover { color: var(--g); }
-.hbtn {
-  font-family: 'Share Tech Mono', monospace; font-size: 10px;
-  color: var(--g); border: 1px solid rgba(0,229,255,.3);
-  padding: 5px 13px; letter-spacing: .1em;
-  transition: all .15s; border-radius: 2px;
-}
-.hbtn:hover {
-  background: rgba(0,229,255,.06);
-  border-color: rgba(0,229,255,.7);
-  box-shadow: 0 0 12px rgba(0,229,255,.2);
-}
-
-/* ═══════════════════════════════════════════════════════
-   FEATURED SECTION
-═══════════════════════════════════════════════════════ */
-#featured {
-  min-height: 100vh;
-  padding-top: 50px;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  position: relative; overflow: hidden;
-  gap: 32px; padding-bottom: 20px;
-}
-
-/* radial spotlight */
-#featured::after {
-  content: '';
-  position: absolute; top: 50%; left: 50%;
-  transform: translate(-50%,-50%);
-  width: 120vw; height: 80vh;
-  background: radial-gradient(ellipse at center,
-    rgba(0,229,255,.04) 0%,
-    rgba(0,229,255,.02) 40%,
-    transparent 70%);
-  pointer-events: none; z-index: 0;
-}
-
-/* ─── HUD panel ─────────────────────────────────────────── */
-.c-hud {
-  position: relative;
-  width: min(96vw, 980px);
-  border: 1px solid rgba(0,229,255,.22);
-  border-radius: 3px;
-  background: rgba(0,229,255,.008);
-  box-shadow:
-    0 0 0 1px rgba(0,229,255,.04),
-    0 0 80px rgba(0,229,255,.1),
-    inset 0 0 80px rgba(0,0,0,.35);
-  z-index: 1;
-}
-.c-hud::before {
-  content: '';
-  position: absolute; inset: -6px;
-  border: 1px solid rgba(0,229,255,.07);
-  border-radius: 7px;
-  pointer-events: none;
-}
-.c-hud::after {
-  content: '';
-  position: absolute; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(0,229,255,.55), transparent);
-  pointer-events: none; z-index: 10;
-}
-@keyframes chudScan {
-  0%   { top: 0; opacity: 0; }
-  4%   { opacity: 1; }
-  96%  { opacity: 1; }
-  100% { top: 100%; opacity: 0; }
-}
-.chud-c { position: absolute; width: 22px; height: 22px; pointer-events: none; z-index: 5; }
-.chud-c.tl { top:-2px; left:-2px; border-top:2px solid var(--g); border-left:2px solid var(--g); }
-.chud-c.tr { top:-2px; right:-2px; border-top:2px solid var(--g); border-right:2px solid var(--g); }
-.chud-c.bl { bottom:-2px; left:-2px; border-bottom:2px solid var(--g); border-left:2px solid var(--g); }
-.chud-c.br { bottom:-2px; right:-2px; border-bottom:2px solid var(--g); border-right:2px solid var(--g); }
-.chud-lbl {
-  position: absolute; top: -17px;
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 8px; letter-spacing: .18em; color: rgba(0,229,255,.38);
-  pointer-events: none; white-space: nowrap;
-}
-.chud-lbl.l { left: 4px; }
-.chud-lbl.r { right: 4px; }
-
-/* ─── Carousel ──────────────────────────────────────── */
-.c-wrap { width: 100%; position: relative; z-index: 1; }
-
-/* perspective scene */
-#c-scene {
-  width: 100%;
-  perspective: 1000px;
-  perspective-origin: 50% 50%;
-  overflow: hidden;
-  position: relative;
-}
-
-/* 3d track */
-#c-track {
-  width: 100%; height: 100%;
-  transform-style: preserve-3d;
-  position: relative;
-  display: flex; align-items: center; justify-content: center;
-}
-
-/* slide */
-.cslide {
-  position: absolute;
-  border-radius: 4px; overflow: hidden;
-  border: 1px solid #0a1422;
-  background: #030608;
-  transition:
-    transform .55s cubic-bezier(.25,.46,.45,.94),
-    opacity   .42s ease,
-    border-color .3s,
-    box-shadow .3s;
-  will-change: transform, opacity;
-}
-.cslide img {
-  width: 100%; height: 100%; object-fit: cover; display: block;
-  filter: saturate(.3) brightness(.45);
-  transition: filter .4s;
-}
-.cslide.cactive {
-  border-color: rgba(0,229,255,.35);
-  box-shadow:
-    0 0 0 1px rgba(0,229,255,.12),
-    0 0 40px rgba(0,229,255,.12),
-    0 0 80px rgba(0,229,255,.06);
-}
-.cslide.cactive img { filter: saturate(.9) brightness(.82); }
-
-/* bottom gradient overlay on slide */
-.cslide-grad {
-  position: absolute; inset: 0;
-  background: linear-gradient(to top,
-    rgba(2,4,8,.9) 0%,
-    rgba(2,4,8,.1) 45%,
-    transparent   100%);
-  pointer-events: none;
-}
-
-/* slide index badge */
-.cslide-idx {
-  position: absolute; top: 10px; left: 12px;
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 10px; color: rgba(0,229,255,.5);
-  letter-spacing: .1em;
-}
-
-/* scan-line overlay on active slide */
-.cslide.cactive::before {
-  content: '';
-  position: absolute; inset: 0; z-index: 2;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 3px,
-    rgba(0,229,255,.018) 3px,
-    rgba(0,229,255,.018) 4px
-  );
-  pointer-events: none;
-}
-
-/* progress bar */
-.cprog {
-  position: absolute; bottom: 0; left: 0; right: 0; height: 1%; z-index: 3;
-  background: rgba(0,229,255,.1);
-}
-.cprog-bar {
-  height: 100%; width: 0%;
-  background: linear-gradient(90deg, var(--g), var(--c));
-  box-shadow: 0 0 6px var(--g);
-}
-
-/* corner brackets on active slide */
-.cslide.cactive .cbracket { opacity: 1; }
-.cbracket {
-  position: absolute; z-index: 3; opacity: 0; transition: opacity .3s;
-  width: 18px; height: 18px; pointer-events: none;
-}
-.cbracket.tl { top: 8px; left: 8px;
-  border-top: 1.5px solid var(--g); border-left: 1.5px solid var(--g); }
-.cbracket.tr { top: 8px; right: 8px;
-  border-top: 1.5px solid var(--g); border-right: 1.5px solid var(--g); }
-.cbracket.bl { bottom: 10px; left: 8px;
-  border-bottom: 1.5px solid var(--g); border-left: 1.5px solid var(--g); }
-.cbracket.br { bottom: 10px; right: 8px;
-  border-bottom: 1.5px solid var(--g); border-right: 1.5px solid var(--g); }
-
-/* nav arrows */
-.carrow {
-  position: absolute; top: 50%; transform: translateY(-50%);
-  z-index: 20; width: 40px; height: 40px;
-  border: 1px solid rgba(0,229,255,.15); border-radius: 2px;
-  background: rgba(2,4,8,.85);
-  color: #0e2535; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: all .15s;
-}
-.carrow:hover {
-  border-color: rgba(0,229,255,.5);
-  color: var(--g);
-  box-shadow: 0 0 14px rgba(0,229,255,.15);
-}
-#cprev { left: 12px; }
-#cnext { right: 12px; }
-@media(min-width:640px) { #cprev { left: 24px; } #cnext { right: 24px; } }
-
-/* project info above carousel */
-#cinfo-top {
-  z-index: 1; width: 100%;
-  max-width: 700px; margin: 0 auto 18px;
-  padding: 0 20px; text-align: center;
-  transition: opacity .2s, transform .2s;
-}
-
-/* ─── Carousel info panel ───────────────────────────── */
-#cinfo {
-  padding: 18px 28px 22px;
-  text-align: center;
-  transition: opacity .2s, transform .2s;
-}
-.ci-sys {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 9px; color: rgba(0,229,255,.4); letter-spacing: .2em;
-  margin-bottom: 6px;
-}
-.ci-tags { display: flex; justify-content: center; flex-wrap: wrap; gap: 4px; margin-bottom: 10px; }
-.ci-title {
-  font-family: 'Orbitron', sans-serif; font-weight: 700;
-  font-size: clamp(18px, 3.5vw, 32px); color: #d0f8ff;
-  letter-spacing: .05em; margin-bottom: 10px; line-height: 1.2;
-  text-shadow: 0 0 30px rgba(0,229,255,.25);
-}
-.ci-desc {
-  color: #00e5ff; font-size: 12px; line-height: 1.7;
-  margin-bottom: 18px;
-  max-width: 520px; margin-left: auto; margin-right: auto;
-  padding: 10px 14px;
-  border-left: 2px solid rgba(0,229,255,.22);
-  background: rgba(0,229,255,.025);
-  border-radius: 0 2px 2px 0;
-  text-align: left;
-}
-.ci-foot {
-  display: flex; align-items: center; justify-content: center;
-  gap: 24px; flex-wrap: wrap;
-}
-.ci-link {
-  font-family: 'Share Tech Mono', monospace; font-size: 10px;
-  color: var(--g); border: 1px solid rgba(0,229,255,.3);
-  padding: 8px 20px; letter-spacing: .1em;
-  transition: all .15s; border-radius: 2px;
-}
-.ci-link:hover {
-  background: rgba(0,229,255,.07);
-  border-color: var(--g);
-  box-shadow: 0 0 16px rgba(0,229,255,.2);
-}
-.cidots { display: flex; gap: 6px; align-items: center; }
-.cdot {
-  width: 5px; height: 5px; border-radius: 50%;
-  background: #0a1825; border: none; cursor: pointer;
-  transition: all .22s;
-}
-.cdot.don { background: var(--g); box-shadow: 0 0 6px var(--g); transform: scale(1.4); }
-
-
-
-/* ═══════════════════════════════════════════════════════
-   PROJECTS SECTION
-═══════════════════════════════════════════════════════ */
-#projects { padding: 64px 0 0; }
-
-.proj-hd {
-  padding: 0 16px 12px;
-  display: flex; align-items: baseline; gap: 10px;
-}
-@media(min-width:640px){ .proj-hd{ padding: 0 24px 16px; } }
-.proj-title {
-  font-family: 'Orbitron', sans-serif; font-weight: 700;
-  font-size: 14px; color: #d0f8ff; letter-spacing: .1em;
-}
-.proj-ct {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 10px; color: rgba(0,229,255,.35);
-}
-
-/* filter + search */
-.fbar {
-  display: flex; align-items: center; gap: 6px;
-  padding: 0 16px 18px; flex-wrap: wrap;
-}
-@media(min-width:640px){ .fbar{ padding:0 24px 20px; gap:8px; } }
-.fprow { display: flex; gap: 4px; overflow-x: auto; flex: 1; scrollbar-width: none; min-width: 0; }
-.fprow::-webkit-scrollbar { display: none; }
-.fp {
-  flex-shrink: 0;
-  padding: 3px 8px; border-radius: 2px;
-  border: 1px solid #060c14;
-  color: #162535;
-  font-family: 'Share Tech Mono', monospace; font-size: 10px;
-  letter-spacing: .06em; cursor: pointer; background: transparent;
-  transition: all .15s; white-space: nowrap;
-}
-.fp:hover { border-color: rgba(0,229,255,.2); color: #2a5065; }
-.fp.fon {
-  border-color: rgba(0,229,255,.4); color: var(--g);
-  background: rgba(0,229,255,.04);
-  box-shadow: 0 0 8px rgba(0,229,255,.08);
-}
-.fsep { width: 1px; height: 18px; background: #060e0a; flex-shrink: 0; }
-.fsrch {
-  background: #040608; border: 1px solid #080d16;
-  border-radius: 2px; color: #3a6070;
-  font-family: 'Share Tech Mono', monospace; font-size: 10px;
-  padding: 5px 10px; width: 130px; outline: none;
-  transition: border-color .15s;
-}
-.fsrch:focus { border-color: rgba(0,229,255,.2); }
-.fsrch::placeholder { color: #0e1a22; }
-
-/* ─── Grid ──────────────────────────────────────────── */
-#pgrid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 6px; padding: 0 8px 8px;
-}
-@media(min-width:480px)  { #pgrid { gap: 7px; padding: 0 10px 10px; } }
-@media(min-width:640px)  { #pgrid { grid-template-columns: repeat(3,1fr); gap:8px; padding:0 16px 16px; } }
-@media(min-width:1024px) { #pgrid { grid-template-columns: repeat(4,1fr); gap:10px; padding:0 24px 24px; } }
-@media(min-width:1400px) { #pgrid { grid-template-columns: repeat(5,1fr); } }
-
-/* ─── Grid card ─────────────────────────────────────── */
-.pc {
-  background: var(--s1);
-  border: 1px solid #060e0a;
-  border-radius: 3px; overflow: hidden;
-  display: flex; flex-direction: column;
-  position: relative; opacity: 0;
-  transition: border-color .18s, transform .18s, box-shadow .18s;
-}
-.pc.pvis { animation: pIn .3s ease forwards; }
-@keyframes pIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
-.pc.pgone { display: none !important; }
-.pc:hover {
-  border-color: rgba(0,229,255,.18);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 28px rgba(0,0,0,.6), 0 0 0 1px rgba(0,229,255,.06);
-}
-.pclink { position: absolute; inset: 0; z-index: 10; }
-
-.pcimg { height: 148px; overflow: hidden; background: #020508; flex-shrink: 0; }
-.pcimg img {
-  width: 100%; height: 100%; object-fit: cover; display: block;
-  transition: transform .5s ease, filter .3s ease;
-}
-.pc:hover .pcimg img { transform: scale(1.04); }
-.pcph { width:100%; height:100%; display:flex; align-items:center; justify-content:center;
-  font-family:'Share Tech Mono',monospace; font-size:9px; letter-spacing:.18em; color:#0a1422; }
-
-.pcinfo { padding: 9px 11px 11px; flex: 1; display: flex; flex-direction: column; gap: 4px; }
-.pctags { display: flex; flex-wrap: wrap; gap: 3px; }
-.pctitle { color: white; font-weight: 600; font-size: 12px; line-height: 1.3; }
-.pcdesc { color: #00c5db; font-size: 10px; line-height: 1.5;
-  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-
-/* empty */
-#pnores { display:none; padding:80px 0; text-align:center;
-  font-family:'Share Tech Mono',monospace; font-size:11px; color:#0a1422; }
-
-/* ═══════════════════════════════════════════════════════
-   TECH TAGS
-═══════════════════════════════════════════════════════ */
-.tag { display:inline-flex; align-items:center; padding:1px 5px; border-radius:2px;
-  font-size:9px; font-weight:600; border:1px solid; letter-spacing:.03em; white-space:nowrap; }
-.tag-c,.tag-cpp { color:#7dd3fc; border-color:rgba(125,211,252,.16); background:rgba(125,211,252,.03); }
-.tag-zig    { color:#fbbf24; border-color:rgba(251,191,36,.16);   background:rgba(251,191,36,.03); }
-.tag-asm    { color:#f87171; border-color:rgba(248,113,113,.16);  background:rgba(248,113,113,.03); }
-.tag-cs     { color:#c084fc; border-color:rgba(192,132,252,.16);  background:rgba(192,132,252,.03); }
-.tag-py     { color:#60a5fa; border-color:rgba(96,165,250,.16);   background:rgba(96,165,250,.03); }
-.tag-unreal { color:#94a3b8; border-color:rgba(148,163,184,.16);  background:rgba(148,163,184,.03); }
-.tag-unity  { color:#d0d8e0; border-color:rgba(208,216,224,.12);  background:rgba(208,216,224,.02); }
-.tag-vulkan { color:#fb923c; border-color:rgba(251,146,60,.16);   background:rgba(251,146,60,.03); }
-.tag-web    { color:#fbbf24; border-color:rgba(251,191,36,.16);   background:rgba(251,191,36,.03); }
-.tag-sfml   { color:#4ade80; border-color:rgba(74,222,128,.16);   background:rgba(74,222,128,.03); }
-
-/* ═══════════════════════════════════════════════════════
-   ABOUT
-═══════════════════════════════════════════════════════ */
-#about {
-  margin-top: 64px; padding: 52px 20px;
-  border-top: 1px solid #060e08;
-  scroll-margin-top: 50px;
-}
-@media(min-width:640px){ #about{ padding:60px 24px; } }
-.ainn { max-width: 860px; margin: 0 auto; }
-.a-ey { font-family:'Share Tech Mono',monospace; font-size:9px;
-  letter-spacing:.3em; color:rgba(0,229,255,.35); margin-bottom:6px; }
-.a-nm { font-family:'Orbitron',sans-serif; font-weight:900;
-  font-size:clamp(18px,3vw,26px); color:#d0f8ff; letter-spacing:.06em; margin-bottom:3px;
-  text-shadow:0 0 20px rgba(0,229,255,.15); }
-.a-ro { font-family:'Share Tech Mono',monospace; font-size:10px;
-  color:#0a1830; letter-spacing:.1em; margin-bottom:32px; }
-.agrid { display:grid; grid-template-columns:1fr; gap:28px; }
-@media(min-width:640px){ .agrid{ grid-template-columns:1.5fr 1fr 1fr; gap:24px; } }
-.a-lb { font-family:'Share Tech Mono',monospace; font-size:9px;
-  letter-spacing:.22em; color:#00e5ff; margin-bottom:11px; }
-.a-bio { color:#00e5ff; font-size:12px; line-height:1.72; }
-.a-bio b { color:#007bff; font-weight:500; }
-.a-mn { font-family:'Share Tech Mono',monospace; font-size:9px;
-  color:#0a1422; display:block; margin-top:9px; }
-.alink { display:flex; align-items:center; gap:8px; color:#00e5ff;
-  font-size:12px; padding:7px 0; border-bottom:1px solid #060e08;
-  transition:color .15s; }
-.alink:last-child { border-bottom:none; }
-.alink:hover { color:#2a5065; }
-.alink:hover .aico { color:var(--g); }
-.aico { width:13px; height:13px; flex-shrink:0; color:#007bff; transition:color .15s; }
-.astk { display:flex; flex-wrap:wrap; gap:4px; margin-bottom:14px; }
-.aedu { padding:8px 0 8px 11px; border-left:2px solid #060c14; margin-bottom:6px; }
-.aedu:last-child { margin-bottom:0; }
-.aesc { color:#007bff; font-size:12px; font-weight:600; }
-.aed  { color:#00e5ff; font-size:10px; margin-top:2px; }
-
-/* ═══════════════════════════════════════════════════════
-   FOOTER
-═══════════════════════════════════════════════════════ */
-footer { padding:16px; text-align:center; border-top:1px solid #060e08;
-  font-family:'Share Tech Mono',monospace; font-size:10px; color:#0a1420; }
-
-/* ═══════════════════════════════════════════════════════
-   REDUCED MOTION
-═══════════════════════════════════════════════════════ */
-/* slide transition — filter animates independently of inline transform/opacity */
-.cslide.centering { animation: cslideIn .6s ease-out; }
-.cslide.cleaving  { animation: cslideOut .3s ease-in forwards; }
-@keyframes cslideIn {
-  0%   { filter: brightness(0) blur(10px); }
-  55%  { filter: brightness(.7) blur(2px); }
-  100% { filter: brightness(1) blur(0); }
-}
-@keyframes cslideOut {
-  0%   { filter: brightness(1) blur(0); }
-  100% { filter: brightness(.04) blur(8px); }
-}
-
-@media(prefers-reduced-motion:reduce){
-  #rain{display:none;}
-  *, *::before, *::after{animation-duration:.01ms!important;transition-duration:.01ms!important;}
-}
+.facts { display: grid; grid-template-columns: max-content 1fr; gap: 8px 24px; margin: 0 0 32px; }
+.facts dt { color: var(--muted); }
+.facts dd { margin: 0; }
+h3 { font-size: 1.1rem; margin: 0 0 12px; }
+.timeline { list-style: none; margin: 0; padding: 0 0 0 20px; border-left: 2px solid var(--line); }
+.timeline li { position: relative; padding: 0 0 18px; }
+.timeline li::before { content: ""; position: absolute; left: -27px; top: 7px; width: 12px; height: 12px; border-radius: 50%; background: var(--accent); }
+.timeline time { display: block; color: var(--muted); font-size: .85rem; }
+.timeline b { display: block; }
+#about .links { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 20px; }
 </style>
 </head>
 <body>
+<main>
 
-<canvas id="rain" aria-hidden="true"></canvas>
-<div id="cur"  aria-hidden="true"></div>
-<div id="cur2" aria-hidden="true"></div>
-
-<!-- ════════════════ HEADER ═════════════════════════════ -->
-<header id="hdr">
-  <a href="#" class="logo" aria-label="Lucas Eklund">LUCAS <span>EKLUND</span></a>
-  <nav class="hnav">
-    <a href="#projects" class="hl">Projects</a>
-    <a href="#about"    class="hl">About</a>
-    <a href="https://github.com/LuEklund" target="_blank" rel="noopener" class="hbtn">GitHub</a>
+<section id="me">
+  <img src="assets/lucas.webp" alt="">
+  <h1>Lucas Eklund</h1>
+  <nav class="social">
+    <a href="https://youtube.com/@LucasDevelop" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="#ff0033"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>YouTube <span class="subs">2.2K subs</span></a>
+    <a href="https://store.steampowered.com/app/3167780/Planetary_Zigma/" target="_blank" rel="noopener" aria-label="PlanetaryZigma on Steam"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.979 0C5.678 0 .511 4.86.022 11.037l6.432 2.658c.545-.371 1.203-.59 1.912-.59.063 0 .125.004.188.006l2.861-4.142V8.91c0-2.495 2.028-4.524 4.524-4.524 2.494 0 4.524 2.031 4.524 4.527s-2.03 4.525-4.524 4.525h-.105l-4.076 2.911c0 .052.004.105.004.159 0 1.875-1.515 3.396-3.39 3.396-1.635 0-3.016-1.173-3.331-2.727L.436 15.27C1.862 20.307 6.486 24 11.979 24c6.627 0 11.999-5.373 11.999-12S18.605 0 11.979 0zM7.54 18.21l-1.473-.61c.262.543.714.999 1.314 1.25 1.297.539 2.793-.076 3.332-1.375.263-.63.264-1.319.005-1.949s-.75-1.121-1.377-1.383c-.624-.26-1.29-.249-1.878-.03l1.523.63c.956.4 1.409 1.5 1.009 2.455-.397.957-1.497 1.41-2.454 1.012H7.54zm11.415-9.303c0-1.662-1.353-3.015-3.015-3.015-1.665 0-3.015 1.353-3.015 3.015 0 1.665 1.35 3.015 3.015 3.015 1.663 0 3.015-1.35 3.015-3.015zm-5.273-.005c0-1.252 1.013-2.266 2.265-2.266 1.249 0 2.266 1.014 2.266 2.266 0 1.251-1.017 2.265-2.266 2.265-1.253 0-2.265-1.014-2.265-2.265z"/></svg>Steam</a>
   </nav>
-</header>
-
-<!-- ════════════════ FEATURED / CAROUSEL ════════════════ -->
-<section id="featured" aria-label="Featured projects">
-
-  <div class="c-wrap">
-    <button class="carrow" id="cprev" aria-label="Previous">
-      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
-      </svg>
-    </button>
-    <div id="c-scene"><div id="c-track"></div></div>
-    <button class="carrow" id="cnext" aria-label="Next">
-      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
-      </svg>
-    </button>
-  </div>
-
-  <div class="c-hud">
-    <div class="chud-lbl l" aria-hidden="true">FEATURED.SYS</div>
-    <div class="chud-lbl r" aria-hidden="true" id="ci-idx"></div>
-    <span class="chud-c tl" aria-hidden="true"></span>
-    <span class="chud-c tr" aria-hidden="true"></span>
-    <span class="chud-c bl" aria-hidden="true"></span>
-    <span class="chud-c br" aria-hidden="true"></span>
-    <div id="cinfo" aria-live="polite">
-      <div class="ci-tags" id="ci-tags"></div>
-      <h2 class="ci-title" id="ci-title"></h2>
-      <p class="ci-desc" id="ci-desc"></p>
-      <div class="ci-foot">
-        <a class="ci-link" id="ci-link" target="_blank" rel="noopener">[ VIEW_PROJECT ]</a>
-        <div class="cidots" id="cidots"></div>
-      </div>
-    </div>
-  </div>
-
-
-
 </section>
 
-<!-- ════════════════ ALL PROJECTS ════════════════════════ -->
-<section id="projects" aria-label="All projects">
-  <div class="proj-hd">
-    <h2 class="proj-title">// ALL_PROJECTS</h2>
-    <span class="proj-ct" id="pct"></span>
+<section id="projects">
+  <h2>Projects</h2>
+  <div class="langs">
+    <button data-lang="star" aria-pressed="true"><span class="glyph">★</span>Featured</button>
+    <button data-lang="zig" aria-pressed="true"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/zig/zig-original.svg" alt="">Zig</button>
+    <button data-lang="c" aria-pressed="false"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg" alt="">C</button>
+    <button data-lang="cpp" aria-pressed="false"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="">C++</button>
+    <button data-lang="cs" aria-pressed="false"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg" alt="">C#</button>
+    <button data-lang="asm" aria-pressed="false"><span class="glyph">ASM</span>Assembly</button>
+    <button data-lang="py" aria-pressed="false"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="">Python</button>
+    <button data-lang="js" aria-pressed="false"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="">JavaScript</button>
+    <button data-lang="lua" aria-pressed="false"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/lua/lua-original.svg" alt="">Lua</button>
+    <button id="all" aria-pressed="false">All</button>
   </div>
-  <div class="fbar">
-    <div class="fprow" id="fprow">
-      <button class="fp fon" data-f="all">ALL</button>
-      <button class="fp" data-f="c">C</button>
-      <button class="fp" data-f="cpp">C++</button>
-      <button class="fp" data-f="zig">ZIG</button>
-      <button class="fp" data-f="asm">ASM</button>
-      <button class="fp" data-f="vulkan">VULKAN</button>
-      <button class="fp" data-f="unreal">UNREAL</button>
-      <button class="fp" data-f="unity">UNITY</button>
-      <button class="fp" data-f="cs">C#</button>
-      <button class="fp" data-f="py">PYTHON</button>
-      <button class="fp" data-f="web">JS/TS</button>
-      <button class="fp" data-f="sfml">SFML</button>
-    </div>
-    <div class="fsep"></div>
-    <input class="fsrch" id="fsrch" type="text" placeholder="SEARCH_" autocomplete="off" aria-label="Search projects"/>
+  <div class="grid" id="featured">
+    <a class="card" href="https://github.com/LuEklund/PlanetaryZigma" target="_blank" rel="noopener" data-lang="zig star"><video src="assets/planetary-zigma.mp4" poster="assets/planetary-zigma.webp" preload="none" muted loop playsinline></video><b>PlanetaryZigma</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/zig/zig-original.svg" alt="Zig" title="Zig"><span>Vulkan</span><span>Multiplayer</span><span>Steam</span></span><span class="desc">Co-op roguelike on procedural planets. Own Vulkan renderer, UDP netcode, hot-reloading.</span></a>
+    <a class="card" href="https://github.com/LuEklund/BAR-Rewind" target="_blank" rel="noopener" data-lang="zig lua star"><video src="assets/bar-rewind.mp4" poster="assets/bar-rewind.webp" preload="none" muted loop playsinline></video><b>BAR Rewind</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/zig/zig-original.svg" alt="Zig" title="Zig"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/lua/lua-original.svg" alt="Lua" title="Lua"><span>Tools</span><span>Replays</span></span><span class="desc">Rewind and scrub Beyond All Reason replays.</span></a>
+    <a class="card" href="https://github.com/LuEklund/StreamerFighter" target="_blank" rel="noopener" data-lang="cs star"><video src="assets/streamer-fighter.mp4" poster="assets/streamer-fighter.webp" preload="none" muted loop playsinline></video><b>StreamerFighter</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg" alt="C#" title="C#"><span>Unity</span><span>Twitch</span><span>YouTube API</span></span><span class="desc">Viewers join a fighting game by typing in chat.</span></a>
+    <a class="card" href="https://github.com/LuEklund/WallensteinVR" target="_blank" rel="noopener" data-lang="zig star"><img src="assets/wallenstein-vr.webp" alt="" loading="lazy"><b>WallensteinVR</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/zig/zig-original.svg" alt="Zig" title="Zig"><span>OpenXR</span><span>Vulkan</span><span>VR</span></span><span class="desc">VR labyrinth game with OpenXR + Vulkan.</span></a>
+    <a class="card" href="https://github.com/LuEklund/assembly" target="_blank" rel="noopener" data-lang="asm star"><img src="assets/snake-6502.webp" alt="" loading="lazy"><b>NES Snake</b><span class="meta"><span class="asm">ASM</span><span>NES</span><span>6502</span></span><span class="desc">Snake for the NES in 6502 assembly.</span></a>
+    <a class="card" href="https://github.com/LuEklund/MinecraftVulkan" target="_blank" rel="noopener" data-lang="cpp star"><video src="assets/minecraft-vulkan.mp4" poster="assets/minecraft-vulkan.webp" preload="none" muted loop playsinline></video><b>Minecraft Vulkan</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++" title="C++"><span>Vulkan</span><span>Voxels</span></span><span class="desc">Voxel world with a Vulkan renderer from scratch.</span></a>
+    <a class="card" href="https://github.com/LuEklund/Hexpansion" target="_blank" rel="noopener" data-lang="cpp star"><video src="assets/hexpansion.mp4" poster="assets/hexpansion.webp" preload="none" muted loop playsinline></video><b>Hexpansion</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++" title="C++"><span>Unreal 5</span><span>Tower defense</span></span><span class="desc">Roguelike tower defense on an expanding hex grid. Unreal 5.</span></a>
+    <a class="card" href="https://github.com/jontssu/cub3D" target="_blank" rel="noopener" data-lang="c star"><video src="assets/cub3d.mp4" poster="assets/cub3d.webp" preload="none" muted loop playsinline></video><b>Cub3D</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg" alt="C" title="C"><span>Raycaster</span><span>Hive</span></span><span class="desc">Wolfenstein-style raycaster in pure C.</span></a>
   </div>
-  <div id="pgrid" role="list"></div>
-  <div id="pnores" role="status">&gt; NO_RESULTS_FOUND_</div>
-</section>
-
-<!-- ════════════════ ABOUT ═══════════════════════════════ -->
-<section id="about" aria-label="About">
-  <div class="ainn">
-    <p class="a-ey">// ABOUT</p>
-    <h2 class="a-nm">Lucas Eklund</h2>
-    <p class="a-ro">GAME_DEV &nbsp;::&nbsp; SYSTEMS_PROGRAMMER &nbsp;::&nbsp; ARCH_LINUX</p>
-    <div class="agrid">
-      <div>
-        <p class="a-lb">// BACKGROUND</p>
-        <div style="display:flex;align-items:center;gap:11px;margin-bottom:13px;">
-          <img src="assets/leklund1000x1000.png" alt="Lucas Eklund"
-               style="width:48px;height:48px;border-radius:2px;object-fit:cover;border:1px solid #060c14;flex-shrink:0;"
-               onerror="this.style.display='none'"/>
-          <div>
-            <div style="color:#007bff;font-weight:600;font-size:13px;">Lucas Eklund</div>
-            <div style="color:#00e5ff;font-family:'Share Tech Mono',monospace;font-size:9px;">lucasdevbusiness@gmail.com</div>
-          </div>
-        </div>
-        <p class="a-bio">Developer who loves level programing <b>low as possible</b>. Studied at <b>Hive Helsinki</b> (42 Network) — peer-to-peer C school, no teachers, no lectures. Currently Computer Engineering at <b>Åbo Akademi University</b> (2nd year). Building game engines from scratch and documenting on YouTube.<span class="a-mn">$ uname -a → Arch Linux x86_64</span></p>
-      </div>
-      <div>
-        <p class="a-lb">// CONTACT</p>
-        <a href="https://github.com/LuEklund" target="_blank" rel="noopener" class="alink">
-          <svg class="aico" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-          github.com/LuEklund
-        </a>
-        <a href="https://www.linkedin.com/in/lucas-eklund/" target="_blank" rel="noopener" class="alink">
-          <svg class="aico" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-          LinkedIn
-        </a>
-        <a href="mailto:lucasdevbusiness@gmail.com" class="alink">
-          <svg class="aico" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"/></svg>
-          lucasdevbusiness@gmail.com
-        </a>
-        <a href="https://www.youtube.com/@LucasDevelop" target="_blank" rel="noopener" class="alink">
-          <svg class="aico" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-          youtube/@lucasdevelop
-        </a>
-      </div>
-      <div>
-        <p class="a-lb">// STACK</p>
-        <div class="astk">
-          <span class="tag tag-c">C</span><span class="tag tag-cpp">C++</span>
-          <span class="tag tag-zig">Zig</span><span class="tag tag-asm">6502 ASM</span>
-          <span class="tag tag-vulkan">Vulkan</span><span class="tag tag-unreal">Unreal 5</span>
-          <span class="tag tag-unity">Unity</span><span class="tag tag-sfml">SFML</span>
-          <span class="tag tag-py">Python</span><span class="tag tag-web">JS/TS</span>
-          <span class="tag tag-cs">C#</span>
-        </div>
-        <p class="a-lb" style="margin-top:14px;">// EDUCATION</p>
-        <div class="aedu"><div class="aesc">Åbo Akademi University</div><div class="aed">Computer Engineering · 2024 – present</div></div>
-        <div class="aedu"><div class="aesc">Hive Helsinki — 42 Network</div><div class="aed">Software Engineering · 2022 – 2024</div></div>
-      </div>
-    </div>
+  <hr>
+  <div class="grid" id="rest">
+    <a class="card" href="https://github.com/LuEklund/Vulkan-0.1" target="_blank" rel="noopener" data-lang="cpp"><img src="assets/vulkan.webp" alt="" loading="lazy"><b>Vulkan Renderer</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++" title="C++"><span>Vulkan</span></span><span class="desc">First steps in Vulkan.</span></a>
+    <a class="card" href="https://lucasdevs.itch.io/chungustraction" target="_blank" rel="noopener" data-lang="cs"><video src="assets/chungustraction.mp4" poster="assets/chungustraction.webp" preload="none" muted loop playsinline></video><b>Chungustraction</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg" alt="C#" title="C#"><span>Unity</span><span>Game jam</span></span><span class="desc">DaniJam 2025 entry, theme: Attraction.</span></a>
+    <a class="card" href="https://www.youtube.com/watch?v=e1C9blkl-N0" target="_blank" rel="noopener" data-lang="cpp"><img src="assets/ribbit-space.webp" alt="" loading="lazy"><b>RibbitSpace</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++" title="C++"><span>Space combat</span></span><span class="desc">Space combat prototype.</span></a>
+    <a class="card" href="https://github.com/LuEklund/Unreal-TopDown-RPG" target="_blank" rel="noopener" data-lang="cpp"><video src="assets/unreal-topdown-rpg.mp4" poster="assets/unreal-topdown-rpg.webp" preload="none" muted loop playsinline></video><b>TopDown RPG</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++" title="C++"><span>Unreal 5</span><span>Multiplayer</span><span>GAS</span></span><span class="desc">Multiplayer RPG in Unreal 5 with GAS.</span></a>
+    <a class="card" href="https://github.com/LuEklund/ToonTanks" target="_blank" rel="noopener" data-lang="cpp"><video src="assets/toon-tanks.mp4" poster="assets/toon-tanks.webp" preload="none" muted loop playsinline></video><b>ToonTanks</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++" title="C++"><span>Unreal 5</span></span><span class="desc">Tank shooter in Unreal 5.</span></a>
+    <a class="card" href="https://github.com/LuEklund/SFML-GameRPG" target="_blank" rel="noopener" data-lang="cpp"><video src="assets/sfml-rpg.mp4" poster="assets/sfml-rpg.webp" preload="none" muted loop playsinline></video><b>SFML RPG</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++" title="C++"><span>SFML</span></span><span class="desc">RPG with no engine, on SFML.</span></a>
+    <a class="card" href="https://www.youtube.com/watch?v=PyilFiclHH8" target="_blank" rel="noopener" data-lang="py"><img src="assets/pydefend.webp" alt="" loading="lazy"><b>PyDefend</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" title="Python"><span>PyGame</span><span>Tower defense</span></span><span class="desc">Tower defense in PyGame.</span></a>
+    <a class="card" href="https://github.com/LuEklund/LucasBot" target="_blank" rel="noopener" data-lang="js"><img src="assets/discord-bot.webp" alt="" loading="lazy"><b>Discord RPG Bot</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript" title="JavaScript"><span>Discord</span></span><span class="desc">Discord bot with quests and 1v1 battles.</span></a>
+    <a class="card" href="https://github.com/LuEklund/MergeGame" target="_blank" rel="noopener" data-lang="cs"><video src="assets/merge-game.mp4" poster="assets/merge-game.webp" preload="none" muted loop playsinline></video><b>MergeGame</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg" alt="C#" title="C#"><span>Unity</span></span><span class="desc">Stack coins to pay the Money Man.</span></a>
+    <a class="card" href="https://lucas-eklund.itch.io/lost-prince" target="_blank" rel="noopener" data-lang="cs"><video src="assets/lost-prince.mp4" poster="assets/lost-prince.webp" preload="none" muted loop playsinline></video><b>Lost Prince</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg" alt="C#" title="C#"><span>Unity</span><span>Visual scripting</span></span><span class="desc">Short story game in Unity.</span></a>
+    <a class="card" href="https://github.com/LuEklund/Platformer-SFML" target="_blank" rel="noopener" data-lang="cpp"><img src="assets/platformer-sfml.webp" alt="" loading="lazy"><b>Platformer</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++" title="C++"><span>SFML</span></span><span class="desc">2D platformer in SFML.</span></a>
+    <a class="card" href="https://github.com/LuEklund/Snake-SFML" target="_blank" rel="noopener" data-lang="cpp"><img src="assets/snake-sfml.webp" alt="" loading="lazy"><b>Snake</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++" title="C++"><span>SFML</span></span><span class="desc">Snake in SFML.</span></a>
+    <a class="card" href="https://github.com/LuEklund/TicTacToe-SFML" target="_blank" rel="noopener" data-lang="cpp"><img src="assets/tictactoe-sfml.webp" alt="" loading="lazy"><b>TicTacToe</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++" title="C++"><span>SFML</span></span><span class="desc">TicTacToe in SFML.</span></a>
+    <a class="card" href="https://github.com/LuEklund/1D-Combat-SFML" target="_blank" rel="noopener" data-lang="cpp"><img src="assets/1d-combat-sfml.webp" alt="" loading="lazy"><b>1D Combat</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++" title="C++"><span>SFML</span></span><span class="desc">Age of War-style lane battler in SFML.</span></a>
+    <a class="card" href="https://github.com/LuEklund/gifer" target="_blank" rel="noopener" data-lang="zig"><img src="assets/gifer.svg" alt="" loading="lazy"><b>gifer</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/zig/zig-original.svg" alt="Zig" title="Zig"><span>Tools</span><span>Screen capture</span></span><span class="desc">Capture your screen and turn it into a GIF.</span></a>
+    <a class="card" href="https://github.com/LuEklund/Minishell" target="_blank" rel="noopener" data-lang="c"><img src="assets/minishell.svg" alt="" loading="lazy"><b>Minishell</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg" alt="C" title="C"><span>Shell</span><span>Hive</span></span><span class="desc">Bash-like shell in C: pipes, redirections, env vars. Hive project.</span></a>
+    <a class="card" href="https://github.com/LuEklund/HIVE_2022" target="_blank" rel="noopener" data-lang="c"><img src="assets/42.svg" alt="" loading="lazy"><b>Hive Helsinki</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg" alt="C" title="C"><span>Hive</span></span><span class="desc">42 curriculum in pure C.</span></a>
+    <a class="card" href="https://github.com/LuEklund/ft_transcendence" target="_blank" rel="noopener" data-lang="py js"><img src="assets/42.svg" alt="" loading="lazy"><b>ft_transcendence</b><span class="meta"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" title="Python"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript" title="JavaScript"><span>Django</span><span>Web</span><span>Hive</span></span><span class="desc">Full-stack Pong site, final Hive project.</span></a>
   </div>
 </section>
 
-<footer>[ © 2026 LUCAS_EKLUND :: GITHUB_PAGES ]</footer>
+<section id="about">
+  <h2>About me</h2>
+  <dl class="facts">
+    <dt>Location</dt><dd>Turku, Finland</dd>
+    <dt>Role</dt><dd>Software &amp; Systems Developer</dd>
+    <dt>Interests</dt><dd>Game dev, storytelling, startups, YouTube, fitness, reading</dd>
+    <dt>Languages</dt><dd>C, C++, Zig, 6502 Assembly, C#, Java, Python, JavaScript, TypeScript, HTML, CSS, PHP, MySQL</dd>
+    <dt>Spoken</dt><dd>Swedish (native), English (fluent), Finnish (conversational)</dd>
+  </dl>
+  <h3>Timeline</h3>
+  <ol class="timeline">
+    <li><time>2024 – now</time> <b>Åbo Akademi University</b> B.Sc. Computer Engineering</li>
+    <li><time>2022 – 2024</time> <b>Hive Helsinki (42)</b> Software Engineering</li>
+    <li><time>2021 – 2022</time> <b>Västra Nylands Folkhögskola</b> Natur och medicin</li>
+    <li><time>2020 – 2021</time> <b>Finnish Defence Forces</b> Military service, medic</li>
+    <li><time>2017 – 2020</time> <b>K-Supermarket</b> Store clerk &amp; cashier (work)</li>
+    <li><time>2017 – 2020</time> <b>Axxell</b> Datanom, ICT</li>
+  </ol>
+  <p class="links">
+    <a href="mailto:lucasdevbusiness@gmail.com">lucasdevbusiness@gmail.com</a>
+    <a href="https://github.com/LuEklund">GitHub</a>
+    <a href="https://www.linkedin.com/in/lucas-eklund/">LinkedIn</a>
+    <a href="https://youtube.com/@LucasDevelop">YouTube</a>
+  </p>
+</section>
 
-<!-- ════════════════ SCRIPTS ═════════════════════════════ -->
+</main>
 <script>
-/* ─── cursor ──────────────────────────────────────────── */
-const cur=document.getElementById('cur'),cur2=document.getElementById('cur2');
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
-(function raf(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;cur2.style.left=rx+'px';cur2.style.top=ry+'px';requestAnimationFrame(raf);})();
-document.addEventListener('mouseover',e=>{cur.style.transform=e.target.closest('a,button')?'translate(-50%,-50%) scale(2)':'translate(-50%,-50%) scale(1)';});
-
-/* ─── matrix rain ─────────────────────────────────────── */
-(function(){
-  const cv=document.getElementById('rain'),cx=cv.getContext('2d');
-  const CH='0123456789';
-  let W,H,drops;
-  function init(){W=cv.width=innerWidth;H=cv.height=innerHeight;drops=Array.from({length:Math.ceil(W/16)},()=>Math.random()*H/18|0);}
-  function draw(){
-    cx.fillStyle='rgba(2,4,8,.055)';cx.fillRect(0,0,W,H);
-    cx.font='14px monospace';
-    drops.forEach((d,i)=>{
-      const bright=Math.random()>.92;
-      cx.fillStyle=bright?'rgba(180,230,255,.9)':'rgba(0,229,255,.65)';
-      cx.fillText(CH[Math.random()*CH.length|0],i*16,d*18);
-      if(d*18>H&&Math.random()>.965)drops[i]=0;else drops[i]++;
-    });
-  }
-  init();window.addEventListener('resize',init);setInterval(draw,55);
-})();
-
-/* ─── data ────────────────────────────────────────────── */
-const TL={c:"C",cpp:"C++",cs:"C#",zig:"Zig",asm:"ASM",py:"Python",unreal:"Unreal",unity:"Unity",vulkan:"Vulkan",web:"JS/TS",sfml:"SFML"};
-
-const P=[
-  {t:"PlanetaryZigma",d:"Risk of Rain 2 inspired game with procedurally generated planets. Custom Vulkan renderer from scratch in Zig. Server-Client UDP, Steamworks. Server authoritative",i:"assets/PlanetaryZigma.gif",u:"https://github.com/LuEklund/PlanetaryZigma",g:["zig","vulkan"],hi:1},
-  {t:"WallensteinVR",d:"Labyrinth VR game in Zig. Enemies hunt you, grab the collectible and race back before they reach you.",i:"assets/WallenstienVR.png",u:"https://github.com/LuEklund/WallensteinVR.git",g:["zig","vulkan"],hi:1},
-  {t:"NES Snake — 6502 ASM",d:"Snake  NES in 6502 assembly",i:"assets/Snake_ASM.jpg",u:"https://github.com/LuEklund/assembly",g:["asm"],hi:1},
-  {t:"Minecraft — Vulkan",d:"Minecraft clone built with Vulkan from scratch. Custom chunk meshing, terrain generation. YouTube devlog.",i:"assets/EpicMinecraftClone.gif",u:"https://www.youtube.com/watch?v=fP3RNawUWzU",g:["c","cpp","vulkan"],hi:1},
-  {t:"Fingrevie — Hexpansion",d:"Tower defense on a procedurally expanding hex grid with upgrades. Unreal Engine 5.",i:"assets/HexPlanation.gif",u:"https://fingrevie.itch.io/hextd-prototype",g:["cpp","unreal"],hi:1},
-  {t:"Cub3D — DDA Raycaster",d:"Wolfenstein-inspired raycaster in pure C. 2D map → real-time 3D via DDA. Zero external dependencies.",i:"https://github.com/jontssu/cub3D/blob/master/Peek%202024-01-09%2016-46.gif?raw=true",u:"https://github.com/jontssu/cub3D",g:["c"],hi:1},
-  {t:"Vulkan Renderer",d:"Building a Vulkan renderer from scratch — pipeline, render passes, sync, descriptor sets. YouTube devlog.",i:"assets/Vulkan.png",u:"https://www.youtube.com/watch?v=QDaCNKZ0rf4",g:["c","cpp","vulkan"],hi:1},
-  {t:"Chungustraction",d:"Solo DaniJam 2025 entry, theme: Attraction. Built in Unity over 48 hours.",i:"assets/Attract.gif",u:"https://lucasdevs.itch.io/chungustraction",g:["cs","unity"]},
-  {t:"StreamerFighter",d:"Game stream overlay, viewers joins a fighter simulation by typing in the chat. Youtube, Twicth API.",i:"assets/StreamFighter.gif",u:"https://github.com/LuEklund/StreamerFighter",g:["cs","unity"]},
-  {t:"RibbitSpace",d:"Space combat prototype in Unreal Engine. Custom ship movement and projectile system.",i:"assets/Ribbit.jpg",u:"https://www.youtube.com/watch?v=e1C9blkl-N0",g:["cpp","unreal"]},
-  {t:"TopDown RPG — Multiplayer",d:"Top-down RPG in UE5 with replication netcode and Gameplay Ability System (GAS).",i:"https://github.com/LuEklund/Unreal-TopDown-RPG/blob/master/ProgressImages/TopDownRPG3.gif?raw=true",u:"https://github.com/LuEklund/Unreal-TopDown-RPG",g:["cpp","unreal"]},
-  {t:"ToonTanks",d:"Tank shooter in UE5. C++ with minimal Blueprint usage.",i:"https://github.com/LuEklund/ToonTanks/blob/master/AnimationToon2.gif?raw=true",u:"https://github.com/LuEklund/ToonTanks",g:["cpp","unreal"]},
-  {t:"SFML RPG",d:"RPG on SFML. Custom entity system, game loop, state machine — no engine.",i:"assets/SFML-RPG.gif",u:"https://github.com/LuEklund/SFML-GameRPG",g:["c","cpp","sfml"]},
-  {t:"PyDefend",d:"2D base-defense in Python/PyGame. Place towers on every tile to win.",i:"assets/PyDefend.png",u:"https://lucasdevs.itch.io/pydefend",g:["py"]},
-  {t:"Discord RPG Bot",d:"Discord bot with quests, inventory, and 1v1 battle mechanics.",i:"assets/DiscordBot.png",u:"#",g:["web"]},
-  {t:"MergeGame",d:"Stack coins to hit a target amount. Minimalist Unity puzzle game.",i:"assets/MergeGame.gif",u:"https://github.com/LuEklund/MergeGame",g:["cs","unity"]},
-  {t:"Lost Prince",d:"Short Unity story game made with Visual Scripting. Atmosphere-first.",i:"assets/LostPrince.gif",u:"https://lucas-eklund.itch.io/lost-prince",g:["cs","unity"]},
-  {t:"Platformer — SFML",d:"Side-scroller in C++/SFML. Custom physics and collision, no engine.",i:"https://github.com/LuEklund/Platformer-SFML/blob/master/assets/thumbnail.png?raw=true",u:"https://github.com/LuEklund/Platformer-SFML",g:["cpp","sfml"]},
-  {t:"Snake — SFML",d:"Classic Snake in C++/SFML.",i:"https://github.com/LuEklund/Snake-SFML/blob/master/assets/thumbnail.png?raw=true",u:"https://github.com/LuEklund/Snake-SFML",g:["cpp","sfml"]},
-  {t:"TicTacToe — SFML",d:"TicTacToe in C++/SFML.",i:"https://github.com/LuEklund/TicTacToe-SFML/blob/master/assets/thumbnail.png?raw=true",u:"https://github.com/LuEklund/TicTacToe-SFML",g:["cpp","sfml"]},
-  {t:"1D Combat — SFML",d:"Player vs AI lane combat inspired by Age of War. Custom AI in C++.",i:"https://github.com/LuEklund/1D-Combat-SFML/blob/master/assets/thumbnail.png?raw=true",u:"https://github.com/LuEklund/1D-Combat-SFML",g:["cpp","sfml"]},
-  {t:"42 — Hive Helsinki",d:"Core 42 curriculum in pure C. Memory, pointers, data structures — no external libraries.",i:"https://auth.42.fr/auth/resources/0nmse/login/students/img/42_logo.svg",u:"https://github.com/LuEklund/HIVE_2022",g:["c"]},
-  {t:"ft_transcendence",d:"Final Hive project. Full-stack: Django, vanilla JS, OAuth2, WebSockets, live Pong.",i:"https://auth.42.fr/auth/resources/0nmse/login/students/img/42_logo.svg",u:"https://github.com/LuEklund/ft_transcendence",g:["web","py"]},
-];
-const FEAT=P.filter(p=>p.hi);
-
-/* ════════════════════════════════════════════════════════
-   CAROUSEL
-════════════════════════════════════════════════════════ */
-let cAct=0, cTimer=null, cDragX=0, cWasDrag=false, cProgTimer=null;
-
-const AUTOPLAY_MS = 20000;
-
-function cW(){ return Math.min(window.innerWidth * 0.82, 960); }
-function cH(){ return Math.min(Math.round(cW() * 9/16), 540); }
-function cGap(){ return Math.round(cW() * 0.86); }
-
-function buildCarousel(){
-  const track=document.getElementById('c-track');
-  track.innerHTML='';
-  FEAT.forEach((p,i)=>{
-    const s=document.createElement('div');
-    s.className='cslide'; s.dataset.i=i;
-    s.innerHTML=`<img src="${p.i}" alt="${p.t}" loading="lazy" onerror="this.style.display='none'">`
-               +`<div class="cslide-grad"></div>`
-               +`<div class="cslide-idx">[${String(i+1).padStart(2,'0')}/${String(FEAT.length).padStart(2,'0')}]</div>`
-               +`<div class="cbracket tl"></div><div class="cbracket tr"></div>`
-               +`<div class="cbracket bl"></div><div class="cbracket br"></div>`
-               +`<div class="cprog"><div class="cprog-bar" id="cpb${i}"></div></div>`;
-    s.addEventListener('click',()=>{ if(!cWasDrag) cGo(i); });
-    track.appendChild(s);
-  });
-  buildDots();
-  cResize();
-  cRender();
-  cInfoSet(false);
+const buttons = [...document.querySelectorAll('.langs button[data-lang]')];
+const all = document.getElementById('all');
+const DEFAULT = ['star', 'zig'];
+function press(b, on) { b.setAttribute('aria-pressed', on); }
+all.onclick = () => {
+  const allOn = all.getAttribute('aria-pressed') === 'true';
+  for (const b of buttons) press(b, allOn ? DEFAULT.includes(b.dataset.lang) : true);
+  filter();
+};
+const cards = [...document.querySelectorAll('.card')];
+function filter() {
+  press(all, buttons.every(b => b.getAttribute('aria-pressed') === 'true'));
+  const on = buttons.filter(b => b.getAttribute('aria-pressed') === 'true').map(b => b.dataset.lang);
+  for (const c of cards) c.hidden = on.length && !c.dataset.lang.split(' ').some(l => on.includes(l));
+  for (const g of document.querySelectorAll('.grid')) g.hidden = !g.querySelector('.card:not([hidden])');
+  document.querySelector('hr').hidden = document.getElementById('featured').hidden || document.getElementById('rest').hidden;
 }
-
-function cResize(){
-  const h=cH();
-  document.getElementById('c-scene').style.height=h+'px';
-  document.querySelectorAll('.cslide').forEach(s=>{
-    s.style.width=cW()+'px'; s.style.height=h+'px';
-  });
+for (const b of buttons) b.onclick = () => {
+  b.setAttribute('aria-pressed', b.getAttribute('aria-pressed') !== 'true');
+  filter();
+};
+filter();
+for (const c of cards) {
+  const v = c.querySelector('video');
+  if (!v) continue;
+  c.onmouseenter = () => v.play();
+  c.onmouseleave = () => { v.pause(); v.currentTime = 0; };
 }
-
-function cRender(){
-  const gap=cGap(), N=FEAT.length;
-  document.querySelectorAll('.cslide').forEach((s,i)=>{
-    let d=i-cAct;
-    if(d > N/2) d -= N;
-    if(d < -N/2) d += N;
-    const a=Math.abs(d);
-    if(a>2){ s.style.opacity='0'; s.style.pointerEvents='none'; s.classList.remove('cactive'); return; }
-    const tx = d * gap;
-    const ry = -d * 44;
-    const tz = -a * 90;
-    const sc = Math.max(0.68, 1 - a * 0.16);
-    const op = a===0 ? 1 : a===1 ? 0.45 : 0.15;
-    s.style.transform=`translateX(${tx}px) rotateY(${ry}deg) translateZ(${tz}px) scale(${sc})`;
-    s.style.opacity=op;
-    s.style.zIndex=10-a;
-    s.style.pointerEvents=a<2?'auto':'none';
-    s.classList.toggle('cactive', i===cAct);
-  });
-}
-
-function cInfoSet(anim=true){
-  const p=FEAT[cAct];
-  const tags=p.g.map(k=>`<span class="tag tag-${k}">${TL[k]}</span>`).join('');
-  const panel=document.getElementById('cinfo');
-  function fill(){
-    document.getElementById('ci-idx').textContent=`// FEATURED_PROJECT [${String(cAct+1).padStart(2,'0')}/${String(FEAT.length).padStart(2,'0')}]`;
-    document.getElementById('ci-tags').innerHTML=tags;
-    document.getElementById('ci-title').textContent=p.t;
-    document.getElementById('ci-desc').textContent=p.d;
-    document.getElementById('ci-link').href=p.u;
-    document.querySelectorAll('.cdot').forEach((d,i)=>d.classList.toggle('don',i===cAct));
-  }
-  if(anim){
-    panel.style.opacity='0'; panel.style.transform='translateY(8px)';
-    setTimeout(()=>{ fill(); panel.style.opacity='1'; panel.style.transform='none'; }, 170);
-  } else { fill(); panel.style.opacity='1'; panel.style.transform='none'; }
-}
-
-function cStartProg(){
-  const bar=document.getElementById('cpb'+cAct);
-  if(!bar)return;
-  bar.style.transition='none'; bar.style.width='0%';
-  requestAnimationFrame(()=>{
-    bar.style.transition=`width ${AUTOPLAY_MS}ms linear`;
-    bar.style.width='100%';
-  });
-}
-function cStopProg(){
-  FEAT.forEach((_,i)=>{
-    const b=document.getElementById('cpb'+i);
-    if(b){ b.style.transition='none'; b.style.width='0%'; }
-  });
-}
-
-function cGo(idx){
-  const slides=Array.from(document.querySelectorAll('.cslide'));
-  const prev=slides[cAct];
-
-  cAct=((idx%FEAT.length)+FEAT.length)%FEAT.length;
-  cRender(); cInfoSet();
-  cStopProg(); cStartProg();
-  cResetAuto();
-
-  if(prev){ prev.classList.remove('cleaving'); void prev.offsetWidth; prev.classList.add('cleaving'); setTimeout(()=>prev.classList.remove('cleaving'),280); }
-  const next=slides[cAct];
-  if(next){ next.classList.remove('centering'); void next.offsetWidth; next.classList.add('centering'); setTimeout(()=>next.classList.remove('centering'),650); }
-}
-
-function buildDots(){
-  const c=document.getElementById('cidots'); c.innerHTML='';
-  FEAT.forEach((_,i)=>{
-    const d=document.createElement('button');
-    d.className='cdot'; d.setAttribute('aria-label',`Project ${i+1}`);
-    d.addEventListener('click',()=>cGo(i));
-    c.appendChild(d);
-  });
-}
-
-function cStartAuto(){ cTimer=setInterval(()=>cGo(cAct+1), AUTOPLAY_MS); }
-function cResetAuto(){ clearInterval(cTimer); cStartAuto(); }
-
-document.getElementById('cprev').addEventListener('click',()=>cGo(cAct-1));
-document.getElementById('cnext').addEventListener('click',()=>cGo(cAct+1));
-
-document.addEventListener('keydown',e=>{
-  if(e.key==='ArrowLeft')cGo(cAct-1);
-  if(e.key==='ArrowRight')cGo(cAct+1);
-});
-
-const cScene=document.getElementById('c-scene');
-cScene.addEventListener('mousedown',e=>{cDragX=e.clientX;cWasDrag=false;},{passive:true});
-cScene.addEventListener('mousemove',e=>{if(Math.abs(e.clientX-cDragX)>8)cWasDrag=true;},{passive:true});
-cScene.addEventListener('mouseup',e=>{ if(cWasDrag&&Math.abs(e.clientX-cDragX)>40)cGo(cAct+(e.clientX<cDragX?1:-1)); },{passive:true});
-cScene.addEventListener('touchstart',e=>{cDragX=e.touches[0].clientX;cWasDrag=false;},{passive:true});
-cScene.addEventListener('touchmove', e=>{if(Math.abs(e.touches[0].clientX-cDragX)>8)cWasDrag=true;},{passive:true});
-cScene.addEventListener('touchend',  e=>{ const d=e.changedTouches[0].clientX-cDragX; if(cWasDrag&&Math.abs(d)>40)cGo(cAct+(d<0?1:-1)); },{passive:true});
-cScene.addEventListener('mouseenter',()=>{ clearInterval(cTimer); cStopProg(); });
-cScene.addEventListener('mouseleave',()=>{ cStartAuto(); cStartProg(); });
-
-window.addEventListener('resize',()=>{ cResize(); cRender(); });
-
-buildCarousel();
-cStartAuto();
-cStartProg();
-
-/* ════════════════════════════════════════════════════════
-   PROJECT GRID
-════════════════════════════════════════════════════════ */
-function buildGrid(){
-  const g=document.getElementById('pgrid'); g.innerHTML='';
-  P.forEach(p=>{
-    const tags=p.g.map(k=>`<span class="tag tag-${k}">${TL[k]}</span>`).join('');
-    const el=document.createElement('article');
-    el.className='pc';
-    el.dataset.tags=p.g.join(' ');
-    el.dataset.title=p.t.toLowerCase();
-    el.dataset.desc=p.d.toLowerCase();
-    el.setAttribute('role','listitem');
-    el.innerHTML=`
-      <a href="${p.u}" target="_blank" rel="noopener" aria-label="${p.t}" class="pclink"></a>
-      <div class="pcimg">${p.i?`<img src="${p.i}" alt="${p.t}" loading="lazy" onerror="this.outerHTML='<div class=\\'pcph\\'>NO_PREVIEW</div>'">`:`<div class="pcph">NO_PREVIEW</div>`}</div>
-      <div class="pcinfo">
-        <div class="pctags">${tags}</div>
-        <h3 class="pctitle">${p.t}</h3>
-        <p class="pcdesc">${p.d}</p>
-      </div>`;
-    g.appendChild(el);
-  });
-  const obs=new IntersectionObserver(entries=>{
-    entries.forEach(e=>{
-      if(e.isIntersecting){
-        const i=+e.target.dataset.ii;
-        setTimeout(()=>e.target.classList.add('pvis'),(i%8)*32);
-        obs.unobserve(e.target);
-      }
-    });
-  },{threshold:.01,rootMargin:'0px 0px -4px 0px'});
-  document.querySelectorAll('.pc').forEach((el,i)=>{el.dataset.ii=i;obs.observe(el);});
-  pCount();
-}
-
-let af='all',sq='';
-function pFilter(){
-  let v=0;
-  document.querySelectorAll('.pc').forEach(c=>{
-    const tm=af==='all'||c.dataset.tags.split(' ').includes(af);
-    const sm=!sq||c.dataset.title.includes(sq)||c.dataset.desc.includes(sq)||c.dataset.tags.includes(sq);
-    c.classList.toggle('pgone',!(tm&&sm));
-    if(tm&&sm)v++;
-  });
-  document.getElementById('pnores').style.display=v===0?'block':'none';
-  pCount(v);
-}
-function pCount(v){
-  const n=v!==undefined?v:P.length;
-  document.getElementById('pct').textContent=`[${n}]`;
-}
-
-document.getElementById('fprow').addEventListener('click',e=>{
-  const b=e.target.closest('.fp');if(!b)return;
-  af=b.dataset.f;
-  document.querySelectorAll('.fp').forEach(x=>x.classList.remove('fon'));
-  b.classList.add('fon'); pFilter();
-});
-document.getElementById('fsrch').addEventListener('input',e=>{
-  sq=e.target.value.toLowerCase().trim(); pFilter();
-});
-
-buildGrid();
 </script>
 </body>
 </html>
